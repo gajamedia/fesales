@@ -4,21 +4,21 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
-//import { ModalExpiredService } from './modalexpired.service';
 import { environment } from '../environments/environment.prod';
 import { SharedloginService } from './sharedlogin.service';
-
+import { ModalExpiredService} from './modalexpired.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
+  
 
   constructor(
     private http: HttpClient, 
     private router: Router, 
-    //private modalexpiredService: ModalExpiredService, 
+    private modalexpiredService: ModalExpiredService, 
     private shareloginService: SharedloginService) {}
 
   // auth.service.ts
@@ -31,13 +31,13 @@ export class AuthService {
         //const user_details = response['user_details'][0]
         //this.shareloginService.setProfileData(user_details); // Store the data
         // Navigate to dashboard
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/main/dashboard']);
       }),
       catchError(this.handleError<any>('/login'))
     );
   }
   teslogin(formData: FormData): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/api/token/`, formData).pipe(
+    return this.http.post<any>(`${this.apiUrl}/token/`, formData).pipe(
       tap(response => {
         console.log('test respon token api', response)
         const token = response['access'];
@@ -89,13 +89,32 @@ export class AuthService {
   isAuthenticated(): boolean {
     const token = localStorage.getItem('custom_token');
     
-    if (!token) {
-
+    if (!token || this.isTokenExpired(token)) {
+      // If no token or the token is expired, show the modal
+      const modal = this.modalexpiredService.getModal();
+      if (modal) {
+        modal.show();
+        modal.confirm.subscribe(() => {
           this.logout();
           window.location.reload();
-     
+        });
       }
-      return true;
+      return false;
     }
- 
+  
+    return true; // Token is valid, and UID is obtained
+  }
+  
+  
+  isTokenExpired(token: string): boolean {
+    try {
+      const decodedToken: any = jwtDecode(token);
+      const exp = decodedToken.exp;
+      const currentTime = Math.floor(Date.now() / 1000);
+      return exp < currentTime;
+    } catch (error) {
+      console.error('Error decoding token', error);
+      return true; // Consider token expired if there's an error
+    }
+  }
 }

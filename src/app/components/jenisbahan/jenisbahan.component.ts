@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -60,7 +60,7 @@ export class JenisbahanComponent implements OnInit {
     });
 
   }
-  
+
   currentDateTime() {
     const current = new Date();
     const date = current.getFullYear()+'-'+(current.getMonth()+1)+'-'+current.getDate();
@@ -74,13 +74,14 @@ export class JenisbahanComponent implements OnInit {
   }
   loadData() {
     //this.jenisbahanService.getAll(this.page, this.pageSize, this.search)
-    this.jenisbahanService.getAll()
+    console.log('tes ketik search', this.search)
+    this.jenisbahanService.getAll(this.search, this.page, this.pageSize)
     .subscribe({
       next:(res:any) => {
         console.log('response', res);
-        this.dataJenisbahan = res
+        this.dataJenisbahan = res.results
         console.log('response this.dataJenisbahan', this.dataJenisbahan);
-        //this.totalPages = res.count
+        this.totalPages = res.count
          //this.count = res.count
         /*
         this.totalPages = Math.ceil(this.count / this.pageSize);
@@ -103,17 +104,20 @@ export class JenisbahanComponent implements OnInit {
   onEdit(id: any) {
     // Fetch the user data based on the id
     const jns = this.dataJenisbahan.find(u => u.id === id);
+    console.log('test id jenis bahan', jns)
     if (jns) {
       this.sharedjenisbahanService.setData('editJenisbahan', jns);
-      this.router.navigate(['/main/inputjenisbahan']);
+      setTimeout(() => {
+        this.router.navigate(['/main/inputjenisbahan']);
+      }, 100); // Small delay to ensure data is set
     }
   }
   onDeletedby(r: any) {
     const d={
-      tgldel:this.tgldel,
-      deletedby:this.deletedby
+      //tgldel:this.tgldel,
+      'is_deleted':1
     }
-    this.jenisbahanService.deletedby(JSON.stringify(r), d)
+    this.jenisbahanService.deletedby(r, d)
     .subscribe({
       next:(res:any) => {
         //console.log(res);
@@ -125,25 +129,14 @@ export class JenisbahanComponent implements OnInit {
       },
     });
   }
-  onDelete(r: any) {
-    this.jenisbahanService.delete(r)
-    .subscribe({
-      next:(res:any) => {
-        //console.log(res);
-        this.loadData();
-        this.router.navigate(['/main/jenisbahan'])
-      },
-      error:(e:any) => {
-        console.log(e);
-      },
-    });
-  }
+  
   handlePageChange(p:any){
     //console.log("page", p)
     this.page = p
     this.refreshList()
   }
   handleSearch(){
+    
     this.loadData()
   }
   handlePageSizeChange() {

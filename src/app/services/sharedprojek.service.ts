@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class SharedbahanService {
+export class SharedprojekService {
   private data: any = {};
 
   setData(key: string, value: any) {

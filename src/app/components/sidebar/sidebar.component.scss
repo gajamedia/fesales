@@ -1,0 +1,18 @@
+#sidebar {
+  img {
+    transition: all 0.3s ease; /* Smooth transition for image resizing */
+  }
+
+  .h-16.w-16 {
+    max-width: 64px;
+    max-height: 64px;
+  }
+
+  .p-2 {
+    padding: 10px; /* Ensures consistent padding */
+  }
+  .tooltip {
+    z-index: 9999; /* Ensure it is higher than the z-index of the thead */
+    position: absolute; /* or fixed */
+}
+}

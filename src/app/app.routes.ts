@@ -13,6 +13,8 @@ import { InputjenisbahanComponent } from './components/jenisbahan/inputjenisbaha
 import { BahanComponent } from './components/bahan/bahan.component';
 import { InputbahanComponent } from './components/bahan/inputbahan.component';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import { ProjekComponent } from './components/projek/projek.component';
+import { InputprojekComponent } from './components/projek/inputprojek.component';
 
 
 export const routes: Routes = [
@@ -37,6 +39,8 @@ export const routes: Routes = [
       { path: 'inputjenisbahan', component: InputjenisbahanComponent},
       { path: 'bahan', component: BahanComponent},
       { path: 'inputbahan', component: InputbahanComponent},
+      { path: 'projek', component: ProjekComponent},
+      { path: 'inputprojek', component: InputprojekComponent},
       { path: 'user', component: UserComponent},
       { path: 'edituser', component: EdituserComponent},
       { path: 'userprofile', component: UserprofileComponent},

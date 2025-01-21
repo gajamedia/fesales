@@ -11,15 +11,21 @@ import { Jenisbahan } from '../../interfaces/global.interface';
   selector: 'app-inputjenisbahan',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  providers: [JenisbahanService, SharedjenisbahanService ],
   templateUrl: './inputjenisbahan.component.html',
-  providers: [JenisbahanService, SharedjenisbahanService ]
+  
 })
 
 export class InputjenisbahanComponent implements OnInit, OnDestroy {
   
-  jenisBahan: Jenisbahan = {
+  jenisbahan: Jenisbahan = {
     id:0,
-    NamaJenis:"",
+    nama_jenis:"",
+    created_by:"",
+    created_date:"",
+    updated_by:"",
+    updated_date:"",
+    is_deleted:0
   };
 
   visible:boolean = false
@@ -38,8 +44,9 @@ export class InputjenisbahanComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.currentDateTime()
-    this.dataJenisbahan = this.sharedjenisbahanService.getData('editJenisbahan');
-    //console.log( 'tmpval2 on init', this.dataJenisbahan)
+    console.log('Fetching data from shared service...');
+  this.dataJenisbahan = this.sharedjenisbahanService.getData('editJenisbahan');
+  console.log('Received data:', this.dataJenisbahan);
     if (!this.dataJenisbahan) {
       // Handle case where user is not found, maybe navigate back or show an error
       this.mode = false
@@ -65,19 +72,16 @@ export class InputjenisbahanComponent implements OnInit, OnDestroy {
     this.tahunini = currentYear
     return dateTime;
   }
-  trackByFn(index: number, item: any) {
-    return item.value;
-  }
   
   initFormData(){
-    this.jenisBahan.id = this.dataJenisbahan.id
-    this.jenisBahan.NamaJenis = this.dataJenisbahan.NamaJenis
+    this.jenisbahan.id = this.dataJenisbahan.id
+    this.jenisbahan.nama_jenis = this.dataJenisbahan.nama_jenis
   }
 
   onSimpan(form: any) {
     if (form.valid) {
       const data = {
-        'NamaJenis': this.jenisBahan.NamaJenis,
+        'nama_jenis': this.jenisbahan.nama_jenis,
       }
       console.log('res', data)
       this.jenisbahanService.create(data)
@@ -102,14 +106,14 @@ export class InputjenisbahanComponent implements OnInit, OnDestroy {
   onUpdate(form: any) {
     if (form.valid) {
       const data = {
-        'NamaJenis': this.jenisBahan.NamaJenis
+        'nama_jenis': this.jenisbahan.nama_jenis
       }
-      let id = this.jenisBahan.id
+      let id = this.jenisbahan.id
       this.jenisbahanService.update(id, data)
       .subscribe({
         next:(res)=>{
           this.showMessage('Update Data Sukses');
-          this.router.navigate(['/jenisbahan'])
+          this.router.navigate(['/main/jenisbahan'])
           this.refreshData()
         },
         error: (e) => {
@@ -127,10 +131,10 @@ export class InputjenisbahanComponent implements OnInit, OnDestroy {
   }
   onCancel(){
     //console.log('tes clik cancel')
-    this.router.navigate(['/jenisBahan'])
+    this.router.navigate(['/main/jenisbahan'])
   }
   refreshData(){
-    this.jenisBahan.NamaJenis =""
+    this.jenisbahan.nama_jenis =""
   }
   showMessage(t:string): void {
     this.isNongolMessage = true;

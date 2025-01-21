@@ -20,11 +20,11 @@ export class JenisbahanService {
     return this.http.get<any>(`${this.apiUrl}/jenisbahan/getid/?id=${id}`, { headers });
   }
   // Function to get All
-  getAll(): Observable<Jenisbahan[]> {
+  getListAll(): Observable<Jenisbahan[]> {
     const headers = this.globalService.getHeaders();
     return this.http.get<Jenisbahan[]>(`${this.apiUrl}/jenisbahan/list/`, { headers});
   }
-  /*
+  /* ?search=jenisa&page=1&page_size=10
   getAll(page: number, pageSize: number, search: string): Observable<Jenisbahan[]> {
     const headers = this.globalService.getHeaders();
     let params = new HttpParams().set('page', page.toString()).set('page_size', pageSize.toString());
@@ -34,7 +34,14 @@ export class JenisbahanService {
     return this.http.get<Jenisbahan[]>(`${this.apiUrl}/jenisbahan/getall/`, { headers, params });
   }
   */
-
+  getAll(search: string, page: number, pageSize: number): Observable<Jenisbahan[]> {
+    const headers = this.globalService.getHeaders();
+    let params = new HttpParams().set('page', page.toString()).set('page_size', pageSize.toString());
+    if (search) {
+      params = params.set('search', search);
+    }
+    return this.http.get<Jenisbahan[]>(`${this.apiUrl}/jenisbahan/search/`, { headers, params });
+  }
   create(formData: any): Observable<any> {
     const headers = this.globalService.getHeaders();
     return this.http.post<any>(`${this.apiUrl}/jenisbahan/create/`, formData, { headers });
@@ -42,17 +49,13 @@ export class JenisbahanService {
 
   update(id: any, data: any): Observable<any> {
     const headers = this.globalService.getHeaders();
-    return this.http.put(`${this.apiUrl}/jenisbahan/update/${id}`, data, { headers });
+    return this.http.put(`${this.apiUrl}/jenisbahan/${id}/update/`, data, { headers });
   }
 
   deletedby(id: any, jdata:any): Observable<any> {
     const headers = this.globalService.getHeaders();
-    return this.http.put(`${this.apiUrl}/jenisbahan/delete/${id}`, { headers, jdata});
+    return this.http.put(`${this.apiUrl}/jenisbahan/${id}/delete/`, jdata, { headers});
   }
 
-  delete(id: string): Observable<any> {
-    const headers = this.globalService.getHeaders();
-    return this.http.delete(`${this.apiUrl}/jenisbahan/delete/`, { headers, params: { id } });
-  }
 
 }

@@ -1,0 +1,159 @@
+<header aria-label="page caption" class="flex-none flex h-16 bg-gray-200 border-t px-4 items-center">
+  <h1 id="page-caption" class="font-semibold text-lg">Input Projek</h1>
+</header>
+<section aria-label="main content" class="flex flex-col flex-auto border-l py-2 px-4 h-full mt-2">
+  <div *ngIf="isNongolMessage" class="fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow-lg">
+    {{ messageText }}
+  </div>
+  <div class="w-full p-4 bg-white shadow-2xl rounded-xl">
+    <form class="flex flex-col" #projekForm="ngForm">
+      <div class="form-group flex flex-col gap-4 md:flex-row">
+        <div class="flex flex-col gap-2 w-full">
+          <label class="text-gray-700" for="no_project">No Projek</label>
+          <input
+            required
+            id="no_project"
+            type="text"
+            class="p-2 border-2 rounded-lg"
+            [(ngModel)]="dataInputProjek.no_project"
+            name="no_project"
+            #no_project="ngModel"
+            [ngClass]="{'border-red-500': no_project.touched && no_project.invalid}"
+          >
+          <div *ngIf="no_project.touched && no_project.invalid" class="text-red-500 text-sm">
+            No project is required.
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 w-full">
+          <label class="text-gray-700" for="tgl_project">Tanggal Projek</label>
+          <app-datepicker [(ngModel)]="dataInputProjek.tgl_project" 
+            name="tgl_project"
+            class="border-2 rounded-lg"
+            (dateChange)="onDateSelected($event)">
+          </app-datepicker>
+        </div>      
+      </div>
+      <div class="form-group flex flex-col gap-4 md:flex-row">
+        <div class="flex flex-col gap-2 w-full">
+          <label class="text-gray-700" for="ket_project">Keterangan</label>
+          <textarea
+            required
+            id="ket_project"
+            class="p-2 border-2 rounded-lg"
+            [(ngModel)]="dataInputProjek.ket_project"
+            name="ket_project"
+            #ket_project="ngModel"
+            [ngClass]="{'border-red-500': ket_project.touched && ket_project.invalid}"
+          ></textarea>
+          <div *ngIf="ket_project.touched && ket_project.invalid" class="text-red-500 text-sm">
+            ket_project is required.
+          </div>
+        </div>
+      </div>
+      <div class="form-group flex flex-col gap-4 md:flex-row">
+        <div class="flex flex-col gap-2 w-full">
+          <label class="text-gray-700" for="nama_customer">Customer</label>
+          <input
+            required
+            id="nama_customer"
+            type="text"
+            class="p-2 border-2 rounded-lg"
+            [(ngModel)]="dataInputProjek.nama_customer"
+            name="nama_customer"
+            #nama_customer="ngModel"
+            [ngClass]="{'border-red-500': nama_customer.touched && nama_customer.invalid}"
+          >
+          <div *ngIf="nama_customer.touched && nama_customer.invalid" class="text-red-500 text-sm">
+            Nama Customer is required.
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 w-full">
+          <label class="text-gray-700" for="addr_customer">Alamat Customer</label>
+          <input
+            required
+            id="addr_customer"
+            type="text"
+            class="p-2 border-2 rounded-lg"
+            [(ngModel)]="dataInputProjek.addr_customer"
+            name="addr_customer"
+            #addr_customer="ngModel"
+            [ngClass]="{'border-red-500': addr_customer.touched && addr_customer.invalid}"
+          >
+          <div *ngIf="addr_customer.touched && addr_customer.invalid" class="text-red-500 text-sm">
+            Alamat Customer is required.
+          </div>
+        </div>     
+      </div>
+      <div class="form-group flex flex-col gap-4 md:flex-row">
+        <div class="flex flex-col gap-2 w-full">
+          <label class="text-gray-700" for="contact_customer">Kontak Customer</label>
+          <input
+            required
+            id="contact_customer"
+            type="text"
+            class="p-2 border-2 rounded-lg"
+            [(ngModel)]="dataInputProjek.contact_customer"
+            name="contact_customer"
+            #contact_customer="ngModel"
+            [ngClass]="{'border-red-500': contact_customer.touched && contact_customer.invalid}"
+          >
+          <div *ngIf="contact_customer.touched && contact_customer.invalid" class="text-red-500 text-sm">
+            Kontak Customer is required.
+          </div>
+        </div>
+         <!-- Select Dropdown -->
+        <div class="flex flex-col gap-2 w-full">
+          <label class="text-gray-700" for="status_project">Project Status</label>
+          <select
+            required
+            id="status_project"
+            class="p-2 border-2 rounded-lg"
+            [(ngModel)]="dataInputProjek.status_project"
+            name="status_project"
+            #status_project="ngModel"
+            [ngClass]="{'border-red-500': status_project.touched && status_project.invalid}"
+          >
+            <option *ngFor="let option of statusProjectOptions" [value]="option.key">{{ option.value }}</option>
+          </select>
+          <div *ngIf="status_project.touched && status_project.invalid" class="text-red-500 text-sm">
+            Project status is required.
+          </div>
+        </div>    
+      </div>
+      <!-- Buttons -->
+      <div *ngIf="!visible" class="mt-2">
+        <button 
+          (click)="onCancel()" 
+          type="button" 
+          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >
+          Cancel
+        </button>
+        <button 
+          (click)="onSimpan(projekForm)" 
+          type="button" 
+          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ml-2"
+        >
+          Simpan
+        </button>
+      </div>
+      <div *ngIf="visible" class="mt-2">
+        <button 
+          (click)="onCancel()" 
+          type="button" 
+          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >
+          Cancel
+        </button>
+        <button 
+          (click)="onUpdate(projekForm)" 
+          type="button" 
+          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ml-2"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+    

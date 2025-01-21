@@ -1,0 +1,7 @@
+test
+testing
+statusproject
+`status_project` CHAR(1) DEFAULT '0' 
+  '0' COMMENT '0:Fu;1:kontrak;2:pengerjaan;3:pemasangan;4:pengecekan;5:penagihan;6:lunas'
+`tipe` CHAR(1) DEFAULT '0' COMMENT '0: - | 1: L',
+`tinggi_lipatan` INT DEFAULT '0' COMMENT '+tinggi',

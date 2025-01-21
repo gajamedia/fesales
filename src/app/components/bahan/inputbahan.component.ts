@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SharedbahanService } from '../../services/sharedbahan.service';
 import { BahanService } from '../../services/bahan.service';
-import { Bahan } from '../../interfaces/global.interface';
+import { Bahan, Jenisbahan } from '../../interfaces/global.interface';
+import { JenisbahanService } from '../../services/jenisbahan.service';
 
 
 
@@ -12,21 +13,25 @@ import { Bahan } from '../../interfaces/global.interface';
   selector: 'app-inputjenisbahan',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  providers: [BahanService, SharedbahanService ],
   templateUrl: './inputbahan.component.html',
-  providers: [BahanService, SharedbahanService ]
+  
 })
 
 export class InputbahanComponent implements OnInit, OnDestroy {
   
   bahan: Bahan = {
     id:0,
-    itemcode:"",
-    itemname:"",
-    idjenis:0,
+    item_code:"",
+    item_name:"",
+    id_jenis:0,
+    ukuran:"",
+    keterangan:"",
     created_by:"",
     created_date:"",
     updated_by:"",
-    updated_date:""
+    updated_date:"",
+    is_deleted:0
   };
 
   visible:boolean = false
@@ -38,8 +43,13 @@ export class InputbahanComponent implements OnInit, OnDestroy {
   isNongolMessage = false;
   messageText = '';
 
+  selectJenis:any={}
+  dataJenisBahan:Jenisbahan[]=[]
+  selectedJenisBahan: any = null; // or an appropriate default value
+
   constructor(
-    private bahanService:BahanService, 
+    private bahanService:BahanService,
+    private jenisbahanService: JenisbahanService,
     private sharedbahanService: SharedbahanService,
     private router:Router) { }
 
@@ -57,6 +67,8 @@ export class InputbahanComponent implements OnInit, OnDestroy {
       this.visible = true
       this.initFormData()
     }
+    //load data jenis bahan
+    this.loadJenisBahan()
   }
 
   ngOnDestroy() {
@@ -72,34 +84,46 @@ export class InputbahanComponent implements OnInit, OnDestroy {
     this.tahunini = currentYear
     return dateTime;
   }
-  trackByFn(index: number, item: any) {
-    return item.value;
+  loadJenisBahan(){
+    this.jenisbahanService.getListAll().subscribe({
+      next:(res:any)=>{
+        console.log('res load jenisbahan', res)
+        this.dataJenisBahan = res
+      }
+    })
   }
   
   initFormData(){
     this.bahan.id = this.dataBahan.id
-    this.bahan.itemname = this.dataBahan.itemname
-    this.bahan.itemcode = this.dataBahan.itemcode
-    this.bahan.idjenis = this.dataBahan.idjenis
-    this.bahan.created_by = this.bahan.created_by
-    this.bahan.created_date = this.bahan.created_date
-    this.bahan.updated_by = this.bahan.updated_by
-    this.bahan.updated_date = this.bahan.updated_date
-    this.bahan.is_deleted = this.bahan.is_deleted
+    this.bahan.item_name = this.dataBahan.item_name
+    this.bahan.item_code = this.dataBahan.item_code
+    this.bahan.id_jenis = this.dataBahan.id_jenis
+    this.bahan.ukuran = this.dataBahan.ukuran
+    this.bahan.keterangan = this.dataBahan.keterangan
+    this.bahan.created_by = this.dataBahan.created_by
+    this.bahan.created_date = this.dataBahan.created_date
+    this.bahan.updated_by = this.dataBahan.updated_by
+    this.bahan.updated_date = this.dataBahan.updated_date
+    this.bahan.is_deleted = this.dataBahan.is_deleted
   }
 
   onSimpan(form: any) {
+    let a:any = this.selectedJenisBahan
+    this.bahan.id_jenis = a
     if (form.valid) {
       const data = {
-        'ItemName': this.bahan.itemname,
-        'ItemCode': this.bahan.itemcode,
-        'IdJenis': this.bahan.idjenis,
+        'item_name': this.bahan.item_name,
+        'item_code': this.bahan.item_code,
+        'id_jenis': this.bahan.id_jenis,
+        'ukuran': this.bahan.ukuran,
+        'keterangan': this.bahan.keterangan,
+        /*
         'created_by' : this.bahan.created_by,
         'created_date' : this.bahan.created_date,
         'updated_by' : this.bahan.updated_by,
         'updated_date' : this.bahan.updated_date,
         'is_deleted' : this.bahan.is_deleted
-
+        */
 
       }
       console.log('res', data)
@@ -123,23 +147,29 @@ export class InputbahanComponent implements OnInit, OnDestroy {
   }
 
   onUpdate(form: any) {
+    let a:any = this.selectedJenisBahan
+    this.bahan.id_jenis = a
     if (form.valid) {
       const data = {
-        'ItemName': this.bahan.itemname,
-        'ItemCode': this.bahan.itemcode,
-        'IdJenis': this.bahan.idjenis,
+        'item_name': this.bahan.item_name,
+        'item_code': this.bahan.item_code,
+        'id_jenis': this.bahan.id_jenis,
+        'ukuran': this.bahan.ukuran,
+        'keterangan': this.bahan.keterangan,
+        /*
         'created_by' : this.bahan.created_by,
         'created_date' : this.bahan.created_date,
         'updated_by' : this.bahan.updated_by,
         'updated_date' : this.bahan.updated_date,
         'is_deleted' : this.bahan.is_deleted
+        */
       }
       let id = this.bahan.id
       this.bahanService.update(id, data)
       .subscribe({
         next:(res)=>{
           this.showMessage('Update Data Sukses');
-          this.router.navigate(['/jenisbahan'])
+          this.router.navigate(['/main/bahan'])
           this.refreshData()
         },
         error: (e) => {
@@ -157,17 +187,20 @@ export class InputbahanComponent implements OnInit, OnDestroy {
   }
   onCancel(){
     //console.log('tes clik cancel')
-    this.router.navigate(['/jenisBahan'])
+    this.router.navigate(['/main/bahan'])
   }
   refreshData(){
-    this.bahan.itemname = ""
-    this.bahan.itemcode = ""
-    this.bahan.idjenis = 0
+    this.bahan.item_code = ""
+    this.bahan.item_name = ""
+    this.bahan.id_jenis = 0
+    this.bahan.ukuran = ""
+    this.bahan.keterangan = ""
     this.bahan.created_by = ""
     this.bahan.created_date = ""
     this.bahan.updated_by = ""
     this.bahan.updated_date = ""
     this.bahan.is_deleted = 0
+    this.selectedJenisBahan = 0
   }
   showMessage(t:string): void {
     this.isNongolMessage = true;

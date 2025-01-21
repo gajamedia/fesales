@@ -1,0 +1,156 @@
+<header aria-label="page caption" class="flex-grow flex h-16 bg-gray-300 border-t px-4 items-center">
+  <h1 id="page-caption" class="font-semibold text-lg">List Projek</h1>
+  
+  <!-- Centered Search and Page Size Section -->
+  <div class="flex-grow flex justify-center">
+    <div class="bg-gray-100 p-1 rounded-lg shadow-md text-center flex items-center gap-2">
+      <label for="pageSize" class="block text-gray-700 mr-4">Per Page:</label>
+      <div class="relative">
+        <select id="pageSize" (change)="handlePageSizeChange()" [(ngModel)]="selectedPageSize" class="appearance-none rounded border block bg-white border-gray-400 text-gray-700 py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+          <option *ngFor="let b of dataBaris" [ngValue]="b">
+            {{ b }}
+          </option>
+        </select>
+      </div>
+      <div class="relative ml-4">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500">
+            <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z"></path>
+          </svg>
+        </span>
+        <input [(ngModel)]="search" (input)="handleSearch()" placeholder="Search" class="appearance-none rounded-r border block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Projek Button -->
+  <div class="ml-auto">
+    <button type="button" (click)="onAdd()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+      Add Projek
+    </button>
+  </div>
+</header>
+
+<section aria-label="main content" class="flex flex-col flex-auto border-l py-2 px-2 h-full">
+  <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4">
+    <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+      <table class="w-full leading-normal">
+        <thead class="sticky top-0">
+          <tr>
+            <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">#</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nomer</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Keterangan</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Customer</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Alamat</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kontak</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Created By</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Edited By</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table rows -->
+          <tr *ngFor="let ritem of dataProjek ;  index as i">
+            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">{{ (pageSize * (page - 1) + i) + 1}}</td>
+            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+              <div class="flex items-center">
+                <div class="ml-3">
+                  <p class="text-gray-900 whitespace-no-wrap">{{ ritem.no_project }}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+              <div class="flex items-center">
+                <div class="ml-3">
+                  <p class="text-gray-900 whitespace-no-wrap">{{ formatTglView(ritem.tgl_project) }}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+              <div class="flex items-center">
+                <div class="ml-3">
+                  <p class="text-gray-900 whitespace-no-wrap">{{ ritem.ket_project}}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+              <div class="flex items-center">
+                <div class="ml-3">
+                  <p class="text-gray-900 whitespace-no-wrap">{{ ritem.nama_customer}}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+              <div class="flex items-center">
+                <div class="ml-3">
+                  <p class="text-gray-900 whitespace-no-wrap">{{ ritem.addr_customer}}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+              <div class="flex items-center">
+                <div class="ml-3">
+                  <p class="text-gray-900 whitespace-no-wrap">{{ ritem.contact_customer}}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+              <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                <span aria-hidden class="{{ formatSpanStatus(ritem.status_project) }}"></span>
+                <p class="text-gray-900 whitespace-no-wrap">{{ formatStatus(ritem.status_project) }}</p>
+              </span>
+            </td>
+            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+              <div class="flex items-center">
+                <div class="ml-3">
+                  <p class="text-gray-900 whitespace-no-wrap">{{ ritem.created_by}}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+              <div class="flex items-center">
+                <div class="ml-3">
+                  <p class="text-gray-900 whitespace-no-wrap">{{ formatTglView(ritem.created_date)}}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+              <div class="flex items-center">
+                <div class="ml-3">
+                  <p class="text-gray-900 whitespace-no-wrap">{{ ritem.updated_by}}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+              <button [disabled]="ritem.status_project === 6" title="Edit" class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30" type="button">
+                <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(245, 7, 153);"><path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path><path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path></svg>
+                </span>
+              </button>
+              <button [disabled]="ritem.status_project == 6" title="Hapus" class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30" type="button">
+                <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path><path d="M9 10h2v8H9zm4 0h2v8h-2z"></path></svg>
+                </span>
+              </button>
+            </td>
+          </tr>
+          <!-- More rows -->
+        </tbody>
+      </table>  
+      <div class="h-16 mt-2 px-5 bg-white flex flex-col sm:flex-row items-center sm:justify-between">
+        <span class="text-xs sm:text-sm text-gray-900">
+          Showing {{ (currentPage - 1) * pageSize + 1 }} to
+          {{ currentPage * pageSize > totalPages ? totalPages : currentPage * pageSize }} of {{ totalPages }} Entries
+        </span>
+        <div class="flex flex-row gap-2 items-start">
+          <button class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">Prev</button>
+          <button class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r">Next</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+</section>
+
+  

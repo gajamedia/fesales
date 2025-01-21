@@ -46,7 +46,7 @@
           <tbody>
             <tr *ngFor="let ritem of dataJenisbahan; index as i">
               <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">{{ (pageSize * (page - 1) + i) + 1}}</td>
-              <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">{{ ritem.NamaJenis }}</td>
+              <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">{{ ritem.nama_jenis }}</td>
               <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">{{ ritem.created_by }}</td>
               <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">{{ ritem.created_date }}</td>
               <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm"> {{ ritem.updated_by }}</td>
@@ -70,7 +70,7 @@
                     </svg>
                   </span>
                 </button>
-                <button (click)="onDelete(ritem.id)" class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30" type="button">
+                <button (click)="onDeletedby(ritem.id)" class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30" type="button">
                   <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
