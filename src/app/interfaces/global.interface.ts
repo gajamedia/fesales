@@ -28,7 +28,7 @@ export interface Projek {
   nama_customer?: string, 
   addr_customer?: string, 
   contact_customer?: string, 
-  status_project?: number, 
+  status_project?: string, 
   created_by?: string,
   created_date?: string,
   updated_by?: string,

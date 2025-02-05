@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedloginService } from '../../services/sharedlogin.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProjekService } from '../../services/projek.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { Projek } from '../../interfaces/global.interface';
 import dayjs from 'dayjs';
+import { SharedprojekService } from '../../services/sharedprojek.service';
 
 @Component({
   selector: 'app-projek',
@@ -34,9 +35,14 @@ export class ProjekComponent implements OnInit{
   dataLogin: any={}
   isRole:boolean = false
 
+  id: string | null = null;
+  isEditMode = false;
+
   constructor(
     private sharedloginService: SharedloginService,
     private projekService: ProjekService,
+    private sharedprojekService: SharedprojekService,
+    private route: ActivatedRoute, // Add this
     private router: Router)
 
     {
@@ -48,11 +54,65 @@ export class ProjekComponent implements OnInit{
     this.sharedloginService.getProfileData().subscribe(data => {
       this.dataLogin = data;
       //console.log('Header received updated profile:', this.dataLogin);
-    
     });
+    
+    this.loadDataProjek()
+  }
+  loadDataProjekByID(id:any){
+    // Logic to fetch project details by id and populate form fields
+    console.log('Loading project data for ID:', id);
+    this.projekService.getID(id).subscribe({
+      next:(res:any)=>{
+        console.log('tes res from search', res)
+        //this.dataProjek = res.results
+      },
+      error:(e:any)=>{ console.error(e)},
+      complete:()=>{ console.log('complete')}
+    })
+  }
+  loadDataProjek(){
+    this.projekService.getAll(this.search, this.page, this.pageSize).subscribe({
+      next:(res:any)=>{
+        console.log('tes res from search', res)
+        this.dataProjek = res.results
+        this.totalPages = res.count
+      },
+      error:(e:any)=>{ console.error(e)},
+      complete:()=>{ console.log('complete')}
+    })
   }
   onAdd(){
     this.router.navigate(['/main/inputprojek'])
+  }
+  onEdit(id: any) {
+    // Fetch the user data based on the id
+    const jns = this.dataProjek.find(u => u.id === id);
+    console.log('test id jenis bahan', jns)
+    if (jns) {
+      this.sharedprojekService.setData('editProjek', jns);
+      setTimeout(() => {
+        this.router.navigate(['/main/inputjenisbahan']);
+      }, 100); // Small delay to ensure data is set
+    }
+  }
+  onDetail(id: any) {
+    const projectId = id || this.route.snapshot.paramMap.get('id');
+    this.router.navigate(['/main/detailprojek', projectId]);
+  }
+  onDeleted(id: any) {
+    const projectId = id || this.route.snapshot.paramMap.get('id');
+    const d = {
+      'is_deleted' : 1
+    }
+    if (confirm('Are you sure you want to delete this project?')) {
+      this.projekService.deletedby(projectId, d).subscribe({
+        next: (res) => {
+          console.log('Project deleted:', res);
+          this.loadDataProjek(); // Refresh the list
+        },
+        error: (err) => console.error(err),
+      });
+    }
   }
   handlePageChange(p:any){
     //console.log("page", p)
@@ -61,48 +121,48 @@ export class ProjekComponent implements OnInit{
   }
   handleSearch(){
     
-    //this.loadData()
+    this.loadDataProjek()
   }
   handlePageSizeChange() {
     this.pageSize = this.selectedPageSize;
     this.page = 1;
     this.currentPage = this.page;
-    //this.loadData()
+    this.loadDataProjek()
   }
 
   handleNext() {
     if (this.currentPage < this.totalPages) {
       this.page = ++this.currentPage;
-      //this.loadData()
+      this.loadDataProjek()
     }
   }
 
   handlePrev() {
     if (this.currentPage > 1) {
       this.page = --this.currentPage;
-      //this.loadData()
+      this.loadDataProjek()
     }
   }
 
   refreshList(){
-    //this.loadData();
+    this.loadDataProjek()
   }
 
   formatSpanStatus(k: any) {
     switch (k) {
-      case 0:
+      case "0":
         return 'absolute inset-0 bg-green-200 opacity-50 rounded-full';
-      case 1:
+      case "1":
         return 'absolute inset-0 bg-yellow-200 opacity-50 rounded-full';
-      case 2:
+      case "2":
         return 'absolute inset-0 bg-blue-200 opacity-50 rounded-full';
-      case 3:
+      case "3":
         return 'absolute inset-0 bg-amber-200 opacity-50 rounded-full';
-      case 4:
+      case "4":
         return 'absolute inset-0 bg-lime-200 opacity-50 rounded-full';
-      case 5:
+      case "5":
         return 'absolute inset-0 bg-emerald-300 opacity-50 rounded-full';
-      case 6:
+      case "6":
         return 'absolute inset-0 bg-teal-200 opacity-50 rounded-full';
       default:
         return 'absolute inset-0 bg-gray-200 opacity-50 rounded-full';
@@ -111,19 +171,19 @@ export class ProjekComponent implements OnInit{
   
   formatStatus(k: any) {
     switch (k) {
-      case 0:
+      case "0":
         return 'FU';
-      case 1:
+      case "1":
         return 'Kontrak';
-      case 2:
+      case "2":
         return 'Pengerjaan';
-      case 3:
+      case "3":
         return 'Pemasangan';
-      case 4:
+      case "4":
         return 'Pengecekan';
-      case 5:
+      case "5":
         return 'Penagihan';
-      case 6:
+      case "6":
         return 'Lunas';
       default:
         return 'none';

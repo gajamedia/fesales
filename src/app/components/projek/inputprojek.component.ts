@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,7 +19,7 @@ import { SharedprojekService } from '../../services/sharedprojek.service';
   styleUrl: './projek.component.scss',
   providers: [SharedloginService, SharedprojekService]
 })
-export class InputprojekComponent implements OnInit {
+export class InputprojekComponent implements OnInit, OnDestroy {
   
   dataInputProjek: Projek = {
     id: 0,
@@ -29,7 +29,7 @@ export class InputprojekComponent implements OnInit {
     nama_customer: "", 
     addr_customer: "", 
     contact_customer: "", 
-    status_project: 0, 
+    status_project: "", 
     created_by: "",
     created_date: "",
     updated_by: "",
@@ -48,8 +48,9 @@ export class InputprojekComponent implements OnInit {
   messageText: string="";
   isNongolMessage: boolean = false;
 
-  mode:any
-  visible:boolean=false
+  visible:boolean = false
+  mode:boolean = false
+  submitted:boolean = false
 
   // Define the options for the select dropdown
   statusProjectOptions = [
@@ -72,7 +73,9 @@ export class InputprojekComponent implements OnInit {
     {
       //this.typepayId = this.route.snapshot.paramMap.get('typepayId')!;
     }
-
+  ngOnDestroy() {
+    this.sharedprojekService.clearData('editProjek');
+  }
   ngOnInit(): void {
     this.currentDateTime();
     this.dataProjek = this.sharedprojekService.getData('editProjek');
@@ -80,11 +83,13 @@ export class InputprojekComponent implements OnInit {
       // Handle case where user is not found, maybe navigate back or show an error
       this.mode = false
       this.visible = false
+      this.genKode()
     }
     else{
       this.mode = true
       this.visible = true
       this.initFormData()
+      
     }
   }
   
@@ -116,7 +121,17 @@ export class InputprojekComponent implements OnInit {
   }
   onSimpan(form: any) {
     if (form.valid) {
-      this.projekService.create(this.dataInputProjek).subscribe({
+      const d ={
+        'no_project' : this.dataInputProjek.no_project,
+        'tgl_project': this.formatTglDB(this.dataInputProjek.tgl_project || ""),
+        'ket_project' : this.dataInputProjek.ket_project,
+        'nama_customer' : this.dataInputProjek.nama_customer,
+        'addr_customer' : this.dataInputProjek.addr_customer,
+        'contact_customer' : this.dataInputProjek.contact_customer,
+        'status_project' : this.dataInputProjek.status_project
+      }
+      console.log('simpan', d)
+      this.projekService.create(d).subscribe({
         next: () => {
           this.showMessage('Simpan Data Sukses');
           this.refreshData();
@@ -133,8 +148,17 @@ export class InputprojekComponent implements OnInit {
   }
   onUpdate(form: any) {
     if (form.valid) {
+      const d ={
+        'no_project' : this.dataInputProjek.no_project,
+        'tgl_project': this.dataProjek.tgl_project,
+        'ket_project' : this.dataProjek.ket_project,
+        'nama_customer' : this.dataProjek.nama_customer,
+        'addr_customer' :this.dataProjek.addr_customer,
+        'contact_customer' : this.dataProjek.contact_customer,
+        'status_project' : this.dataProjek.status_project
+      }
       let id = this.dataInputProjek.id
-      this.projekService.update(id, this.dataInputProjek)
+      this.projekService.update(id, d)
       .subscribe({
         next:(res)=>{
           this.showMessage('Update Data Sukses');
@@ -167,7 +191,7 @@ export class InputprojekComponent implements OnInit {
       nama_customer: "", 
       addr_customer: "", 
       contact_customer: "", 
-      status_project: 0, 
+      status_project: "", 
       created_by: "",
       created_date: "",
       updated_by: "",
@@ -178,6 +202,7 @@ export class InputprojekComponent implements OnInit {
   genKode(){
     this.projekService.getListAll().subscribe({
       next: (res: any) => {
+        console.log('test res getlist', res)
         let nrec = res.count || 0;
         let snol = '0'.repeat(Math.max(0, 3 - nrec.toString().length));
         this.dataInputProjek.no_project = `PROJ.${snol}${nrec + 1}`;
@@ -191,7 +216,7 @@ export class InputprojekComponent implements OnInit {
   }
   formatTglDB(tgl:string){
     const date = dayjs(tgl)
-    return date.format('YYYY-MM-DD')
+    return date.format('YYYY-MM-DD hh:mm:ss')
   }
   showMessage(t:string): void {
     this.isNongolMessage = true;

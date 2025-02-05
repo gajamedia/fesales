@@ -44,8 +44,7 @@ export class InputbahanComponent implements OnInit, OnDestroy {
   messageText = '';
 
   selectJenis:any={}
-  dataJenisBahan:Jenisbahan[]=[]
-  selectedJenisBahan: any = null; // or an appropriate default value
+  selectDataJenisBahan: any;
 
   constructor(
     private bahanService:BahanService,
@@ -72,7 +71,7 @@ export class InputbahanComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sharedbahanService.clearData('editJenisbahan');
+    this.sharedbahanService.clearData('editBahan');
   }
 
   currentDateTime() {
@@ -88,7 +87,7 @@ export class InputbahanComponent implements OnInit, OnDestroy {
     this.jenisbahanService.getListAll().subscribe({
       next:(res:any)=>{
         console.log('res load jenisbahan', res)
-        this.dataJenisBahan = res
+        this.selectDataJenisBahan = res
       }
     })
   }
@@ -108,8 +107,8 @@ export class InputbahanComponent implements OnInit, OnDestroy {
   }
 
   onSimpan(form: any) {
-    let a:any = this.selectedJenisBahan
-    this.bahan.id_jenis = a
+    //let a:any = this.selectedJenisBahan
+    //this.bahan.id_jenis = a
     if (form.valid) {
       const data = {
         'item_name': this.bahan.item_name,
@@ -147,8 +146,8 @@ export class InputbahanComponent implements OnInit, OnDestroy {
   }
 
   onUpdate(form: any) {
-    let a:any = this.selectedJenisBahan
-    this.bahan.id_jenis = a
+    //let a:any = this.selectedJenisBahan
+    //this.bahan.id_jenis = a
     if (form.valid) {
       const data = {
         'item_name': this.bahan.item_name,
@@ -200,7 +199,7 @@ export class InputbahanComponent implements OnInit, OnDestroy {
     this.bahan.updated_by = ""
     this.bahan.updated_date = ""
     this.bahan.is_deleted = 0
-    this.selectedJenisBahan = 0
+    //this.selectedJenisBahan = 0
   }
   showMessage(t:string): void {
     this.isNongolMessage = true;

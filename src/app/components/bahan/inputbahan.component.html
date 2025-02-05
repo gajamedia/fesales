@@ -11,14 +11,12 @@
         <div class="flex flex-col gap-2 w-full">
           <label class="text-gray-700" for="id_jenis">Pilih Jenis Bahan</label>
           <select
-            id="comboBox"
             class="p-2 border-2 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            [(ngModel)]="selectedJenisBahan"
-            [ngModelOptions]="{standalone: true}"
+            [(ngModel)]="bahan.id_jenis" name="id_jenis" class="p-2 border-2 rounded-lg ng-untouched ng-pristine ng-valid" id="floatingInput"
           >
-            <option *ngFor="let item of dataJenisBahan" [value]="item.id">
-              {{ item.nama_jenis }}
-            </option>
+              <option *ngFor="let item of selectDataJenisBahan" [ngValue]="item.id">
+                {{ item.nama_jenis }}
+              </option>
           </select>
         </div>
       </div>

@@ -1,5 +1,5 @@
 <header aria-label="page caption" class="flex-none flex h-16 bg-gray-200 border-t px-4 items-center">
-  <h1 id="page-caption" class="font-semibold text-lg">Input Projek</h1>
+  <h1 id="page-caption" class="font-semibold text-lg">{{mode ? 'Edit' : 'Add New'}} Projek</h1>
 </header>
 <section aria-label="main content" class="flex flex-col flex-auto border-l py-2 px-4 h-full mt-2">
   <div *ngIf="isNongolMessage" class="fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow-lg">

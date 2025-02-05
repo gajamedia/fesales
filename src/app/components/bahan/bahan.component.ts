@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SharedloginService } from '../../services/sharedlogin.service';
 import { BahanService } from '../../services/bahan.service';
@@ -16,7 +16,7 @@ import { SharedbahanService } from '../../services/sharedbahan.service';
   templateUrl: './bahan.component.html',
   styleUrl: './bahan.component.scss'
 })
-export class BahanComponent implements OnInit {
+export class BahanComponent implements OnInit{
   dataBahan: Bahan[] = [];
   currentPage: number = 1;
   totalPages!: number;
@@ -44,7 +44,7 @@ export class BahanComponent implements OnInit {
   {
     //this.tmp = this.route.snapshot.paramMap.get('id')!;
   }
-
+  
   ngOnInit(): void {
     
     this.pageSize = this.selectedPageSize

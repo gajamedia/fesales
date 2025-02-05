@@ -17,7 +17,7 @@ export class ProjekService {
   // Function to gel user detail by id_auth
   getID(id: string): Observable<Projek> {
     const headers = this.globalService.getHeaders();
-    return this.http.get<any>(`${this.apiUrl}/projek/getid/?id=${id}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/project/${id}/`, { headers });
   }
   // Function to get All
   getListAll(): Observable<Projek[]> {
@@ -45,7 +45,7 @@ export class ProjekService {
 
   deletedby(id: any, jdata:any): Observable<any> {
     const headers = this.globalService.getHeaders();
-    return this.http.put(`${this.apiUrl}/project/${id}/delete/`, { headers, jdata});
+    return this.http.put(`${this.apiUrl}/project/${id}/delete/`, jdata, { headers});
   }
 
 }
