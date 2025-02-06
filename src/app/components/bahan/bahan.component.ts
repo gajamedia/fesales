@@ -7,11 +7,12 @@ import dayjs from 'dayjs';
 import { Bahan } from '../../interfaces/global.interface';
 import { Router } from '@angular/router';
 import { SharedbahanService } from '../../services/sharedbahan.service';
+import { ThousandSeparatorPipe } from '../helpers/thousand-separator.pipe';
 
 @Component({
   selector: 'app-bahan',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ThousandSeparatorPipe],
   providers: [SharedloginService, BahanService],
   templateUrl: './bahan.component.html',
   styleUrl: './bahan.component.scss'

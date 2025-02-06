@@ -6,13 +6,14 @@ import { SharedbahanService } from '../../services/sharedbahan.service';
 import { BahanService } from '../../services/bahan.service';
 import { Bahan, Jenisbahan } from '../../interfaces/global.interface';
 import { JenisbahanService } from '../../services/jenisbahan.service';
+import { ThousandSeparatorPipe } from '../helpers/thousand-separator.pipe';
 
 
 
 @Component({
   selector: 'app-inputjenisbahan',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ThousandSeparatorPipe],
   providers: [BahanService, SharedbahanService ],
   templateUrl: './inputbahan.component.html',
   
@@ -27,6 +28,8 @@ export class InputbahanComponent implements OnInit, OnDestroy {
     id_jenis:0,
     ukuran:"",
     keterangan:"",
+    harga_beli:0 ,
+    harga_jual: 0,
     created_by:"",
     created_date:"",
     updated_by:"",
@@ -99,6 +102,8 @@ export class InputbahanComponent implements OnInit, OnDestroy {
     this.bahan.id_jenis = this.dataBahan.id_jenis
     this.bahan.ukuran = this.dataBahan.ukuran
     this.bahan.keterangan = this.dataBahan.keterangan
+    this.bahan.harga_beli = this.dataBahan.harga_beli
+    this.bahan.harga_jual = this.dataBahan.harga_jual
     this.bahan.created_by = this.dataBahan.created_by
     this.bahan.created_date = this.dataBahan.created_date
     this.bahan.updated_by = this.dataBahan.updated_by
@@ -116,6 +121,8 @@ export class InputbahanComponent implements OnInit, OnDestroy {
         'id_jenis': this.bahan.id_jenis,
         'ukuran': this.bahan.ukuran,
         'keterangan': this.bahan.keterangan,
+        'harga_beli': this.bahan.harga_beli,
+        'harga_jual': this.bahan.harga_jual,
         /*
         'created_by' : this.bahan.created_by,
         'created_date' : this.bahan.created_date,
@@ -155,6 +162,8 @@ export class InputbahanComponent implements OnInit, OnDestroy {
         'id_jenis': this.bahan.id_jenis,
         'ukuran': this.bahan.ukuran,
         'keterangan': this.bahan.keterangan,
+        'harga_beli': this.bahan.harga_beli,
+        'harga_jual': this.bahan.harga_jual,
         /*
         'created_by' : this.bahan.created_by,
         'created_date' : this.bahan.created_date,
@@ -194,6 +203,8 @@ export class InputbahanComponent implements OnInit, OnDestroy {
     this.bahan.id_jenis = 0
     this.bahan.ukuran = ""
     this.bahan.keterangan = ""
+    this.bahan.harga_beli = 0
+    this.bahan.harga_jual = 0
     this.bahan.created_by = ""
     this.bahan.created_date = ""
     this.bahan.updated_by = ""

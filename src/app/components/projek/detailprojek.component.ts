@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SharedloginService } from '../../services/sharedlogin.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjekService } from '../../services/projek.service';
@@ -8,18 +8,19 @@ import { AuthService } from '../../services/auth.service';
 import { DetailProjek, Projek } from '../../interfaces/global.interface';
 import dayjs from 'dayjs';
 import { DetailprojekService } from '../../services/detailprojek.service';
+import { ShareddetailprojekService } from '../../services/shareddetailprojek.service';
 
 @Component({
   selector: 'app-detailprojek',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  providers: [SharedloginService, AuthService],
+  providers: [SharedloginService, AuthService, ShareddetailprojekService],
   templateUrl: './detailprojek.component.html',
   styleUrl: './projek.component.scss'
 })
-export class DetailprojekComponent implements OnInit{
+export class DetailprojekComponent implements OnInit, OnDestroy{
   dataProjek: any
-  dataDetailProjek: DetailProjek []= []
+  dataDetailProjek: any
 
   currentPage: number = 1
   totalPages!: number
@@ -56,10 +57,17 @@ export class DetailprojekComponent implements OnInit{
     is_deleted: 0,
   }
   projectId: string | null = null;
+
+  mode:boolean = false
+  visible:boolean = false
+  isNongolMessage:boolean = false
+  messageText:string=""
+
   constructor(
     private sharedloginService: SharedloginService,
     private projekService: ProjekService,
     private detailprojekService: DetailprojekService,
+    private shareddetailprojekService: ShareddetailprojekService,
     private route: ActivatedRoute,
     private router: Router)
 
@@ -67,6 +75,9 @@ export class DetailprojekComponent implements OnInit{
       //this.typepayId = this.route.snapshot.paramMap.get('typepayId')!;
     }
 
+  ngOnDestroy() {
+    this.shareddetailprojekService.clearData('editDetailProjek');
+  }
   ngOnInit(): void {
     this.pageSize = this.selectedPageSize
     this.sharedloginService.getProfileData().subscribe(data => {
@@ -78,7 +89,18 @@ export class DetailprojekComponent implements OnInit{
       this.loadDataProjekBy(this.projectId);
       this.loadDataDetailProjek(this.projectId)
     }
-  
+    this.dataDetailProjek = this.shareddetailprojekService.getData('editDetailProjek');
+    if (!this.dataProjek) {
+      // Handle case where user is not found, maybe navigate back or show an error
+      //this.mode = false
+      this.visible = false
+    }
+    else{
+      //this.mode = true
+      this.visible = true
+      this.initFormData()
+      
+    }
   }
   loadDataProjekBy(id:any){
     this.projekService.getID(id).subscribe({
@@ -89,6 +111,23 @@ export class DetailprojekComponent implements OnInit{
       error:(e:any)=>{ console.error(e)},
       complete:()=>{ console.log('complete')}
     })
+  }
+  initFormData(){
+    this.inputDetailProjek.id = this.dataDetailProjek.id
+    this.inputDetailProjek.id_project_header = this.dataDetailProjek.id_project_header
+    this.inputDetailProjek.lebar_bahan= this.dataDetailProjek.lebar_bahan
+    this.inputDetailProjek.lantai = this.dataDetailProjek.lantai
+    this.inputDetailProjek.ruangan = this.dataDetailProjek.ruangan
+    this.inputDetailProjek.bed = this.dataDetailProjek.bed
+    this.inputDetailProjek.tipe = this.dataDetailProjek.tipe
+    this.inputDetailProjek.uk_room_l = this.dataDetailProjek.uk_room_l
+    this.inputDetailProjek.uk_room_p = this.dataDetailProjek.uk_room_p
+    this.inputDetailProjek.uk_room_t = this.dataDetailProjek.uk_room_t
+    this.inputDetailProjek.stik = this.dataDetailProjek.stik
+    this.inputDetailProjek.elevasi = this.dataDetailProjek.elevasi
+    this.inputDetailProjek.tinggi_vitrase = this.dataDetailProjek.tinggi_vitrase
+    this.inputDetailProjek.tinggi_lipatan = this.dataDetailProjek.tinggi_lipatan 
+    this.inputDetailProjek.nilai_pembagi = this.dataDetailProjek.nilai_pembagi
   }
   loadDataDetailProjek(id:any){
     this.search = id
@@ -103,8 +142,40 @@ export class DetailprojekComponent implements OnInit{
       complete:()=>{ console.log('complete')}
     })
   }
-  onAdd(){
-    this.router.navigate(['/main/inputprojek'])
+  onSimpan(form: any){
+    if (form.valid) {
+      const d ={
+        //'id': this.inputDetailProjek.id,
+        'id_project_header':this.inputDetailProjek.id_project_header,
+        'lebar_bahan':this.inputDetailProjek.lebar_bahan,
+        'lantai':this.inputDetailProjek.lantai,
+        'ruangan':this.inputDetailProjek.ruangan,
+        'bed':this.inputDetailProjek.bed,
+        'tipe':this.inputDetailProjek.tipe,
+        'uk_room_l':this.inputDetailProjek.uk_room_l,
+        'uk_room_p':this.inputDetailProjek.uk_room_p,
+        'uk_room_t':this.inputDetailProjek.uk_room_t,
+        'stik':this.inputDetailProjek.stik,
+        'elevasi':this.inputDetailProjek.elevasi,
+        'tinggi_vitrase':this.inputDetailProjek.tinggi_vitrase,
+        'tinggi_lipatan':this.inputDetailProjek.tinggi_lipatan,
+        'nilai_pembagi':this.inputDetailProjek.nilai_pembagi
+      }
+      console.log('simpan', d)
+      this.detailprojekService.create(d).subscribe({
+        next: () => {
+          this.showMessage('Simpan Data Sukses');
+          this.refreshData();
+        },
+        error: () => {
+          this.showMessage('Failed to save project!');
+        }
+      });
+    } else {
+      this.showMessage('isian wajib diisi Failed to save project!');
+    }
+    //let b:any = this.inputDetailProjek.id_project_header
+    //this.loadDataDetailProjek(b)
   }
   onEdit(id:any){
 
@@ -112,8 +183,79 @@ export class DetailprojekComponent implements OnInit{
   onDeleted(id:any){
 
   }
+  onUpdate(form: any) {
+    if (form.valid) {
+      const d ={
+        'id_project_header':this.inputDetailProjek.id_project_header,
+        'lebar_bahan':this.inputDetailProjek.lebar_bahan,
+        'lantai':this.inputDetailProjek.lantai,
+        'ruangan':this.inputDetailProjek.ruangan,
+        'bed':this.inputDetailProjek.bed,
+        'tipe':this.inputDetailProjek.tipe,
+        'uk_room_l':this.inputDetailProjek.uk_room_l,
+        'uk_room_p':this.inputDetailProjek.uk_room_p,
+        'uk_room_t':this.inputDetailProjek.uk_room_t,
+        'stik':this.inputDetailProjek.stik,
+        'elevasi':this.inputDetailProjek.elevasi,
+        'tinggi_vitrase':this.inputDetailProjek.tinggi_vitrase,
+        'tinggi_lipatan':this.inputDetailProjek.tinggi_lipatan,
+        'nilai_pembagi':this.inputDetailProjek.nilai_pembagi
+      }
+      let id = this.inputDetailProjek.id
+      this.detailprojekService.update(id, d)
+      .subscribe({
+        next:(res)=>{
+          this.showMessage('Update Data Sukses');
+          this.router.navigate(['/main/detailprojek'])
+          this.refreshData()
+        },
+        error: (e) => {
+          //console.error('Update error:', e);
+          if (e.error) {
+              // Display a more readable error message
+            console.error('Backend error:', e.error);
+          } else {
+            console.error('Error', 'Simpan Data Error.');
+          }
+        }
+      })
+    }
+    //let b:any = this.inputDetailProjek.id_project_header
+    //console.error('b:', this.inputDetailProjek.id_project_header);
+    //this.loadDataDetailProjek(b)
+  }
+  onCancel(){
+    //console.log('tes clik cancel')
+    this.shareddetailprojekService.clearData('editDetailProjek');
+    this.router.navigate(['/main/projek'])
+  }
   formatTglView(tgl: any){
     const date = dayjs(tgl)
     return date.format('DD/MM/YYYY')
+  }
+  showMessage(t:string): void {
+    this.isNongolMessage = true;
+    this.messageText = t
+    // Auto close the message after 3 seconds (3000 ms)
+    setTimeout(() => {
+      this.isNongolMessage = false;
+    }, 3000);
+  }
+  refreshData(){
+    this.inputDetailProjek.id = 0
+    this.inputDetailProjek.id_project_header = 0
+    this.inputDetailProjek.lebar_bahan= 0
+    this.inputDetailProjek.lantai = ""
+    this.inputDetailProjek.ruangan = ""
+    this.inputDetailProjek.bed = ""
+    this.inputDetailProjek.tipe = ""
+    this.inputDetailProjek.uk_room_l = 0
+    this.inputDetailProjek.uk_room_p = 0
+    this.inputDetailProjek.uk_room_t = 0
+    this.inputDetailProjek.stik = 0
+    this.inputDetailProjek.elevasi = 0
+    this.inputDetailProjek.tinggi_vitrase = 0
+    this.inputDetailProjek.tinggi_lipatan = 0
+    this.inputDetailProjek.nilai_pembagi = 0
   }
 }

@@ -8,20 +8,18 @@
   <div class="w-full p-4 bg-white shadow-2xl rounded-xl">
     <form class="flex flex-col" #bahanForm="ngForm">
       <div class="form-group flex flex-col gap-4 md:flex-row">
-        <div class="flex flex-col gap-2 w-full">
+        <div class="flex flex-col w-full">
           <label class="text-gray-700" for="id_jenis">Pilih Jenis Bahan</label>
           <select
             class="p-2 border-2 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             [(ngModel)]="bahan.id_jenis" name="id_jenis" class="p-2 border-2 rounded-lg ng-untouched ng-pristine ng-valid" id="floatingInput"
-          >
-              <option *ngFor="let item of selectDataJenisBahan" [ngValue]="item.id">
-                {{ item.nama_jenis }}
-              </option>
+            >
+            <option *ngFor="let item of selectDataJenisBahan" [ngValue]="item.id">
+              {{ item.nama_jenis }}
+            </option>
           </select>
         </div>
-      </div>
-      <div class="form-group flex flex-col gap-4 md:flex-row">
-        <div class="flex flex-col gap-2 w-full">
+        <div class="flex flex-col w-full">
           <label class="text-gray-700" for="item_code">Kode Item</label>
           <input
             required
@@ -36,8 +34,8 @@
           <div *ngIf="item_code.touched && item_code.invalid" class="text-red-500 text-sm">
             Kode Item is required.
           </div>
-        </div>
-        <div class="flex flex-col gap-2 w-full">
+        </div> 
+        <div class="flex flex-col w-full">
           <label class="text-gray-700" for="item_name">Nama Item</label>
           <input
             required
@@ -54,9 +52,9 @@
           </div>
         </div>
       </div>
-      
       <div class="form-group flex flex-col gap-4 md:flex-row">
-        <div class="flex flex-col gap-2 w-full">
+
+        <div class="flex flex-col w-full">
           <label class="text-gray-700" for="ukuran">Ukuran</label>
           <input
             required
@@ -73,6 +71,41 @@
           </div>
         </div>
         <div class="flex flex-col gap-2 w-full">
+          <label class="text-gray-700" for="harga_beli">Harga Beli</label>
+          <input
+            required
+            id="harga_beli"
+            type="text"
+            class="p-2 border-2 rounded-lg"
+            [(ngModel)]="bahan.harga_beli"
+            name="harga_beli"
+            #harga_beli="ngModel"
+            [ngClass]="{'border-red-500': harga_beli.touched && harga_beli.invalid}"
+          >
+          <div *ngIf="harga_beli.touched && harga_beli.invalid" class="text-red-500 text-sm">
+            harga beli is required.
+          </div>
+        </div>
+        
+        <div class="flex flex-col gap-2 w-full">
+          <label class="text-gray-700" for="harga_jual">Harga Jual</label>
+          <input
+            required
+            id="harga_jual"
+            type="text"
+            class="p-2 border-2 rounded-lg"
+            [(ngModel)]="bahan.harga_jual"
+            name="harga_jual"
+            #harga_jual="ngModel"
+            [ngClass]="{'border-red-500': harga_jual.touched && harga_jual.invalid}"
+          >
+          <div *ngIf="harga_jual.touched && harga_jual.invalid" class="text-red-500 text-sm">
+            harga jual is required.
+          </div>
+        </div>
+      </div>
+      <div class="form-group flex flex-col gap-4 md:flex-row">
+        <div class="flex flex-col w-full">
           <label class="text-gray-700" for="keterangan">Keterangan</label>
           <input
             required

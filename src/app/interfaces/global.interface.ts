@@ -14,6 +14,8 @@ export interface Bahan {
   id_jenis?: number,
   ukuran?: string,
   keterangan?: string,
+  harga_jual?: number,
+  harga_beli?: number,
   created_by?: string,
   created_date?: string,
   updated_by?: string,
