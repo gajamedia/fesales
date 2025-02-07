@@ -146,7 +146,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     if (form.valid) {
       const d ={
         //'id': this.inputDetailProjek.id,
-        'id_project_header':this.inputDetailProjek.id_project_header,
+        'id_project_header':this.projectId, //ini saat edit this.inputDetailProjek.id_project_header,
         'lebar_bahan':this.inputDetailProjek.lebar_bahan,
         'lantai':this.inputDetailProjek.lantai,
         'ruangan':this.inputDetailProjek.ruangan,
@@ -174,8 +174,9 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     } else {
       this.showMessage('isian wajib diisi Failed to save project!');
     }
-    //let b:any = this.inputDetailProjek.id_project_header
-    //this.loadDataDetailProjek(b)
+    let b:any = this.projectId
+    console.log('saat simpan detail project .id_project_header', b)
+    this.loadDataDetailProjek(b)
   }
   onEdit(id:any){
 
@@ -220,8 +221,8 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
         }
       })
     }
-    //let b:any = this.inputDetailProjek.id_project_header
-    //console.error('b:', this.inputDetailProjek.id_project_header);
+    let b:any = this.inputDetailProjek.id_project_header
+    console.error('b:', this.inputDetailProjek.id_project_header);
     //this.loadDataDetailProjek(b)
   }
   onCancel(){

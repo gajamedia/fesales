@@ -17,12 +17,12 @@ export class DetailprojekService {
   // Function to gel user detail by id_auth
   getID(id: string): Observable<DetailProjek> {
     const headers = this.globalService.getHeaders();
-    return this.http.get<any>(`${this.apiUrl}/detailproject/retrieve/?id=${id}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/projectdetil/retrieve/?id=${id}`, { headers });
   }
   // Function to get All
   getListAll(): Observable<DetailProjek[]> {
       const headers = this.globalService.getHeaders();
-      return this.http.get<DetailProjek[]>(`${this.apiUrl}/detailproject/list/`, { headers});
+      return this.http.get<DetailProjek[]>(`${this.apiUrl}/projectdetil/list/`, { headers});
   }
   // Function to get All
   getAll(search: string, page: number, pageSize: number): Observable<DetailProjek[]> {
@@ -31,21 +31,21 @@ export class DetailprojekService {
     if (search) {
       params = params.set('search', search);
     }
-    return this.http.get<DetailProjek[]>(`${this.apiUrl}/detailproject/search/`, { headers, params });
+    return this.http.get<DetailProjek[]>(`${this.apiUrl}/projectdetil/search/`, { headers, params });
   }
   create(formData: any): Observable<any> {
     const headers = this.globalService.getHeaders();
-    return this.http.post<any>(`${this.apiUrl}/detailproject/create/`, formData, { headers });
+    return this.http.post<any>(`${this.apiUrl}/projectdetil/create/`, formData, { headers });
   }
 
   update(id: any, data: any): Observable<any> {
     const headers = this.globalService.getHeaders();
-    return this.http.put(`${this.apiUrl}/detailproject/${id}/update/`, data, { headers });
+    return this.http.put(`${this.apiUrl}/projectdetil/${id}/update/`, data, { headers });
   }
 
   deletedby(id: any, jdata:any): Observable<any> {
     const headers = this.globalService.getHeaders();
-    return this.http.put(`${this.apiUrl}/detailproject/${id}/delete/`, jdata, { headers});
+    return this.http.put(`${this.apiUrl}/projectdetil/${id}/delete/`, jdata, { headers});
   }
 
 }

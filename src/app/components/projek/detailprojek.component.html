@@ -337,10 +337,10 @@
             <thead class="sticky top-0">
               <tr>
                 <th class="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">#</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Lebar Bahan</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Lantai</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Ruangan</th>
                 <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Bed</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Ruangan</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Lantai</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Lebar Bahan</th>
                 <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Tipe</th>
                 <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 ">Uk Room-L</th>
                 <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 ">Uk Room-P</th>
@@ -357,19 +357,16 @@
               <tr *ngFor="let ritem of dataDetailProjek; index as i">
                 <td class="px-2 py-3 border-b border-gray-200 bg-white text-sm">{{ (pageSize * (page - 1) + i) + 1 }}</td>
                 <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
-                  <p class="text-gray-900 whitespace-no-wrap">{{ritem.id_project_header}}</p>
-                </td>
-                <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
-                  <p class="text-gray-900 whitespace-no-wrap">{{ritem.lebar_bahan}}</p>
-                </td>
-                <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
-                  <p class="text-gray-900 whitespace-no-wrap">{{ritem.lantai}}</p>
+                  <p class="text-gray-900 whitespace-no-wrap">{{ ritem.bed }}</p>
                 </td>
                 <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
                   <p class="text-gray-900 whitespace-no-wrap">{{ritem.ruangan}}</p>
                 </td>
                 <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
-                  <p class="text-gray-900 whitespace-no-wrap">{{ ritem.bed }}</p>
+                  <p class="text-gray-900 whitespace-no-wrap">{{ritem.lantai}}</p>
+                </td>
+                <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                  <p class="text-gray-900 whitespace-no-wrap">{{ritem.lebar_bahan}}</p>
                 </td>
                 <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
                   <p class="text-gray-900 whitespace-no-wrap">{{ ritem.tipe }}</p>

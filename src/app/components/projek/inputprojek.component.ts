@@ -145,6 +145,7 @@ export class InputprojekComponent implements OnInit, OnDestroy {
       this.messageText = "Please fill in all required fields!";
       this.isNongolMessage = true;
     }
+    
   }
   onUpdate(form: any) {
     if (form.valid) {
