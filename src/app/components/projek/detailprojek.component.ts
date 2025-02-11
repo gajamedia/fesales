@@ -75,7 +75,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
   //expandedRow: number | null = null;
   //dataDetailBahan: { [key: number]: any } = {}; // Deklarasikan sebagai objek
   expandedRows: { [key: number]: any[] } = {};
-
+  editedBahan:any
 
   constructor(
     private sharedloginService: SharedloginService,
@@ -338,10 +338,10 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       this.expandedRows[id] = [];
     }
   
-    // Tambahkan data baru
+    // Tambahkan data baru dengan item_id null agar terdeteksi sebagai data baru
     const newData = {
       item_code: Date.now(), // ID unik
-      item_id: 0,
+      item_id: null, // Null agar dianggap data baru
       item_name: '',
       ukuran: '',
       harga_beli: 0,
@@ -355,58 +355,36 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     console.log("Data setelah ditambahkan:", this.expandedRows[id]);
   }
   
+  editDetailBahan(ritemId: number, bahan: DetailBahan) {
+    // Cari data dalam expandedRows berdasarkan ID
+    const existingData = this.expandedRows[ritemId].find((b) => b.item_id === bahan.item_id);
   
-  
-  
-  /*
-  addDetailBahan(project: DetailProjek) {
-    const newBahan: DetailBahan = {
-      item_id: 0,
-      item_code: 0,
-      item_name: '',
-      ukuran: '',
-      harga_beli: 0,
-      harga_jual: 0,
-      isEditing: true, // Auto masuk mode edit
-    };
-    project.dataDetailBahan.unshift(newBahan);
-  }
-  */
-  editDetailBahan(bahan: DetailBahan) {
-    console.log('edit bahan', bahan)
-    // Pastikan item_name dan ukuran diubah ke string jika kosong/null
-    bahan.item_name = (bahan.item_name ?? '').toString().trim() || 'Nama Default';
-    bahan.ukuran = (bahan.ukuran ?? '').toString().trim() || 'Ukuran Default';
-  
-    bahan.isEditing = true;
+    if (existingData) {
+      existingData.isEditing = true; // Aktifkan mode edit tanpa membuat row baru
+    }
   }
   
   
-
-  saveDetailBahan(project: DetailProjek, bahan: DetailBahan) {
-    // Trim dan isi nilai default sebelum validasi
-    bahan.item_name = bahan.item_name?.trim() || '';
-    bahan.ukuran = bahan.ukuran?.trim() || '';
-  
-    // Validasi hanya ketika pengguna benar-benar menyimpan
+  saveDetailBahan(ritemId: number, bahan: DetailBahan) {
     if (!bahan.item_name || !bahan.ukuran) {
       alert('Nama bahan dan ukuran harus diisi!');
       return;
     }
   
-    if (bahan.id) {
-      // Jika ID ada, update data
-      this.detailbahanService.update(bahan.id, bahan).subscribe(() => {
+    if (bahan.item_id && bahan.item_id > 0) {
+      // Jika item_id sudah ada, berarti update
+      this.detailbahanService.update(bahan.item_id, bahan).subscribe(() => {
         bahan.isEditing = false;
       });
     } else {
-      // Simpan data baru
+      // Jika item_id kosong/null, berarti buat baru
       this.detailbahanService.create(bahan).subscribe((res) => {
-        bahan.id = res.id; // Update ID dari backend
+        bahan.item_id = res.id; // Simpan ID yang dikembalikan oleh backend
         bahan.isEditing = false;
       });
     }
   }
+  
   
 
   cancelEdit(bahan: any) {
@@ -440,5 +418,5 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     console.log("Data setelah dihapus:", this.expandedRows[ritem.id]);
   }
   
-  
+
 }
