@@ -17,7 +17,7 @@ export class JenisbahanService {
   // Function to gel user detail by id_auth
   getID(id: string): Observable<Jenisbahan> {
     const headers = this.globalService.getHeaders();
-    return this.http.get<any>(`${this.apiUrl}/jenisbahan/getid/?id=${id}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/jenisbahan/${id}/`, { headers });
   }
   // Function to get All
   getListAll(): Observable<Jenisbahan[]> {

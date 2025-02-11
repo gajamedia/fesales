@@ -16,6 +16,7 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { ProjekComponent } from './components/projek/projek.component';
 import { InputprojekComponent } from './components/projek/inputprojek.component';
 import { DetailprojekComponent } from './components/projek/detailprojek.component';
+import { ModaldetailbahanComponent } from './components/projek/modaldetailbahan.component';
 
 
 export const routes: Routes = [
@@ -43,6 +44,8 @@ export const routes: Routes = [
       { path: 'projek', component: ProjekComponent},
       { path: 'inputprojek', component: InputprojekComponent},
       { path: 'detailprojek/:id', component: DetailprojekComponent},
+      //{ path: 'detailbahan', component: ModaldetailbahanComponent},
+      //{ path: 'detailbahan/:id', component: ModaldetailbahanComponent},
       { path: 'user', component: UserComponent},
       { path: 'edituser', component: EdituserComponent},
       { path: 'userprofile', component: UserprofileComponent},

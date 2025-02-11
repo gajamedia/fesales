@@ -448,7 +448,6 @@
                       <thead class="sticky top-0">
                         <tr class="bg-cyan-300">
                           <th class="text-left text-xs font-bold text-gray-600 tracking-wider">#</th>
-                          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Item ID</th>
                           <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Item Code</th>
                           <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Item Name</th>
                           <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Ukuran</th>
@@ -458,12 +457,10 @@
                         </tr>
                        
                       </thead>
-                      <tbody *ngIf="expandedRows[ritem.id] && expandedRows[ritem.id].length > 0">
-                        <tr *ngFor="let bahan of expandedRows[ritem.id]; let i = index; trackBy: trackByFn">
+                      <tbody *ngIf="dataListBahan">
+                        <tr *ngFor="let item of getFilteredBahan()">
                           <ng-container *ngIf="bahan.isEditing; else viewMode">
                             <td>{{ i + 1 }}</td> <!-- Menampilkan nomor urut -->
-                            <input hidden [(ngModel)]="bahan.id_project_detil" />
-                            <td class="text-left text-xs font-bold text-gray-600 tracking-wider"><input [(ngModel)]="bahan.item_id" /></td>
                             <td class="text-left text-xs font-bold text-gray-600 tracking-wider"><input [(ngModel)]="bahan.item_code" /></td>
                             <td class="text-left text-xs font-bold text-gray-600 tracking-wider"><input [(ngModel)]="bahan.item_name" /></td>
                             <td class="text-left text-xs font-bold text-gray-600 tracking-wider"><input [(ngModel)]="bahan.ukuran" /></td>
@@ -473,12 +470,11 @@
                               <!-- Tombol Edit -->
                               
                               <button (click)="saveDetailBahan(ritem, bahan)">Simpan</button>
-                              <button (click)="cancelEdit(bahan)">Batal</button>
+                              <button (click)="cancelEdit(bahan, ritem.id)">Batal</button>
                             </td>
                           </ng-container>
                           <ng-template #viewMode>
                             <td>{{ i + 1 }}</td> <!-- Menampilkan nomor urut -->
-                            <td>{{ bahan.item_id  }}</td>
                             <td>{{ bahan.item_code  }}</td>
                             <td>{{ bahan.item_name || '-' }}</td>
                             <td>{{ bahan.ukuran || '-' }}</td>

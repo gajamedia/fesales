@@ -38,7 +38,8 @@ export interface Projek {
   is_deleted?: number,
 }
 export interface DetailProjek {
-  id?:number,
+  dataDetailBahan: any
+  id:number,
   id_project_header?:number,
   lebar_bahan?:number,
   lantai?:string,
@@ -58,6 +59,18 @@ export interface DetailProjek {
   updated_by?: string,
   updated_date?: string,
   is_deleted?: number,
+  expanded: boolean
+}
+export interface DetailBahan{
+  id?:number,
+  id_project_detil?:number,
+  item_id?:number,
+  item_code?:number,
+  item_name?:string,
+  ukuran?:string,
+  harga_beli?:number,
+  harga_jual?:number,
+  isEditing?: boolean; // Digunakan untuk mode edit
 }
 export interface User {
   id?:string

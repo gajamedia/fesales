@@ -57,7 +57,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     updated_by: "",
     updated_date: "",
     is_deleted: 0,
-    dataDetailBahan: undefined,
+    //dataDetailBahan: undefined,
     expanded: false
   }
     
@@ -75,6 +75,8 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
   //expandedRow: number | null = null;
   //dataDetailBahan: { [key: number]: any } = {}; // Deklarasikan sebagai objek
   expandedRows: { [key: number]: any[] } = {};
+  dataListBahan: any;
+  detailBahanList: DetailBahan[] = []; // ✅ Pastikan ini adalah array
 
 
   constructor(
@@ -179,7 +181,20 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       complete:()=>{ console.log('complete')}
     })
   }
-
+  /*
+  loadDetailBahan(id_project_detil:any){
+    this.detailbahanService.getbyIdDetailProjek(id_project_detil).subscribe({
+      next: (res:any) => {
+        console.log('test res dari detail bahan', res)
+        //this.dataDetailBahan[id_project_detil] = res.results;
+      },
+      error: (err) => {
+        console.error('Error fetching detail:', err);
+      }
+    });   
+  }
+  
+  */
   onSimpan(form: any){
     if (form.valid) {
       const d ={
@@ -307,13 +322,24 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     this.inputDetailProjek.tinggi_lipatan = 0
     this.inputDetailProjek.nilai_pembagi = 0
   }
+  /*
+  toggleSubtable(detailProjekId: number) {
+    if (this.expandedRow === detailProjekId) {
+      this.expandedRow = null;
+    } else {
+      this.expandedRow = detailProjekId;
+      this.loadDetailBahan(detailProjekId);
+    }
+  }
+*/
   toggleSubtable(id: any) {
     if (this.expandedRows[id]) {
       // Jika subtable sudah terbuka, tutup subtable
       delete this.expandedRows[id];
     } else {
       // Ambil data dari API hanya jika subtable belum dibuka
-      this.fetchDetailBahan(id);
+      //this.fetchDetailBahan(id);
+      this.loadDetailBahan(id)
     }
   }
   trackByFn(index: number, item: any): number {
@@ -323,7 +349,6 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
   fetchDetailBahan(id: any) {
     this.detailbahanService.getbyIdDetailProjek(id).subscribe({
       next: (res:any) => {
-        console.log('res detailbahan getbyidp', res)
         this.expandedRows[id] = res.results; // Simpan data dalam expandedRows
       },
       error:(error) => {
@@ -331,6 +356,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       }
     });
   }
+  /*
   addDetailBahan(id: number) {
     console.log("Menambahkan detail bahan untuk ID:", id);
   
@@ -341,90 +367,101 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     // Tambahkan data baru
     const newData = {
       item_code: Date.now(), // ID unik
-      item_id: 0,
       item_name: '',
       ukuran: '',
       harga_beli: 0,
       harga_jual: 0,
       isEditing: true, // Mode edit langsung
-      id_project_detil: id, // Menambahkan id_project_detil
     };
   
     this.expandedRows[id] = [...this.expandedRows[id], newData]; // Spread operator
   
     console.log("Data setelah ditambahkan:", this.expandedRows[id]);
-  }
-  
-  
-  
-  
-  /*
-  addDetailBahan(project: DetailProjek) {
-    const newBahan: DetailBahan = {
-      item_id: 0,
-      item_code: 0,
-      item_name: '',
-      ukuran: '',
-      harga_beli: 0,
-      harga_jual: 0,
-      isEditing: true, // Auto masuk mode edit
-    };
-    project.dataDetailBahan.unshift(newBahan);
-  }
-  */
+  } */
+    addDetailBahan(id_project_detil: number) {
+      if (!this.detailBahanList) {
+        this.detailBahanList = []; // Inisialisasi jika belum ada
+      }
+    
+      const newItem: DetailBahan = {
+        //id: 0, // Bisa diset `null` karena akan diisi oleh backend
+        id_project_detil: id_project_detil,
+        item_code: 0, // Simulasi kode unik
+        item_name: '',
+        ukuran: '',
+        harga_beli: 0,
+        harga_jual: 0,
+        isEditing: true   // Ini tambahan untuk mode edit
+      };
+    
+      this.detailBahanList.push(newItem);
+      console.log('Row ditambahkan:', newItem);
+    }
+    getFilteredBahan() {
+      return this.dataListBahan?.filter((item:any) => item.id) || [];
+    }
+    
+    loadDetailBahan(id_project_detil: any) {
+      this.detailbahanService.getbyIdDetailProjek(id_project_detil).subscribe({
+        next: (data) => {
+          console.log('Data Detail Bahan:', data);
+          this.dataListBahan = data || [];
+        },
+        error: (err) => console.error('Error fetching detail bahan:', err),
+      });
+    }
+    deleteDetailBahan(ritem: any, bahan: any) {
+      console.log('Menghapus:', bahan, 'dari', ritem);
+    
+      if (!this.dataListBahan) {
+        return;
+      }
+    
+      this.dataListBahan = this.dataListBahan.filter((item:any) => item !== bahan);
+    }
+    
+        
   editDetailBahan(bahan: DetailBahan) {
-    console.log('edit bahan', bahan)
-    // Pastikan item_name dan ukuran diubah ke string jika kosong/null
-    bahan.item_name = (bahan.item_name ?? '').toString().trim() || 'Nama Default';
-    bahan.ukuran = (bahan.ukuran ?? '').toString().trim() || 'Ukuran Default';
-  
     bahan.isEditing = true;
   }
-  
-  
 
   saveDetailBahan(project: DetailProjek, bahan: DetailBahan) {
-    // Trim dan isi nilai default sebelum validasi
-    bahan.item_name = bahan.item_name?.trim() || '';
-    bahan.ukuran = bahan.ukuran?.trim() || '';
-  
-    // Validasi hanya ketika pengguna benar-benar menyimpan
     if (!bahan.item_name || !bahan.ukuran) {
       alert('Nama bahan dan ukuran harus diisi!');
       return;
     }
-  
+
     if (bahan.id) {
-      // Jika ID ada, update data
-      this.detailbahanService.update(bahan.id, bahan).subscribe(() => {
+      // Update data jika ID ada
+      this.detailprojekService.update(bahan.id, bahan).subscribe(() => {
         bahan.isEditing = false;
       });
     } else {
       // Simpan data baru
-      this.detailbahanService.create(bahan).subscribe((res) => {
+      this.detailprojekService.create(bahan).subscribe((res) => {
         bahan.id = res.id; // Update ID dari backend
         bahan.isEditing = false;
       });
     }
   }
-  
 
-  cancelEdit(bahan: any) {
-    if (!bahan.id) {
-      // Hapus jika baru ditambahkan dan belum tersimpan
-      const index = this.dataDetailProjek.findIndex((p) =>
-        p.dataDetailBahan.includes(bahan)
-      );
-      if (index !== -1) {
-        this.dataDetailProjek[index].dataDetailBahan = this.dataDetailProjek[
-          index
-        ].dataDetailBahan.filter((b:any) => b !== bahan);
-      }
-    } else {
-      bahan.isEditing = false;
+  cancelEdit(bahan: any, id: number) {
+    if (!this.expandedRows[id]) {
+      console.warn("expandedRows[id] tidak ditemukan:", id);
+      return;
     }
+  
+    const index = this.expandedRows[id].indexOf(bahan);
+    if (index === -1) {
+      console.warn("Data bahan tidak ditemukan dalam expandedRows:", bahan);
+      return;
+    }
+  
+    this.expandedRows[id].splice(index, 1); // Hapus data jika batal
+    this.expandedRows[id] = [...this.expandedRows[id]]; // Memicu deteksi perubahan Angular
   }
-
+  
+  /*
   deleteDetailBahan(ritem: any, bahan: any) {
     if (!this.expandedRows[ritem.id]) {
       console.warn("expandedRows[id] tidak ditemukan:", ritem.id);
@@ -439,6 +476,6 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
   
     console.log("Data setelah dihapus:", this.expandedRows[ritem.id]);
   }
-  
+  */
   
 }

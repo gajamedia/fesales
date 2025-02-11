@@ -17,7 +17,7 @@ export class BahanService {
   // Function to gel user detail by id_auth
   getID(id: string): Observable<Bahan> {
     const headers = this.globalService.getHeaders();
-    return this.http.get<any>(`${this.apiUrl}/bahan/getid/?id=${id}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/bahan/${id}/`, { headers });
   }
   // Function to get All
   getListAll(): Observable<Bahan[]> {
