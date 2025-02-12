@@ -113,9 +113,28 @@ export class InputprojekComponent implements OnInit {
   
   resetForm() {
     console.log('Initialize empty form for new project');
-    // Inisialisasi form kosong
-    this.genKode()
+    
+    // Inisialisasi ulang dengan nilai default
+    this.dataInputProjek = {
+      id: 0,
+      no_project: "", 
+      tgl_project: new Date().toISOString(), // Default ke tanggal hari ini
+      ket_project: "", 
+      nama_customer: "", 
+      addr_customer: "", 
+      contact_customer: "", 
+      status_project: "", 
+      created_by: "",
+      created_date: "",
+      updated_by: "",
+      updated_date: "",
+      is_deleted: 0,
+    };
+  
+    // Generate kode proyek baru
+    this.genKode();
   }
+  
   onDateSelected(selectedDate: Date) {
     console.log('Selected Date:', selectedDate); // Ensure this is firing
   }
@@ -134,7 +153,10 @@ export class InputprojekComponent implements OnInit {
       this.projekService.create(d).subscribe({
         next: () => {
           this.showMessage('Simpan Data Sukses');
-          this.refreshData();
+          setTimeout(() => {
+            this.router.navigate(['/main/projek']);
+            this.resetForm();
+          }, 1000); // Tambahkan delay agar user bisa melihat pesan sukses
         },
         error: () => {
           this.messageText = "Failed to save project!";
@@ -167,7 +189,7 @@ export class InputprojekComponent implements OnInit {
           this.showMessage('Update Data Sukses');
           setTimeout(() => {
             this.router.navigate(['/main/projek']);
-            this.refreshData();
+            this.resetForm();
           }, 1000); // Tambahkan delay agar user bisa melihat pesan sukses
         },
         error: (e) => {
@@ -183,23 +205,6 @@ export class InputprojekComponent implements OnInit {
     }
   }
   
-  refreshData(){
-    this.dataInputProjek = {
-      id: 0,
-      no_project: "", 
-      tgl_project: "", 
-      ket_project: "", 
-      nama_customer: "", 
-      addr_customer: "", 
-      contact_customer: "", 
-      status_project: "", 
-      created_by: "",
-      created_date: "",
-      updated_by: "",
-      updated_date: "",
-      is_deleted: 0,
-    }
-  }
   genKode() {
   this.projekService.getListAll().subscribe({
     next: (res: any) => {
