@@ -22,7 +22,7 @@ import { DetailbahanService } from '../../services/detailbahan.service';
 })
 export class DetailprojekComponent implements OnInit, OnDestroy{
   dataProjek: any ={}
-  dataListDetailProjek: any
+  //dataListDetailProjek: any
   //dataDetailBahan: any
 
   currentPage: number = 1
@@ -62,6 +62,9 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
   }
     
   projectId: string | null = null;
+  editMode: boolean = false;
+  editedItemId: string | null = null;
+  //inputDetailProjek: any = {}; // Objek untuk menyimpan data yang sedang diedit
 
   mode:boolean = false
   visible:boolean = false
@@ -106,41 +109,50 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       this.loadDataDetailProjek(this.projectId)
     }
     
-    this.dataListDetailProjek = this.shareddetailprojekService.getData('editDetailProjek');
-    if (!this.dataListDetailProjek) {
+    //if (this.dataDetailProjek.length > 0) {
+      //this.inputDetailProjek = { ...this.dataDetailProjek[0] };
+      //this.visible = true
+    //}
+   // else{
+     // this.visible = false
+    //}
+    
+    /*
+    //this.dataDetailProjek = this.shareddetailprojekService.getData('editDetailProjek');
+    if (!this.dataDetailProjek) {
       //this.mode = false
       this.visible = false
     }
     else{
       //this.mode = true
       this.visible = true
-      this.initFormData()
+      //this.initFormData()
       
     }
-      
+    */
     //load detail bahan
     //this.loadDetailBahan(this.projectId!)
 
   }
-  
+  /*
   initFormData(){
-    this.inputDetailProjek.id = this.dataListDetailProjek.id
-    this.inputDetailProjek.id_project_header = this.dataListDetailProjek.id_project_header
-    this.inputDetailProjek.lebar_bahan= this.dataListDetailProjek.lebar_bahan
-    this.inputDetailProjek.lantai = this.dataListDetailProjek.lantai
-    this.inputDetailProjek.ruangan = this.dataListDetailProjek.ruangan
-    this.inputDetailProjek.bed = this.dataListDetailProjek.bed
-    this.inputDetailProjek.tipe = this.dataListDetailProjek.tipe
-    this.inputDetailProjek.uk_room_l = this.dataListDetailProjek.uk_room_l
-    this.inputDetailProjek.uk_room_p = this.dataListDetailProjek.uk_room_p
-    this.inputDetailProjek.uk_room_t = this.dataListDetailProjek.uk_room_t
-    this.inputDetailProjek.stik = this.dataListDetailProjek.stik
-    this.inputDetailProjek.elevasi = this.dataListDetailProjek.elevasi
-    this.inputDetailProjek.tinggi_vitrase = this.dataListDetailProjek.tinggi_vitrase
-    this.inputDetailProjek.tinggi_lipatan = this.dataListDetailProjek.tinggi_lipatan 
-    this.inputDetailProjek.nilai_pembagi = this.dataListDetailProjek.nilai_pembagi
+    this.inputDetailProjek.id = this.dataDetailProjek.id
+    this.inputDetailProjek.id_project_header = this.dataDetailProjek.id_project_header
+    this.inputDetailProjek.lebar_bahan= this.dataDetailProjek.lebar_bahan
+    this.inputDetailProjek.lantai = this.dataDetailProjek.lantai
+    this.inputDetailProjek.ruangan = this.dataDetailProjek.ruangan
+    this.inputDetailProjek.bed = this.dataDetailProjek.bed
+    this.inputDetailProjek.tipe = this.dataDetailProjek.tipe
+    this.inputDetailProjek.uk_room_l = this.dataDetailProjek.uk_room_l
+    this.inputDetailProjek.uk_room_p = this.dataDetailProjek.uk_room_p
+    this.inputDetailProjek.uk_room_t = this.dataDetailProjek.uk_room_t
+    this.inputDetailProjek.stik = this.dataDetailProjek.stik
+    this.inputDetailProjek.elevasi = this.dataDetailProjek.elevasi
+    this.inputDetailProjek.tinggi_vitrase = this.dataDetailProjek.tinggi_vitrase
+    this.inputDetailProjek.tinggi_lipatan = this.dataDetailProjek.tinggi_lipatan 
+    this.inputDetailProjek.nilai_pembagi = this.dataDetailProjek.nilai_pembagi
   }
-
+  */
   loadDataProjekBy(id: any) {
     this.projekService.getID(id).subscribe({
       next: (res: any) => {
@@ -219,15 +231,37 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     console.log('saat simpan detail project .id_project_header', b)
     this.loadDataDetailProjek(b)
   }
-  onEdit(id:any){
-
+  onEdit(id: any): void {
+    const item = this.dataDetailProjek.find((d: any) => d.id === id);
+    if (item) {
+      this.visible = true
+      this.editMode = true;
+      this.editedItemId = id;
+      this.inputDetailProjek = { ...item }; // Simpan data yang sedang diedit
+    }
   }
-  onDeleted(id:any){
-
+  
+  onDeleted(id:any): void {
+    //this.editMode = false;
+    //this.editedItemId = null;
+    //this.inputDetailProjek = {}; // Reset input data
+    const d={
+      //tgldel:this.tgldel,
+      'is_deleted':1
+    }
+    this.detailprojekService.deletedby(id, d)
+    .subscribe({
+      next:(res:any) => {
+        //console.log(res);
+        this.loadDataDetailProjek(id);
+        this.router.navigate(['/main/projek'])
+      },
+      error:(e:any) => {
+        console.log(e);
+      },
+    });
   }
-  //onDetailBahan(id:any){
-  // this.onOpenModal()
-  //}
+
   onUpdate(form: any) {
     if (form.valid) {
       const d ={
@@ -248,8 +282,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
         'nilai_pembagi':this.inputDetailProjek.nilai_pembagi
         
       }
-      //let id = this.inputDetailProjek.id
-      let id:any="tes"
+      let id = this.inputDetailProjek.id
       this.detailprojekService.update(id, d)
       .subscribe({
         next:(res)=>{
@@ -363,8 +396,6 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       existingData.isEditing = true; // Aktifkan mode edit tanpa membuat row baru
     }
   }
-  
-  
   saveDetailBahan(ritemId: number, bahan: DetailBahan) {
     if (!bahan.item_name || !bahan.ukuran) {
       alert('Nama bahan dan ukuran harus diisi!');
@@ -384,9 +415,6 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       });
     }
   }
-  
-  
-
   cancelEdit(bahan: any) {
     if (!bahan.id) {
       // Hapus jika baru ditambahkan dan belum tersimpan

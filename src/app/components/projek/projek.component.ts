@@ -28,21 +28,14 @@ export class ProjekComponent implements OnInit{
   pageSize!:number
   search=''
 
-  tahunini:any
-  tgldel:any
-  deletedby:any
-
   dataLogin: any={}
   isRole:boolean = false
 
-  id: string | null = null;
-  isEditMode = false;
 
   constructor(
     private sharedloginService: SharedloginService,
     private projekService: ProjekService,
-    private sharedprojekService: SharedprojekService,
-    private route: ActivatedRoute, // Add this
+    private route :ActivatedRoute,
     private router: Router)
 
     {
@@ -84,18 +77,14 @@ export class ProjekComponent implements OnInit{
   onAdd(){
     this.router.navigate(['/main/inputprojek'])
   }
-  onEdit(id: any) {
-    // Fetch the user data based on the id
-    const jns = this.dataProjek.find(u => u.id === id);
-    console.log('test id jenis bahan', jns)
-    if (jns) {
-      this.sharedprojekService.setData('editProjek', jns);
-      setTimeout(() => {
-        this.router.navigate(['/main/inputjenisbahan']);
-      }, 100); // Small delay to ensure data is set
-    }
+  onEdit(projek: any) {
+    console.log('Klik Edit, ID:', projek); // Debugging
+  
+    this.router.navigateByUrl(`/main/inputprojek?mode=edit&id=${projek.id}`);
   }
-  onDetail(id: any) {
+  
+  
+  onAddDetail(id: any) {
     const projectId = id || this.route.snapshot.paramMap.get('id');
     this.router.navigate(['/main/detailprojek', projectId]);
   }
@@ -120,7 +109,6 @@ export class ProjekComponent implements OnInit{
     this.refreshList()
   }
   handleSearch(){
-    
     this.loadDataProjek()
   }
   handlePageSizeChange() {
