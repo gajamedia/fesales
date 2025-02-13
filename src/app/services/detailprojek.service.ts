@@ -33,6 +33,11 @@ export class DetailprojekService {
     }
     return this.http.get<DetailProjek[]>(`${this.apiUrl}/projectdetil/search/`, { headers, params });
   }
+   // Function to gel user detail by id_auth
+    getbyIdDetailProjek(id: string): Observable<DetailProjek> {
+      const headers = this.globalService.getHeaders();
+      return this.http.get<any>(`${this.apiUrl}/projectdetil/searchbyipd/?id_project_detil=${id}`, { headers });
+    }
   create(formData: any): Observable<any> {
     const headers = this.globalService.getHeaders();
     return this.http.post<any>(`${this.apiUrl}/projectdetil/create/`, formData, { headers });

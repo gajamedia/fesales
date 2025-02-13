@@ -9,18 +9,21 @@ import { DetailBahan, DetailProjek, Projek } from '../../interfaces/global.inter
 import dayjs from 'dayjs';
 import { DetailprojekService } from '../../services/detailprojek.service';
 import { ShareddetailprojekService } from '../../services/shareddetailprojek.service';
+import { ModaldetailbahanComponent } from './modaldetailbahan.component';
 import { DetailbahanService } from '../../services/detailbahan.service';
 
 @Component({
   selector: 'app-detailprojek',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModaldetailbahanComponent],
   providers: [SharedloginService, AuthService, ShareddetailprojekService],
   templateUrl: './detailprojek.component.html',
   styleUrl: './projek.component.scss'
 })
 export class DetailprojekComponent implements OnInit, OnDestroy{
   dataProjek: any ={}
+  dataListDetailProjek: any
+  //dataDetailBahan: any
 
   currentPage: number = 1
   totalPages!: number
@@ -54,23 +57,27 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     updated_by: "",
     updated_date: "",
     is_deleted: 0,
-    dataDetailBahan: undefined,
+    //dataDetailBahan: undefined,
     expanded: false
   }
     
   projectId: string | null = null;
-  editMode: boolean = false;
-  editedItemId: string | null = null;
-  //inputDetailProjek: any = {}; // Objek untuk menyimpan data yang sedang diedit
 
   mode:boolean = false
   visible:boolean = false
   isNongolMessage:boolean = false
   messageText:string=""
-
+  //modal
+  //isModalOpen:boolean=false
+  //subtable
+  //dataDetailProjek: any[] = [];
   dataDetailProjek: DetailProjek[] = []; // Data utama 
+  //expandedRow: number | null = null;
+  //dataDetailBahan: { [key: number]: any } = {}; // Deklarasikan sebagai objek
   expandedRows: { [key: number]: any[] } = {};
-  editedBahan:any
+  dataListBahan: any;
+  detailBahanList: DetailBahan[] = []; // ✅ Pastikan ini adalah array
+
 
   constructor(
     private sharedloginService: SharedloginService,
@@ -101,50 +108,41 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       this.loadDataDetailProjek(this.projectId)
     }
     
-    //if (this.dataDetailProjek.length > 0) {
-      //this.inputDetailProjek = { ...this.dataDetailProjek[0] };
-      //this.visible = true
-    //}
-   // else{
-     // this.visible = false
-    //}
-    
-    /*
-    //this.dataDetailProjek = this.shareddetailprojekService.getData('editDetailProjek');
-    if (!this.dataDetailProjek) {
+    this.dataListDetailProjek = this.shareddetailprojekService.getData('editDetailProjek');
+    if (!this.dataListDetailProjek) {
       //this.mode = false
       this.visible = false
     }
     else{
       //this.mode = true
       this.visible = true
-      //this.initFormData()
+      this.initFormData()
       
     }
-    */
+      
     //load detail bahan
     //this.loadDetailBahan(this.projectId!)
 
   }
-  /*
+  
   initFormData(){
-    this.inputDetailProjek.id = this.dataDetailProjek.id
-    this.inputDetailProjek.id_project_header = this.dataDetailProjek.id_project_header
-    this.inputDetailProjek.lebar_bahan= this.dataDetailProjek.lebar_bahan
-    this.inputDetailProjek.lantai = this.dataDetailProjek.lantai
-    this.inputDetailProjek.ruangan = this.dataDetailProjek.ruangan
-    this.inputDetailProjek.bed = this.dataDetailProjek.bed
-    this.inputDetailProjek.tipe = this.dataDetailProjek.tipe
-    this.inputDetailProjek.uk_room_l = this.dataDetailProjek.uk_room_l
-    this.inputDetailProjek.uk_room_p = this.dataDetailProjek.uk_room_p
-    this.inputDetailProjek.uk_room_t = this.dataDetailProjek.uk_room_t
-    this.inputDetailProjek.stik = this.dataDetailProjek.stik
-    this.inputDetailProjek.elevasi = this.dataDetailProjek.elevasi
-    this.inputDetailProjek.tinggi_vitrase = this.dataDetailProjek.tinggi_vitrase
-    this.inputDetailProjek.tinggi_lipatan = this.dataDetailProjek.tinggi_lipatan 
-    this.inputDetailProjek.nilai_pembagi = this.dataDetailProjek.nilai_pembagi
+    this.inputDetailProjek.id = this.dataListDetailProjek.id
+    this.inputDetailProjek.id_project_header = this.dataListDetailProjek.id_project_header
+    this.inputDetailProjek.lebar_bahan= this.dataListDetailProjek.lebar_bahan
+    this.inputDetailProjek.lantai = this.dataListDetailProjek.lantai
+    this.inputDetailProjek.ruangan = this.dataListDetailProjek.ruangan
+    this.inputDetailProjek.bed = this.dataListDetailProjek.bed
+    this.inputDetailProjek.tipe = this.dataListDetailProjek.tipe
+    this.inputDetailProjek.uk_room_l = this.dataListDetailProjek.uk_room_l
+    this.inputDetailProjek.uk_room_p = this.dataListDetailProjek.uk_room_p
+    this.inputDetailProjek.uk_room_t = this.dataListDetailProjek.uk_room_t
+    this.inputDetailProjek.stik = this.dataListDetailProjek.stik
+    this.inputDetailProjek.elevasi = this.dataListDetailProjek.elevasi
+    this.inputDetailProjek.tinggi_vitrase = this.dataListDetailProjek.tinggi_vitrase
+    this.inputDetailProjek.tinggi_lipatan = this.dataListDetailProjek.tinggi_lipatan 
+    this.inputDetailProjek.nilai_pembagi = this.dataListDetailProjek.nilai_pembagi
   }
-  */
+
   loadDataProjekBy(id: any) {
     this.projekService.getID(id).subscribe({
       next: (res: any) => {
@@ -164,7 +162,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       }
     });
   }
-  
+
   loadDataDetailProjek(id:any){
     this.search = id
 
@@ -183,18 +181,20 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       complete:()=>{ console.log('complete')}
     })
   }
- 
-/*
-  loadDataDetailProjek(id:any){
-    this.detailprojekService.getbyIdDetailProjek(id).subscribe({
-      next:(res:any)=>{
-        this.dataDetailProjek = res
+  /*
+  loadDetailBahan(id_project_detil:any){
+    this.detailbahanService.getbyIdDetailProjek(id_project_detil).subscribe({
+      next: (res:any) => {
+        console.log('test res dari detail bahan', res)
+        //this.dataDetailBahan[id_project_detil] = res.results;
       },
-      error:(e:any)=>{ console.error(e)},
-      complete:()=>{ console.log('complete')}
-    })
+      error: (err) => {
+        console.error('Error fetching detail:', err);
+      }
+    });   
   }
-*/
+  
+  */
   onSimpan(form: any){
     if (form.valid) {
       const d ={
@@ -221,8 +221,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
         next: () => {
           this.showMessage('Simpan Data Sukses');
           console.log('saat simpan detail project this.projectId', this.projectId)
-          this.loadDataDetailProjek(this.projectId)
-          this.refreshData();
+          //.refreshData();
         },
         error: () => {
           this.showMessage('Failed to save project!');
@@ -231,38 +230,19 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     } else {
       this.showMessage('isian wajib diisi Failed to save project!');
     }
+    let b:any = this.projectId
+    console.log('saat simpan detail project .id_project_header', b)
+    this.loadDataDetailProjek(b)
   }
-  onEdit(id: any): void {
-    const item = this.dataDetailProjek.find((d: any) => d.id === id);
-    if (item) {
-      this.visible = true
-      this.editMode = true;
-      this.editedItemId = id;
-      this.inputDetailProjek = { ...item }; // Simpan data yang sedang diedit
-    }
-  }
-  
-  onDeleted(id:any): void {
-    //this.editMode = false;
-    //this.editedItemId = null;
-    //this.inputDetailProjek = {}; // Reset input data
-    const d={
-      //tgldel:this.tgldel,
-      'is_deleted':1
-    }
-    this.detailprojekService.deletedby(id, d)
-    .subscribe({
-      next:(res:any) => {
-        //console.log(res);
-        this.loadDataDetailProjek(id);
-        this.router.navigate(['/main/projek'])
-      },
-      error:(e:any) => {
-        console.log(e);
-      },
-    });
-  }
+  onEdit(id:any){
 
+  }
+  onDeleted(id:any){
+
+  }
+  //onDetailBahan(id:any){
+  // this.onOpenModal()
+  //}
   onUpdate(form: any) {
     if (form.valid) {
       const d ={
@@ -283,13 +263,14 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
         'nilai_pembagi':this.inputDetailProjek.nilai_pembagi
         
       }
-      let id = this.inputDetailProjek.id
+      //let id = this.inputDetailProjek.id
+      let id:any="tes"
       this.detailprojekService.update(id, d)
       .subscribe({
         next:(res)=>{
           this.showMessage('Update Data Sukses');
           this.router.navigate(['/main/detailprojek'])
-          this.refreshData()
+          //this.refreshData()
         },
         error: (e) => {
           //console.error('Update error:', e);
@@ -302,6 +283,9 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
         }
       })
     }
+    //let b:any = this.inputDetailProjek.id_project_header
+    //console.error('b:', this.inputDetailProjek.id_project_header);
+    //this.loadDataDetailProjek(b)
   }
   onCancel(){
     //console.log('tes clik cancel')
@@ -312,7 +296,15 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     const date = dayjs(tgl)
     return date.format('DD/MM/YYYY')
   }
-    
+  showMessage(t:string): void {
+    this.isNongolMessage = true;
+    this.messageText = t
+    // Auto close the message after 3 seconds (3000 ms)
+    setTimeout(() => {
+      this.isNongolMessage = false;
+    }, 3000);
+  }
+  
   refreshData(){
     this.inputDetailProjek.id = 0
     this.inputDetailProjek.id_project_header = 0
@@ -330,13 +322,24 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     this.inputDetailProjek.tinggi_lipatan = 0
     this.inputDetailProjek.nilai_pembagi = 0
   }
+  /*
+  toggleSubtable(detailProjekId: number) {
+    if (this.expandedRow === detailProjekId) {
+      this.expandedRow = null;
+    } else {
+      this.expandedRow = detailProjekId;
+      this.loadDetailBahan(detailProjekId);
+    }
+  }
+*/
   toggleSubtable(id: any) {
     if (this.expandedRows[id]) {
       // Jika subtable sudah terbuka, tutup subtable
       delete this.expandedRows[id];
     } else {
       // Ambil data dari API hanya jika subtable belum dibuka
-      this.fetchDetailBahan(id);
+      //this.fetchDetailBahan(id);
+      this.loadDetailBahan(id)
     }
   }
   trackByFn(index: number, item: any): number {
@@ -346,7 +349,6 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
   fetchDetailBahan(id: any) {
     this.detailbahanService.getbyIdDetailProjek(id).subscribe({
       next: (res:any) => {
-        console.log('res detailbahan getbyidp', res)
         this.expandedRows[id] = res.results; // Simpan data dalam expandedRows
       },
       error:(error) => {
@@ -354,6 +356,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       }
     });
   }
+  /*
   addDetailBahan(id: number) {
     console.log("Menambahkan detail bahan untuk ID:", id);
   
@@ -361,75 +364,104 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       this.expandedRows[id] = [];
     }
   
-    // Tambahkan data baru dengan item_id null agar terdeteksi sebagai data baru
+    // Tambahkan data baru
     const newData = {
       item_code: Date.now(), // ID unik
-      item_id: null, // Null agar dianggap data baru
       item_name: '',
       ukuran: '',
       harga_beli: 0,
       harga_jual: 0,
       isEditing: true, // Mode edit langsung
-      id_project_detil: id, // Menambahkan id_project_detil
     };
   
     this.expandedRows[id] = [...this.expandedRows[id], newData]; // Spread operator
   
     console.log("Data setelah ditambahkan:", this.expandedRows[id]);
-  }
-  
-  editDetailBahan(ritemId: number, bahan: DetailBahan) {
-    // Cari data dalam expandedRows berdasarkan ID
-    const existingData = this.expandedRows[ritemId].find((b) => b.item_id === bahan.item_id);
-  
-    if (existingData) {
-      existingData.isEditing = true; // Aktifkan mode edit tanpa membuat row baru
+  } */
+    addDetailBahan(id_project_detil: number) {
+      if (!this.detailBahanList) {
+        this.detailBahanList = []; // Inisialisasi jika belum ada
+      }
+    
+      const newItem: DetailBahan = {
+        //id: 0, // Bisa diset `null` karena akan diisi oleh backend
+        id_project_detil: id_project_detil,
+        item_code: 0, // Simulasi kode unik
+        item_name: '',
+        ukuran: '',
+        harga_beli: 0,
+        harga_jual: 0,
+        isEditing: true   // Ini tambahan untuk mode edit
+      };
+    
+      this.detailBahanList.push(newItem);
+      console.log('Row ditambahkan:', newItem);
     }
+    getFilteredBahan() {
+      return this.dataListBahan?.filter((item:any) => item.id) || [];
+    }
+    
+    loadDetailBahan(id_project_detil: any) {
+      this.detailbahanService.getbyIdDetailProjek(id_project_detil).subscribe({
+        next: (data) => {
+          console.log('Data Detail Bahan:', data);
+          this.dataListBahan = data || [];
+        },
+        error: (err) => console.error('Error fetching detail bahan:', err),
+      });
+    }
+    deleteDetailBahan(ritem: any, bahan: any) {
+      console.log('Menghapus:', bahan, 'dari', ritem);
+    
+      if (!this.dataListBahan) {
+        return;
+      }
+    
+      this.dataListBahan = this.dataListBahan.filter((item:any) => item !== bahan);
+    }
+    
+        
+  editDetailBahan(bahan: DetailBahan) {
+    bahan.isEditing = true;
   }
-  saveDetailBahan(ritemId: number, bahan: DetailBahan) {
+
+  saveDetailBahan(project: DetailProjek, bahan: DetailBahan) {
     if (!bahan.item_name || !bahan.ukuran) {
       alert('Nama bahan dan ukuran harus diisi!');
       return;
     }
-  
-    if (bahan.item_id && bahan.item_id > 0) {
-      // Jika item_id sudah ada, berarti update
-      this.detailbahanService.update(bahan.item_id, bahan).subscribe(() => {
+
+    if (bahan.id) {
+      // Update data jika ID ada
+      this.detailprojekService.update(bahan.id, bahan).subscribe(() => {
         bahan.isEditing = false;
       });
     } else {
-      // Jika item_id kosong/null, berarti buat baru
-      this.detailbahanService.create(bahan).subscribe((res) => {
-        bahan.item_id = res.id; // Simpan ID yang dikembalikan oleh backend
+      // Simpan data baru
+      this.detailprojekService.create(bahan).subscribe((res) => {
+        bahan.id = res.id; // Update ID dari backend
         bahan.isEditing = false;
       });
     }
   }
-  cancelEdit(bahan: any) {
-    console.log('bahan', bahan);
-    if (!bahan || !this.expandedRows) {
-      console.error("Data bahan atau expandedRows tidak valid");
+
+  cancelEdit(bahan: any, id: number) {
+    if (!this.expandedRows[id]) {
+      console.warn("expandedRows[id] tidak ditemukan:", id);
       return;
     }
   
-    const ritemId = bahan.id_project_detil; // Assuming this is the correct key
-    const index = this.expandedRows[ritemId]?.findIndex((item: any) => item.item_code === bahan.item_code);
-  
-    if (index !== undefined && index !== -1) {
-      // If the item is newly added and has no item_id, remove it from the array
-      if (!bahan.item_id) {
-        this.expandedRows[ritemId].splice(index, 1);
-      } else {
-        // Revert any changes made during editing if necessary
-        // For example, you might want to reload the original data from the server
-        // this.fetchDetailBahan(ritemId);
-        this.expandedRows[ritemId][index].isEditing = false;
-      }
-    } else {
-      console.warn("Bahan tidak ditemukan dalam expandedRows");
+    const index = this.expandedRows[id].indexOf(bahan);
+    if (index === -1) {
+      console.warn("Data bahan tidak ditemukan dalam expandedRows:", bahan);
+      return;
     }
+  
+    this.expandedRows[id].splice(index, 1); // Hapus data jika batal
+    this.expandedRows[id] = [...this.expandedRows[id]]; // Memicu deteksi perubahan Angular
   }
   
+  /*
   deleteDetailBahan(ritem: any, bahan: any) {
     if (!this.expandedRows[ritem.id]) {
       console.warn("expandedRows[id] tidak ditemukan:", ritem.id);
@@ -444,13 +476,6 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
   
     console.log("Data setelah dihapus:", this.expandedRows[ritem.id]);
   }
-  showMessage(t:string): void {
-    this.isNongolMessage = true;
-    this.messageText = t
-    // Auto close the message after 3 seconds (3000 ms)
-    setTimeout(() => {
-      this.isNongolMessage = false;
-    }, 3000);
-  }
-
+  */
+  
 }
