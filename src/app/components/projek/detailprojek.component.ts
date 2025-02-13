@@ -9,21 +9,18 @@ import { DetailBahan, DetailProjek, Projek } from '../../interfaces/global.inter
 import dayjs from 'dayjs';
 import { DetailprojekService } from '../../services/detailprojek.service';
 import { ShareddetailprojekService } from '../../services/shareddetailprojek.service';
-import { ModaldetailbahanComponent } from './modaldetailbahan.component';
 import { DetailbahanService } from '../../services/detailbahan.service';
 
 @Component({
   selector: 'app-detailprojek',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModaldetailbahanComponent],
+  imports: [CommonModule, FormsModule],
   providers: [SharedloginService, AuthService, ShareddetailprojekService],
   templateUrl: './detailprojek.component.html',
   styleUrl: './projek.component.scss'
 })
 export class DetailprojekComponent implements OnInit, OnDestroy{
   dataProjek: any ={}
-  //dataListDetailProjek: any
-  //dataDetailBahan: any
 
   currentPage: number = 1
   totalPages!: number
@@ -70,13 +67,8 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
   visible:boolean = false
   isNongolMessage:boolean = false
   messageText:string=""
-  //modal
-  //isModalOpen:boolean=false
-  //subtable
-  //dataDetailProjek: any[] = [];
+
   dataDetailProjek: DetailProjek[] = []; // Data utama 
-  //expandedRow: number | null = null;
-  //dataDetailBahan: { [key: number]: any } = {}; // Deklarasikan sebagai objek
   expandedRows: { [key: number]: any[] } = {};
   editedBahan:any
 
@@ -218,7 +210,8 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
         next: () => {
           this.showMessage('Simpan Data Sukses');
           console.log('saat simpan detail project this.projectId', this.projectId)
-          //.refreshData();
+          this.loadDataDetailProjek(this.projectId)
+          this.refreshData();
         },
         error: () => {
           this.showMessage('Failed to save project!');
@@ -227,9 +220,6 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     } else {
       this.showMessage('isian wajib diisi Failed to save project!');
     }
-    let b:any = this.projectId
-    console.log('saat simpan detail project .id_project_header', b)
-    this.loadDataDetailProjek(b)
   }
   onEdit(id: any): void {
     const item = this.dataDetailProjek.find((d: any) => d.id === id);
@@ -288,7 +278,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
         next:(res)=>{
           this.showMessage('Update Data Sukses');
           this.router.navigate(['/main/detailprojek'])
-          //this.refreshData()
+          this.refreshData()
         },
         error: (e) => {
           //console.error('Update error:', e);
@@ -301,9 +291,6 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
         }
       })
     }
-    //let b:any = this.inputDetailProjek.id_project_header
-    //console.error('b:', this.inputDetailProjek.id_project_header);
-    //this.loadDataDetailProjek(b)
   }
   onCancel(){
     //console.log('tes clik cancel')
@@ -314,15 +301,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     const date = dayjs(tgl)
     return date.format('DD/MM/YYYY')
   }
-  showMessage(t:string): void {
-    this.isNongolMessage = true;
-    this.messageText = t
-    // Auto close the message after 3 seconds (3000 ms)
-    setTimeout(() => {
-      this.isNongolMessage = false;
-    }, 3000);
-  }
-  
+    
   refreshData(){
     this.inputDetailProjek.id = 0
     this.inputDetailProjek.id_project_header = 0
@@ -445,6 +424,13 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
   
     console.log("Data setelah dihapus:", this.expandedRows[ritem.id]);
   }
-  
+  showMessage(t:string): void {
+    this.isNongolMessage = true;
+    this.messageText = t
+    // Auto close the message after 3 seconds (3000 ms)
+    setTimeout(() => {
+      this.isNongolMessage = false;
+    }, 3000);
+  }
 
 }
