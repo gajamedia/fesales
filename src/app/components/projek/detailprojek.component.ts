@@ -164,7 +164,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       }
     });
   }
-  
+  /*
   loadDataDetailProjek(id:any){
     this.search = id
 
@@ -183,8 +183,8 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       complete:()=>{ console.log('complete')}
     })
   }
- 
-/*
+ */
+
   loadDataDetailProjek(id:any){
     this.detailprojekService.getbyIdDetailProjek(id).subscribe({
       next:(res:any)=>{
@@ -194,7 +194,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       complete:()=>{ console.log('complete')}
     })
   }
-*/
+
   onSimpan(form: any){
     if (form.valid) {
       const d ={
