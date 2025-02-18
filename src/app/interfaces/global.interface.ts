@@ -72,6 +72,15 @@ export interface DetailBahan{
   harga_jual?:number,
   isEditing?: boolean; // Digunakan untuk mode edit
 }
+export interface StatusProject {
+  FU?: number;
+  Kontrak?: number;
+  Pengerjaan?: number;
+  Pemasangan?: number;
+  Pengecekan?: number;
+  Penagihan?: number;
+  Lunas?: number;
+};
 export interface User {
   id?:string
   id_auth?:string

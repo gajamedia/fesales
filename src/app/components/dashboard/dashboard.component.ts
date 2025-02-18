@@ -1,54 +1,145 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ProjekService } from '../../services/projek.service';
 import { Projek } from '../../interfaces/global.interface';
-import { AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import Chart from 'chart.js/auto';
-
-
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
+import { InvoiceReportComponent } from '../surat/invoice.component';
+import { SuratPenawaranComponent } from '../surat/penawaran.component';
 
 @Component({
   selector: 'app-dashboard',
+  standalone: true,
+  imports: [CommonModule, FormsModule, InvoiceReportComponent, SuratPenawaranComponent],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardComponent implements AfterViewInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
   @ViewChild('chartCanvas', { static: false }) chartRef!: ElementRef<HTMLCanvasElement>;
 
-  selesaiCount = 3;
-  dalamProsesCount = 5;
-  pendingCount = 2;
+  statusCounts: { [key: string]: number } = {};
+  chartInstance: Chart | null = null;
+  projekList: Projek[] = [];
+  countProject?:number
+  
+  constructor(private projekService: ProjekService, private cdr: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    this.loadDataProjek();
+  }
+
+  loadDataProjek() {
+    const startTime = performance.now();
+    this.projekService.getAll('', 1, 100).pipe(debounceTime(300)).subscribe({
+      next: (res: any) => {
+        const endTime = performance.now();
+        console.log(`API response time: ${endTime - startTime} ms`);
+        console.log('res dashboard project', res.results);
+
+        this.projekList = res.results;
+        this.countProject = res.count
+        console.log('res dashboard count', this.countProject);
+        this.cdr.detectChanges(); // Paksa update tampilan
+        this.updateStatusCounts(this.projekList);
+        setTimeout(() => this.updateChart(), 100);
+      },
+      error: (e) => console.error('Error fetching project data:', e),
+    });
+  }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      if (this.chartRef) {
-        new Chart(this.chartRef.nativeElement, {
-          type: 'bar',
-          data: {
-            labels: ['Selesai', 'Dalam Proses', 'Pending'],
-            datasets: [{
-              label: 'Jumlah Proyek',
-              data: [this.selesaiCount, this.dalamProsesCount, this.pendingCount],
-              backgroundColor: ['green', 'yellow', 'red']
-            }]
-          }
-        });
+    setTimeout(() => this.updateChart(), 0);
+  }
+
+  getStatusLabel(status: string | undefined): string {
+    if (!status) return 'Unknown';
+    switch (status) {
+      case "0": return 'FU';
+      case "1": return 'Kontrak';
+      case "2": return 'Pengerjaan';
+      case "3": return 'Pemasangan';
+      case "4": return 'Pengecekan';
+      case "5": return 'Penagihan';
+      case "6": return 'Lunas';
+      default: return 'Unknown';
+    }
+  }
+
+  getStatusColor(status: string) {
+    const statusMap: { [key: string]: string } = {
+      'FU': 'bg-blue-500',
+      'Kontrak': 'bg-green-500',
+      'Pengerjaan': 'bg-yellow-500',
+      'Pemasangan': 'bg-orange-500',
+      'Pengecekan': 'bg-teal-500',
+      'Penagihan': 'bg-purple-500',
+      'Lunas': 'bg-red-500',
+    };
+    return statusMap[status] || 'bg-gray-500';
+  }
+    
+  updateStatusCounts(projekList: Projek[]) {
+    // Reset statusCounts
+    this.statusCounts = {
+      FU: 0, Kontrak: 0, Pengerjaan: 0, Pemasangan: 0, 
+      Pengecekan: 0, Penagihan: 0, Lunas: 0
+    };
+  
+    // Loop untuk menghitung jumlah berdasarkan status
+    projekList.forEach(p => {
+      const status = this.getStatusLabel(p.status_project); // Get status label from status_project
+      if (status in this.statusCounts) {
+        this.statusCounts[status]++; // Increment the count for the correct status
       }
-    }, 0);
+    });
+  
+    console.log('Updated statusCounts:', this.statusCounts);
+    this.updateChart(); // Update chart if needed
   }
-  projekList: Projek[] = [
-    { id: 1, no_project: 'PRJ001', tgl_project: '2024-01-10', ket_project: 'Instalasi AC', nama_customer: 'PT ABC', addr_customer: 'Jakarta', contact_customer: '08123456789', status_project: 'Selesai', created_by: 'Admin', created_date: '2024-01-01', updated_by: 'Admin', updated_date: '2024-01-10', is_deleted: 0 },
-    { id: 2, no_project: 'PRJ002', tgl_project: '2024-01-12', ket_project: 'Maintenance Server', nama_customer: 'PT XYZ', addr_customer: 'Bandung', contact_customer: '08129876543', status_project: 'Dalam Proses', created_by: 'Admin', created_date: '2024-01-02', updated_by: 'Admin', updated_date: '2024-01-12', is_deleted: 0 },
-    { id: 3, no_project: 'PRJ003', tgl_project: '2024-02-05', ket_project: 'Pengadaan Laptop', nama_customer: 'PT Jaya', addr_customer: 'Surabaya', contact_customer: '08131234567', status_project: 'Selesai', created_by: 'Admin', created_date: '2024-01-05', updated_by: 'Admin', updated_date: '2024-02-05', is_deleted: 0 },
-    { id: 4, no_project: 'PRJ004', tgl_project: '2024-02-15', ket_project: 'Pemasangan CCTV', nama_customer: 'PT Maju', addr_customer: 'Medan', contact_customer: '08132345678', status_project: 'Dalam Proses', created_by: 'Admin', created_date: '2024-01-10', updated_by: 'Admin', updated_date: '2024-02-15', is_deleted: 0 },
-    { id: 5, no_project: 'PRJ005', tgl_project: '2024-03-01', ket_project: 'Upgrade Software', nama_customer: 'PT Digital', addr_customer: 'Yogyakarta', contact_customer: '08133456789', status_project: 'Pending', created_by: 'Admin', created_date: '2024-01-15', updated_by: 'Admin', updated_date: '2024-03-01', is_deleted: 0 },
-    { id: 6, no_project: 'PRJ006', tgl_project: '2024-03-10', ket_project: 'Instalasi Internet', nama_customer: 'PT Net', addr_customer: 'Semarang', contact_customer: '08134567890', status_project: 'Dalam Proses', created_by: 'Admin', created_date: '2024-02-01', updated_by: 'Admin', updated_date: '2024-03-10', is_deleted: 0 },
-    { id: 7, no_project: 'PRJ007', tgl_project: '2024-04-05', ket_project: 'Pemeliharaan Data Center', nama_customer: 'PT Data', addr_customer: 'Bali', contact_customer: '08135678901', status_project: 'Selesai', created_by: 'Admin', created_date: '2024-02-15', updated_by: 'Admin', updated_date: '2024-04-05', is_deleted: 0 },
-    { id: 8, no_project: 'PRJ008', tgl_project: '2024-04-12', ket_project: 'Pembuatan Website', nama_customer: 'PT Web', addr_customer: 'Makassar', contact_customer: '08136789012', status_project: 'Pending', created_by: 'Admin', created_date: '2024-03-01', updated_by: 'Admin', updated_date: '2024-04-12', is_deleted: 0 },
-    { id: 9, no_project: 'PRJ009', tgl_project: '2024-05-01', ket_project: 'Jaringan Baru', nama_customer: 'PT Network', addr_customer: 'Batam', contact_customer: '08137890123', status_project: 'Dalam Proses', created_by: 'Admin', created_date: '2024-03-10', updated_by: 'Admin', updated_date: '2024-05-01', is_deleted: 0 },
-    { id: 10, no_project: 'PRJ010', tgl_project: '2024-05-15', ket_project: 'Pembuatan ERP', nama_customer: 'PT Software', addr_customer: 'Malang', contact_customer: '08138901234', status_project: 'Pending', created_by: 'Admin', created_date: '2024-03-20', updated_by: 'Admin', updated_date: '2024-05-15', is_deleted: 0 }
-  ];
-  constructor() {
-    this.selesaiCount = this.projekList.filter(p => p.status_project === 'Selesai').length;
-    this.dalamProsesCount = this.projekList.filter(p => p.status_project === 'Dalam Proses').length;
-    this.pendingCount = this.projekList.filter(p => p.status_project === 'Pending').length;
+
+  updateChart() {
+    console.log('res dashboard count di chart ', this.countProject);
+    if (!this.chartRef) return;
+  
+    const labels = Object.keys(this.statusCounts);
+    const data = Object.values(this.statusCounts);
+  
+    const backgroundColors = [
+      '#3b82f6', '#22c55e', '#facc15', '#fb923c', '#14b8a6', '#a855f7', '#ef4444'
+    ];
+  
+    if (!this.chartInstance) {
+      this.chartInstance = new Chart(this.chartRef.nativeElement, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Jumlah Proyek',
+            data: data,
+            backgroundColor: backgroundColors
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              ticks: {
+                stepSize: 1,   // Ensures whole numbers on the y-axis
+              },
+              min: 0,          // Start the y-axis from 0
+            }
+          }
+        }
+      });
+    } else {
+      this.chartInstance.data.labels = labels;
+      this.chartInstance.data.datasets[0].data = data;
+      this.chartInstance.data.datasets[0].label = 'Jumlah Proyek';
+      this.chartInstance.update();
+    }
   }
+  
+  
+  
 }

@@ -1,0 +1,63 @@
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg" id="penawaranReport">
+  <h1 class="text-2xl font-bold text-center">TERUS JAYA ABADI</h1>
+  <p class="text-center">Gresik Regency Blok D5, Manyar, Gresik - Jawa Timur</p>
+  <p class="text-center">Telp. 0822 3338 9489 | Email: tjakra.abadietgmail.com</p>
+  
+  <!-- Right-aligned Date -->
+  <p class="mt-4 text-right">{{ formattedDate }}</p>
+  
+  <p><strong>Kepada:</strong> Yth. Bagian Pengadaan RS. Eka Husada</p>
+  <p><strong>Perihal:</strong> Penawaran Harga</p>
+
+  <p class="mt-4">Dengan Hormat,</p>
+  <p>Bersama ini kami mengajukan penawaran harga Gorden Penyekat Ruang IGD untuk RS. Eka Husada Menganti, adapun perinciannya sebagai berikut:</p>
+  
+  <table class="w-full border-collapse border border-gray-300 mt-4">
+    <thead>
+      <tr class="bg-gray-200">
+        <th class="border border-gray-300 p-2">No</th>
+        <th class="border border-gray-300 p-2">Ruangan</th>
+        <th class="border border-gray-300 p-2">Qty</th>
+        <th class="border border-gray-300 p-2">Kain (Meter)</th>
+        <th class="border border-gray-300 p-2">Rel HNH (Meter)</th>
+        <th class="border border-gray-300 p-2">Harga Kain (Flexa)</th>
+        <th class="border border-gray-300 p-2">Harga Rel HNH (Silent)</th>
+        <th class="border border-gray-300 p-2">Total Value</th>
+        <th class="border border-gray-300 p-2">Keterangan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="text-center">
+        <td class="border border-gray-300 p-2">1</td>
+        <td class="border border-gray-300 p-2">R. IGD Observasi</td>
+        <td class="border border-gray-300 p-2">4 Bed</td>
+        <td class="border border-gray-300 p-2">73.68</td>
+        <td class="border border-gray-300 p-2">{{ formatRupiah(8620560) }}</td>
+        <td class="border border-gray-300 p-2">Rp {{ formatRupiah(117000) }}</td>
+        <td class="border border-gray-300 p-2">Rp {{ formatRupiah(320000) }}</td>
+        <td class="border border-gray-300 p-2">{{ formatRupiah(8620560) }}</td>
+        <td class="border border-gray-300 p-2">Warna menunggu arahan</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="mt-4 font-bold">Keterangan:</p>
+  <ul class="list-disc list-inside">
+    <li>Rel HNH - kualitas bagus, tarikannya halus dan tidak macet.</li>
+    <li>Harga dapat berubah sewaktu-waktu tanpa pemberitahuan terlebih dahulu.</li>
+    <li>Sistem pembayaran 1 minggu setelah pekerjaan selesai.</li>
+  </ul>
+  
+  <p class="mt-4">Demikian penawaran dari kami, atas perhatian dan kerja samanya kami sampaikan terima kasih.</p>
+
+  <p class="mt-6 font-bold">Hormat Kami,</p>
+  <p class="mt-2">Terus Jaya Abadi</p>
+
+  <!-- Print Button -->
+
+  <div class="text-center mt-6">
+    <button (click)="printPenawaran()" class="no-print bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Print Penawaran
+    </button>
+  </div>
+</div>

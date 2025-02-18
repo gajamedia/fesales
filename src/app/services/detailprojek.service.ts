@@ -36,7 +36,7 @@ export class DetailprojekService {
    // Function to gel user detail by id_auth
     getbyIdDetailProjek(id: string): Observable<DetailProjek> {
       const headers = this.globalService.getHeaders();
-      return this.http.get<any>(`${this.apiUrl}/projectdetil/searchbyipd/?id_project_detil=${id}`, { headers });
+      return this.http.get<any>(`${this.apiUrl}/projectdetil/searchbyiph/?id_project_header=${id}`, { headers });
     }
   create(formData: any): Observable<any> {
     const headers = this.globalService.getHeaders();

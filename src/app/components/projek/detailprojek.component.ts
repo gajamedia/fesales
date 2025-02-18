@@ -188,7 +188,8 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
   loadDataDetailProjek(id:any){
     this.detailprojekService.getbyIdDetailProjek(id).subscribe({
       next:(res:any)=>{
-        this.dataDetailProjek = res
+        console.log('res load data detail project', res )
+        this.dataDetailProjek = res.results
       },
       error:(e:any)=>{ console.error(e)},
       complete:()=>{ console.log('complete')}

@@ -25,6 +25,15 @@ export class ProjekService {
       return this.http.get<Projek[]>(`${this.apiUrl}/project/list/`, { headers});
   }
   // Function to get All
+  getByStatus(search: string, page: number, pageSize: number): Observable<Projek[]> {
+    const headers = this.globalService.getHeaders();
+    let params = new HttpParams().set('page', page.toString()).set('page_size', pageSize.toString());
+    if (search) {
+      params = params.set('search', search);
+    }
+    return this.http.get<Projek[]>(`${this.apiUrl}/project/searchbystatus/`, { headers, params });
+}
+  // Function to get All
   getAll(search: string, page: number, pageSize: number): Observable<Projek[]> {
     const headers = this.globalService.getHeaders();
     let params = new HttpParams().set('page', page.toString()).set('page_size', pageSize.toString());

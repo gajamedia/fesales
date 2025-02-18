@@ -16,6 +16,8 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { ProjekComponent } from './components/projek/projek.component';
 import { InputprojekComponent } from './components/projek/inputprojek.component';
 import { DetailprojekComponent } from './components/projek/detailprojek.component';
+import { InvoiceReportComponent } from './components/surat/invoice.component';
+import { SuratPenawaranComponent } from './components/surat/penawaran.component';
 
 
 export const routes: Routes = [
@@ -46,6 +48,10 @@ export const routes: Routes = [
       { path: 'user', component: UserComponent},
       { path: 'edituser', component: EdituserComponent},
       { path: 'userprofile', component: UserprofileComponent},
+      // report
+      { path: 'invoice', component: InvoiceReportComponent},
+      { path: 'penawaran', component: SuratPenawaranComponent},
+   
       ],
   },
   { path: 'forbidden', component: ForbiddenComponent },
