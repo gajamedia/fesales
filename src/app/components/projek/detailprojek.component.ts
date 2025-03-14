@@ -101,50 +101,8 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       this.loadDataDetailProjek(this.projectId)
     }
     
-    //if (this.dataDetailProjek.length > 0) {
-      //this.inputDetailProjek = { ...this.dataDetailProjek[0] };
-      //this.visible = true
-    //}
-   // else{
-     // this.visible = false
-    //}
-    
-    /*
-    //this.dataDetailProjek = this.shareddetailprojekService.getData('editDetailProjek');
-    if (!this.dataDetailProjek) {
-      //this.mode = false
-      this.visible = false
-    }
-    else{
-      //this.mode = true
-      this.visible = true
-      //this.initFormData()
-      
-    }
-    */
-    //load detail bahan
-    //this.loadDetailBahan(this.projectId!)
-
   }
-  /*
-  initFormData(){
-    this.inputDetailProjek.id = this.dataDetailProjek.id
-    this.inputDetailProjek.id_project_header = this.dataDetailProjek.id_project_header
-    this.inputDetailProjek.lebar_bahan= this.dataDetailProjek.lebar_bahan
-    this.inputDetailProjek.lantai = this.dataDetailProjek.lantai
-    this.inputDetailProjek.ruangan = this.dataDetailProjek.ruangan
-    this.inputDetailProjek.bed = this.dataDetailProjek.bed
-    this.inputDetailProjek.tipe = this.dataDetailProjek.tipe
-    this.inputDetailProjek.uk_room_l = this.dataDetailProjek.uk_room_l
-    this.inputDetailProjek.uk_room_p = this.dataDetailProjek.uk_room_p
-    this.inputDetailProjek.uk_room_t = this.dataDetailProjek.uk_room_t
-    this.inputDetailProjek.stik = this.dataDetailProjek.stik
-    this.inputDetailProjek.elevasi = this.dataDetailProjek.elevasi
-    this.inputDetailProjek.tinggi_vitrase = this.dataDetailProjek.tinggi_vitrase
-    this.inputDetailProjek.tinggi_lipatan = this.dataDetailProjek.tinggi_lipatan 
-    this.inputDetailProjek.nilai_pembagi = this.dataDetailProjek.nilai_pembagi
-  }
-  */
+  
   loadDataProjekBy(id: any) {
     this.projekService.getID(id).subscribe({
       next: (res: any) => {
@@ -164,27 +122,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       }
     });
   }
-  /*
-  loadDataDetailProjek(id:any){
-    this.search = id
-
-    this.detailprojekService.getAll(this.search, this.page, this.pageSize).subscribe({
-      next:(res:any)=>{
-        //console.log('tes res from search', res.results)
-        this.dataDetailProjek = res.results
-        this.totalPages = res.count
-        //this.dataDetailProjek = res.results.map((detail: any) => ({
-        //  ...detail,
-        //  showSubTable: false,
-        //  subItems: [] // Inisialisasi array sub-item
-        //}));
-      },
-      error:(e:any)=>{ console.error(e)},
-      complete:()=>{ console.log('complete')}
-    })
-  }
- */
-
+  
   loadDataDetailProjek(id:any){
     this.detailprojekService.getbyIdDetailProjek(id).subscribe({
       next:(res:any)=>{
@@ -223,7 +161,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
           this.showMessage('Simpan Data Sukses');
           console.log('saat simpan detail project this.projectId', this.projectId)
           this.loadDataDetailProjek(this.projectId)
-          this.refreshData();
+          this.refreshData(form);
         },
         error: () => {
           this.showMessage('Failed to save project!');
@@ -290,7 +228,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
         next:(res)=>{
           this.showMessage('Update Data Sukses');
           this.router.navigate(['/main/detailprojek'])
-          this.refreshData()
+          this.refreshData(form)
         },
         error: (e) => {
           //console.error('Update error:', e);
@@ -314,7 +252,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     return date.format('DD/MM/YYYY')
   }
     
-  refreshData(){
+  refreshData(form?:any){
     this.inputDetailProjek.id = 0
     this.inputDetailProjek.id_project_header = 0
     this.inputDetailProjek.lebar_bahan= 0
@@ -401,6 +339,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     } else {
       // Jika item_id kosong/null, berarti buat baru
       this.detailbahanService.create(bahan).subscribe((res) => {
+        
         bahan.item_id = res.id; // Simpan ID yang dikembalikan oleh backend
         bahan.isEditing = false;
       });
