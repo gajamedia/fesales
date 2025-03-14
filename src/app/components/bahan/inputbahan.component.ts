@@ -137,7 +137,8 @@ export class InputbahanComponent implements OnInit, OnDestroy {
       .subscribe({
         next:(res)=>{
           this.showMessage('Simpan Data Sukses');
-          this.refreshData()
+          this.router.navigate(['/main/inputbahan'])
+          this.refreshData(form)
         },
         error:(e:any)=>{
           if (e.error) {
@@ -178,7 +179,7 @@ export class InputbahanComponent implements OnInit, OnDestroy {
         next:(res)=>{
           this.showMessage('Update Data Sukses');
           this.router.navigate(['/main/bahan'])
-          this.refreshData()
+          this.refreshData(form)
         },
         error: (e) => {
           //console.error('Update error:', e);
@@ -197,21 +198,28 @@ export class InputbahanComponent implements OnInit, OnDestroy {
     //console.log('tes clik cancel')
     this.router.navigate(['/main/bahan'])
   }
-  refreshData(){
-    this.bahan.item_code = ""
-    this.bahan.item_name = ""
-    this.bahan.id_jenis = 0
-    this.bahan.ukuran = ""
-    this.bahan.keterangan = ""
-    this.bahan.harga_beli = 0
-    this.bahan.harga_jual = 0
-    this.bahan.created_by = ""
-    this.bahan.created_date = ""
-    this.bahan.updated_by = ""
-    this.bahan.updated_date = ""
-    this.bahan.is_deleted = 0
-    //this.selectedJenisBahan = 0
+  refreshData(form?: any) {
+    this.bahan = {
+      id: 0,
+      item_code: "",
+      item_name: "",
+      id_jenis: 0,
+      ukuran: "",
+      keterangan: "",
+      harga_beli: 0,
+      harga_jual: 0,
+      created_by: "",
+      created_date: "",
+      updated_by: "",
+      updated_date: "",
+      is_deleted: 0
+    };
+  
+    if (form) {
+      form.reset(); // ✅ Reset form agar validasi kembali normal
+    }
   }
+  
   showMessage(t:string): void {
     this.isNongolMessage = true;
     this.messageText = t

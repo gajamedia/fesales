@@ -9,13 +9,12 @@ import { DetailBahan, DetailProjek, Projek } from '../../interfaces/global.inter
 import dayjs from 'dayjs';
 import { DetailprojekService } from '../../services/detailprojek.service';
 import { ShareddetailprojekService } from '../../services/shareddetailprojek.service';
-import { ModaldetailbahanComponent } from './modaldetailbahan.component';
 import { DetailbahanService } from '../../services/detailbahan.service';
 
 @Component({
   selector: 'app-detailprojek',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModaldetailbahanComponent],
+  imports: [CommonModule, FormsModule],
   providers: [SharedloginService, AuthService, ShareddetailprojekService],
   templateUrl: './detailprojek.component.html',
   styleUrl: './projek.component.scss'
@@ -57,7 +56,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     updated_by: "",
     updated_date: "",
     is_deleted: 0,
-    //dataDetailBahan: undefined,
+    dataDetailBahan: undefined,
     expanded: false
   }
     
@@ -221,7 +220,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
         next: () => {
           this.showMessage('Simpan Data Sukses');
           console.log('saat simpan detail project this.projectId', this.projectId)
-          //.refreshData();
+          this.refreshData(form);
         },
         error: () => {
           this.showMessage('Failed to save project!');
@@ -263,14 +262,14 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
         'nilai_pembagi':this.inputDetailProjek.nilai_pembagi
         
       }
-      //let id = this.inputDetailProjek.id
-      let id:any="tes"
+      let id = this.inputDetailProjek.id
+      //let id:any="tes"
       this.detailprojekService.update(id, d)
       .subscribe({
         next:(res)=>{
           this.showMessage('Update Data Sukses');
           this.router.navigate(['/main/detailprojek'])
-          //this.refreshData()
+          this.refreshData(form)
         },
         error: (e) => {
           //console.error('Update error:', e);
@@ -305,7 +304,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     }, 3000);
   }
   
-  refreshData(){
+  refreshData(form?:any){
     this.inputDetailProjek.id = 0
     this.inputDetailProjek.id_project_header = 0
     this.inputDetailProjek.lebar_bahan= 0
@@ -321,6 +320,9 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     this.inputDetailProjek.tinggi_vitrase = 0
     this.inputDetailProjek.tinggi_lipatan = 0
     this.inputDetailProjek.nilai_pembagi = 0
+    if (form) {
+      form.reset(); // ✅ Reset form agar validasi kembali normal
+    }
   }
   /*
   toggleSubtable(detailProjekId: number) {
@@ -426,6 +428,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
   }
 
   saveDetailBahan(project: DetailProjek, bahan: DetailBahan) {
+    console.log('tes klik simpan detail Bahan')
     if (!bahan.item_name || !bahan.ukuran) {
       alert('Nama bahan dan ukuran harus diisi!');
       return;

@@ -88,7 +88,7 @@ export class InputjenisbahanComponent implements OnInit, OnDestroy {
       .subscribe({
         next:(res)=>{
           this.showMessage('Simpan Data Sukses');
-          this.refreshData()
+          this.refreshData(form)
         },
         error:(e:any)=>{
           if (e.error) {
@@ -114,7 +114,7 @@ export class InputjenisbahanComponent implements OnInit, OnDestroy {
         next:(res)=>{
           this.showMessage('Update Data Sukses');
           this.router.navigate(['/main/jenisbahan'])
-          this.refreshData()
+          this.refreshData(form)
         },
         error: (e) => {
           //console.error('Update error:', e);
@@ -133,8 +133,11 @@ export class InputjenisbahanComponent implements OnInit, OnDestroy {
     //console.log('tes clik cancel')
     this.router.navigate(['/main/jenisbahan'])
   }
-  refreshData(){
+  refreshData(form?:any){
     this.jenisbahan.nama_jenis =""
+    if (form) {
+      form.reset(); // ✅ Reset form agar validasi kembali normal
+    }
   }
   showMessage(t:string): void {
     this.isNongolMessage = true;

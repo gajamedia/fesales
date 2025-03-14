@@ -38,7 +38,7 @@ export interface Projek {
   is_deleted?: number,
 }
 export interface DetailProjek {
-  dataDetailBahan: any
+  dataDetailBahan?: any
   id:number,
   id_project_header?:number,
   lebar_bahan?:number,

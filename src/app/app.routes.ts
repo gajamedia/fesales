@@ -50,7 +50,7 @@ export const routes: Routes = [
       { path: 'userprofile', component: UserprofileComponent},
       // report
       { path: 'invoice', component: InvoiceReportComponent},
-      { path: 'penawaran', component: SuratPenawaranComponent},
+      { path: 'penawaran/:id', component: SuratPenawaranComponent},
    
       ],
   },

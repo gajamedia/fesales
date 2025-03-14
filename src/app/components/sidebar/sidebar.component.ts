@@ -14,7 +14,15 @@ export class SidebarComponent {
   isSidebarCollapsed = false; // Track whether the sidebar is collapsed
   isProfileMenuOpen = false; // Track whether the profile menu is open
 
+  //randomBgColor: string = this.getRandomColor();
+
+  
   constructor(private router: Router) {}
+
+  getRandomColor(): string {
+    const colors = ['#FF5733', '#33FF57', '#3357FF', '#F3FF33', '#FF33F6', '#33FFF3']; // Tambahkan warna lain sesuai keinginan
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;

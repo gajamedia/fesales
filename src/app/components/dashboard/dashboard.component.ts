@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { InvoiceReportComponent } from '../surat/invoice.component';
 import { SuratPenawaranComponent } from '../surat/penawaran.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,7 +34,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   dataListTable:any[]=[]
   statustable:string=''
 
-  constructor(private projekService: ProjekService, private cdr: ChangeDetectorRef) {}
+  constructor(private projekService: ProjekService, private router: Router, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.loadDataProjek();
@@ -97,7 +98,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  
+  openPenawaran(projectId: number) {
+    const url = this.router.serializeUrl(this.router.createUrlTree([`/main/penawaran/${projectId}`]));
+    window.open(url, '_blank');
+  }
   getStatusCode(status: string): string {
     const statusMap: { [key: string]: string } = {
       'FU': '0',

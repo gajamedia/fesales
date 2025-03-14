@@ -1,17 +1,52 @@
 <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg" id="penawaranReport">
-  <h1 class="text-2xl font-bold text-center">TERUS JAYA ABADI</h1>
-  <p class="text-center">Gresik Regency Blok D5, Manyar, Gresik - Jawa Timur</p>
-  <p class="text-center">Telp. 0822 3338 9489 | Email: tjakra.abadietgmail.com</p>
-  
-  <!-- Right-aligned Date -->
-  <p class="mt-4 text-right">{{ formattedDate }}</p>
-  
-  <p><strong>Kepada:</strong> Yth. Bagian Pengadaan RS. Eka Husada</p>
+  <h1 class="text-2xl font-bold text-center">{{ info.cv }}</h1>
+  <p class="text-center">{{ info.alamat }}</p>
+  <p class="text-center">Telp. {{ info.phone }} | Email: {{ info.email }}</p>
+
+  <!-- Tanggal -->
+  <p class="mt-4 text-right">{{ tglHariIni }}</p>
+
+  <!-- Informasi Customer -->
+  <p><strong>Kepada:</strong> Yth. Bagian Pengadaan {{ penawaranData?.customer.nama_customer }}</p>
+  <p><strong>Alamat:</strong> {{ penawaranData?.customer.addr_customer }}</p>
+
+  <!-- Informasi Project
+  <p><strong>No. Proyek:</strong> {{ penawaranData?.project.no_project }}</p>
+  <p><strong>Tanggal:</strong> {{ penawaranData?.project.tgl_project | date: 'yyyy-MM-dd' }}</p> -->
   <p><strong>Perihal:</strong> Penawaran Harga</p>
 
   <p class="mt-4">Dengan Hormat,</p>
   <p>Bersama ini kami mengajukan penawaran harga Gorden Penyekat Ruang IGD untuk RS. Eka Husada Menganti, adapun perinciannya sebagai berikut:</p>
   
+  <!-- Tabel Detail -->
+  <table class="w-full border-collapse border border-gray-300 mt-4">
+    <thead>
+      <tr class="bg-gray-200">
+        <th class="border border-gray-300 p-2">No</th>
+        <th class="border border-gray-300 p-2">Lantai</th>
+        <th class="border border-gray-300 p-2">Ruangan</th>
+        <th class="border border-gray-300 p-2">Bed</th>
+        <th class="border border-gray-300 p-2">Tipe</th>
+        <th class="border border-gray-300 p-2">Tinggi Gorden</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let detail of penawaranData?.details; let i = index">
+        <td class="border border-gray-300 p-2">{{ i + 1 }}</td>
+        <td class="border border-gray-300 p-2">{{ detail.lantai }}</td>
+        <td class="border border-gray-300 p-2">{{ detail.ruangan }}</td>
+        <td class="border border-gray-300 p-2">{{ detail.bed }}</td>
+        <td class="border border-gray-300 p-2">{{ detail.tipe }}</td>
+        <td class="border border-gray-300 p-2">{{ detail.tinggi_gorden }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="mt-4">Demikian penawaran dari kami, atas perhatian dan kerja samanya kami sampaikan terima kasih.</p>
+
+  <p class="mt-6 font-bold">Hormat Kami,</p>
+  <p class="mt-2">{{ info.cv }}</p>
+
   <table class="w-full border-collapse border border-gray-300 mt-4">
     <thead>
       <tr class="bg-gray-200">
