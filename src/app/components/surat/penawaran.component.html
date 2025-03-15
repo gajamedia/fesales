@@ -19,74 +19,65 @@
   <p>Bersama ini kami mengajukan penawaran harga Gorden Penyekat Ruang IGD untuk RS. Eka Husada Menganti, adapun perinciannya sebagai berikut:</p>
   
   <!-- Tabel Detail -->
-  <table class="w-full border-collapse border border-gray-300 mt-4">
-    <thead>
-      <tr class="bg-gray-200">
-        <th class="border border-gray-300 p-2">No</th>
-        <th class="border border-gray-300 p-2">Lantai</th>
-        <th class="border border-gray-300 p-2">Ruangan</th>
-        <th class="border border-gray-300 p-2">Bed</th>
-        <th class="border border-gray-300 p-2">Tipe</th>
-        <th class="border border-gray-300 p-2">Tinggi Gorden</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let detail of penawaranData?.details; let i = index">
-        <td class="border border-gray-300 p-2">{{ i + 1 }}</td>
-        <td class="border border-gray-300 p-2">{{ detail.lantai }}</td>
-        <td class="border border-gray-300 p-2">{{ detail.ruangan }}</td>
-        <td class="border border-gray-300 p-2">{{ detail.bed }}</td>
-        <td class="border border-gray-300 p-2">{{ detail.tipe }}</td>
-        <td class="border border-gray-300 p-2">{{ detail.tinggi_gorden }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="overflow-x-auto p-4">
+    <table class="w-full border-collapse border border-gray-300 text-sm">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="border border-gray-300 px-4 py-2">Lantai</th>
+          <th class="border border-gray-300 px-4 py-2">Ruangan</th>
+          <th class="border border-gray-300 px-4 py-2">Bed</th>
+          <th class="border border-gray-300 px-4 py-2">Tinggi Gorden</th>
+          <th class="border border-gray-300 px-4 py-2">Lebar Gorden</th>
+          <th class="border border-gray-300 px-4 py-2">Tinggi Kain</th>
+          <th class="border border-gray-300 px-4 py-2">Panel</th>
+          <th class="border border-gray-300 px-4 py-2">Qty</th>
+          <th class="border border-gray-300 px-4 py-2">Items</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detail of penawaranData.details" class="border-b">
+          <td class="border border-gray-300 px-4 py-2">{{ detail.lantai }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.ruangan }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.bed }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.tinggi_gorden }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.lebar_gorden }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.tinggi_kain }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.panel }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.qty }}</td>
+          <td class="border border-gray-300 px-4 py-2">
+            <table class="w-full border border-gray-200">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="border border-gray-300 px-2 py-1">Kode Item</th>
+                  <th class="border border-gray-300 px-2 py-1">Ukuran</th>
+                  <th class="border border-gray-300 px-2 py-1">Harga Beli</th>
+                  <th class="border border-gray-300 px-2 py-1">Harga Jual</th>
+                  <th class="border border-gray-300 px-2 py-1">Nama Item</th>
+                  <th class="border border-gray-300 px-2 py-1">Volume</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of detail.items">
+                  <td class="border border-gray-300 px-2 py-1">{{ item.item_code }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.ukuran }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.harga_beli }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.harga_jual }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.item_name }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.volume }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <p class="mt-4">Demikian penawaran dari kami, atas perhatian dan kerja samanya kami sampaikan terima kasih.</p>
 
   <p class="mt-6 font-bold">Hormat Kami,</p>
   <p class="mt-2">{{ info.cv }}</p>
 
-  <table class="w-full border-collapse border border-gray-300 mt-4">
-    <thead>
-      <tr class="bg-gray-200">
-        <th class="border border-gray-300 p-2">No</th>
-        <th class="border border-gray-300 p-2">Ruangan</th>
-        <th class="border border-gray-300 p-2">Qty</th>
-        <th class="border border-gray-300 p-2">Kain (Meter)</th>
-        <th class="border border-gray-300 p-2">Rel HNH (Meter)</th>
-        <th class="border border-gray-300 p-2">Harga Kain (Flexa)</th>
-        <th class="border border-gray-300 p-2">Harga Rel HNH (Silent)</th>
-        <th class="border border-gray-300 p-2">Total Value</th>
-        <th class="border border-gray-300 p-2">Keterangan</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="text-center">
-        <td class="border border-gray-300 p-2">1</td>
-        <td class="border border-gray-300 p-2">R. IGD Observasi</td>
-        <td class="border border-gray-300 p-2">4 Bed</td>
-        <td class="border border-gray-300 p-2">73.68</td>
-        <td class="border border-gray-300 p-2">{{ formatRupiah(8620560) }}</td>
-        <td class="border border-gray-300 p-2">Rp {{ formatRupiah(117000) }}</td>
-        <td class="border border-gray-300 p-2">Rp {{ formatRupiah(320000) }}</td>
-        <td class="border border-gray-300 p-2">{{ formatRupiah(8620560) }}</td>
-        <td class="border border-gray-300 p-2">Warna menunggu arahan</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p class="mt-4 font-bold">Keterangan:</p>
-  <ul class="list-disc list-inside">
-    <li>Rel HNH - kualitas bagus, tarikannya halus dan tidak macet.</li>
-    <li>Harga dapat berubah sewaktu-waktu tanpa pemberitahuan terlebih dahulu.</li>
-    <li>Sistem pembayaran 1 minggu setelah pekerjaan selesai.</li>
-  </ul>
-  
-  <p class="mt-4">Demikian penawaran dari kami, atas perhatian dan kerja samanya kami sampaikan terima kasih.</p>
-
-  <p class="mt-6 font-bold">Hormat Kami,</p>
-  <p class="mt-2">Terus Jaya Abadi</p>
 
   <!-- Print Button -->
 

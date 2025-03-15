@@ -98,9 +98,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
     });
   }
+  /*
   openPenawaran(projectId: number) {
+    console.log('projectId', projectId)
     const url = this.router.serializeUrl(this.router.createUrlTree([`/main/penawaran/${projectId}`]));
     window.open(url, '_blank');
+  }
+  */
+  openPenawaran(projectId: number) {
+    console.log('projectId', projectId);
+    this.router.navigate([`./main/penawaran/${projectId}`]); 
   }
   getStatusCode(status: string): string {
     const statusMap: { [key: string]: string } = {

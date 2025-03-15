@@ -299,7 +299,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
     if (!this.expandedRows[id]) {
       this.expandedRows[id] = [];
     }
-  
+    console.log("expandedRows[id] sebelum tambah data:", this.expandedRows[id]);
     // Tambahkan data baru dengan item_id null agar terdeteksi sebagai data baru
     const newData = {
       item_code: Date.now(), // ID unik
@@ -330,7 +330,9 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       alert('Nama bahan dan ukuran harus diisi!');
       return;
     }
-  
+
+    console.log('Data sebelum disimpan:', bahan);
+
     if (bahan.item_id && bahan.item_id > 0) {
       // Jika item_id sudah ada, berarti update
       this.detailbahanService.update(bahan.item_id, bahan).subscribe(() => {
@@ -338,13 +340,15 @@ export class DetailprojekComponent implements OnInit, OnDestroy{
       });
     } else {
       // Jika item_id kosong/null, berarti buat baru
+      bahan.id_project_detil = ritemId; // Pastikan ID Project Detail ada sebelum dikirim
       this.detailbahanService.create(bahan).subscribe((res) => {
-        
+        console.log('Response dari backend:', res);
         bahan.item_id = res.id; // Simpan ID yang dikembalikan oleh backend
         bahan.isEditing = false;
       });
     }
   }
+
   cancelEdit(bahan: any) {
     console.log('bahan', bahan);
     if (!bahan || !this.expandedRows) {
