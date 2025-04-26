@@ -505,12 +505,23 @@
           <span>{{ bahan.item_name }} - {{ bahan.ukuran }}</span>
         </label>
       </div>
-    
       <div class="mt-4 text-right">
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+        <button
+          type="button"
+          class="bg-gray-400 text-white px-4 py-2 rounded mr-2"
+          (click)="onModalCancel()"
+        >
+          Cancel
+        </button>
+      
+        <button
+          type="submit"
+          class="bg-blue-600 text-white px-4 py-2 rounded"
+        >
           {{ editMode ? 'Update' : 'Simpan' }}
         </button>
       </div>
+      
     </form>
     
     

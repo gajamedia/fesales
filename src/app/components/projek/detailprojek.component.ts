@@ -8,7 +8,6 @@ import { AuthService } from '../../services/auth.service';
 import { Bahan, DetailBahan, DetailProjek } from '../../interfaces/global.interface';
 import dayjs from 'dayjs';
 import { DetailprojekService } from '../../services/detailprojek.service';
-import { ShareddetailprojekService } from '../../services/shareddetailprojek.service';
 import { DetailbahanService } from '../../services/detailbahan.service';
 import { BahanService } from '../../services/bahan.service';
 
@@ -16,11 +15,11 @@ import { BahanService } from '../../services/bahan.service';
   selector: 'app-detailprojek',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  providers: [SharedloginService, AuthService, ShareddetailprojekService],
+  providers: [SharedloginService, AuthService],
   templateUrl: './detailprojek.component.html',
   styleUrl: './projek.component.scss'
 })
-export class DetailprojekComponent implements OnInit, OnDestroy {
+export class DetailprojekComponent implements OnInit {
   @ViewChildren('inputField') inputFields!: QueryList<ElementRef>;
   formRef!: NgForm;
 
@@ -59,7 +58,6 @@ export class DetailprojekComponent implements OnInit, OnDestroy {
     private projekService: ProjekService,
     private detailprojekService: DetailprojekService,
     private detailbahanService: DetailbahanService,
-    private shareddetailprojekService: ShareddetailprojekService,
     private bahanService: BahanService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
@@ -80,9 +78,6 @@ export class DetailprojekComponent implements OnInit, OnDestroy {
     if (inputElements.length > 0) {
       inputElements[0].nativeElement.focus(); // Focus on the first element
     }
-  }
-  ngOnDestroy(): void {
-    this.shareddetailprojekService.clearData('editDetailProjek');
   }
 
   loadDataProjekBy(id: any): void {
@@ -155,7 +150,6 @@ export class DetailprojekComponent implements OnInit, OnDestroy {
   }
 
   onCancel(): void {
-    this.shareddetailprojekService.clearData('editDetailProjek');
     this.router.navigate(['/main/projek']);
   }
 
@@ -200,6 +194,12 @@ export class DetailprojekComponent implements OnInit, OnDestroy {
       }
     });
   }
+  onModalCancel(): void {
+    this.showAddBahanModal = false;
+    this.selectedDetailProjekId = null;
+    this.editMode = false;
+    this.dataBahan.forEach(b => b.selected = false); // Reset semua checklist
+  }
   
 
   addDetailBahan(id: number): void {
@@ -219,7 +219,7 @@ export class DetailprojekComponent implements OnInit, OnDestroy {
       }
     });
   }
-  
+ 
 
   loadSelectedBahanForProjectDetail(projectDetailId: number): void {
     this.detailbahanService.getbyIdDetailProjek(projectDetailId.toString()).subscribe({
