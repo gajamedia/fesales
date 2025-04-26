@@ -65,20 +65,20 @@
             </div>
             <div class="flex flex-wrap gap-4 p-2">
               <div class="form-group flex-1">
-                <label class="text-gray-700" for="bed">Bed</label>
+                <label class="text-gray-700" for="lantai">Lantai</label>
                 <input
                   required
-                  id="bed"
+                  id="lantai"
                   type="text"
                   class="mt-1 p-2 w-full border rounded-md"
-                  [(ngModel)]="inputDetailProjek.bed"
-                  name="bed"
-                  #bed="ngModel"
-                  [ngClass]="{'border-red-500': bed.touched && bed.invalid}"
+                  [(ngModel)]="inputDetailProjek.lantai"
+                  name="lantai"
+                  #lantai="ngModel"
+                  [ngClass]="{'border-red-500': lantai.touched && lantai.invalid}"
                 >
-                <div *ngIf="bed.touched && bed.invalid" class="text-red-500 text-sm">
-                  Bed is required.
-                </div> 
+                <div *ngIf="lantai.touched && lantai.invalid" class="text-red-500 text-sm">
+                  Lantai is required.
+                </div>  
               </div>
               <div class="form-group flex-1">
                 <label class="text-gray-700" for="ruangan">Ruangan</label>
@@ -97,20 +97,20 @@
                 </div>  
               </div>
               <div class="form-group flex-1">
-                <label class="text-gray-700" for="lantai">Lantai</label>
+                <label class="text-gray-700" for="bed">Bed</label>
                 <input
                   required
-                  id="lantai"
+                  id="bed"
                   type="text"
                   class="mt-1 p-2 w-full border rounded-md"
-                  [(ngModel)]="inputDetailProjek.lantai"
-                  name="lantai"
-                  #lantai="ngModel"
-                  [ngClass]="{'border-red-500': lantai.touched && lantai.invalid}"
+                  [(ngModel)]="inputDetailProjek.bed"
+                  name="bed"
+                  #bed="ngModel"
+                  [ngClass]="{'border-red-500': bed.touched && bed.invalid}"
                 >
-                <div *ngIf="lantai.touched && lantai.invalid" class="text-red-500 text-sm">
-                  Lantai is required.
-                </div>  
+                <div *ngIf="bed.touched && bed.invalid" class="text-red-500 text-sm">
+                  Bed is required.
+                </div> 
               </div>
               <div class="form-group flex-1">
                 <label class="text-gray-700" for="lebar_bahan">Lebar Bahan</label>
@@ -338,9 +338,9 @@
             <thead class="sticky top-0">
               <tr>
                 <th class="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">#</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Bed</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Ruangan</th>
                 <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Lantai</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Ruangan</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Bed</th>
                 <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Lebar Bahan</th>
                 <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Tipe</th>
                 <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 ">Uk Room-L</th>
@@ -359,13 +359,13 @@
                 <tr class="border-b">
                   <td class="px-2 py-3 border-b border-gray-200 bg-white text-sm">{{ (pageSize * (page - 1) + i) + 1 }}</td>
                   <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
-                    <p class="text-gray-900 whitespace-no-wrap">{{ ritem.bed }}</p>
+                    <p class="text-gray-900 whitespace-no-wrap">{{ ritem.lantai }}</p>
                   </td>
                   <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
                     <p class="text-gray-900 whitespace-no-wrap">{{ritem.ruangan}}</p>
                   </td>
                   <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
-                    <p class="text-gray-900 whitespace-no-wrap">{{ritem.lantai}}</p>
+                    <p class="text-gray-900 whitespace-no-wrap">{{ritem.bed}}</p>
                   </td>
                   <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
                     <p class="text-gray-900 whitespace-no-wrap">{{ritem.lebar_bahan}}</p>
@@ -434,121 +434,74 @@
                   </td>
                 </tr>
                                          
-                <!-- Gunakan *ngIf di luar *ngFor -->
+                <!-- Ganti <tr> dengan <td colspan="7"> agar kontennya valid dalam tabel -->
                 <tr *ngIf="expandedRows[ritem.id] && expandedRows[ritem.id].length > 0">
-                  <td colspan="1"></td>
-                  <td colspan="13">
-                    <table class="min-w-full leading-normal">
-                      <thead class="sticky top-0">
-                        <tr class="bg-cyan-300">
-                          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">#</th>
-                          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Item ID</th>
-                          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Item Code</th>
-                          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Item Name</th>
-                          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Ukuran</th>
-                          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Harga Beli</th>
-                          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Harga Jual</th>
-                          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Aksi</th>
-                        </tr>
-                       
-                      </thead>
-                      <!--
-                      <tbody *ngIf="expandedRows[ritem.id] && expandedRows[ritem.id].length > 0">
-                        <tr *ngFor="let bahan of expandedRows[ritem.id]; let i = index; trackBy: trackByFn">
-                          <ng-container *ngIf="bahan.isEditing; else viewMode">
-                            <td>{{ i + 1 }}</td> <!-- Menampilkan nomor urut ->
-                            <input hidden [(ngModel)]="bahan.id_project_detil" />
-                            <td class="text-left text-xs font-bold text-gray-600 tracking-wider"><input [(ngModel)]="bahan.item_id" /></td>
-                            <td class="text-left text-xs font-bold text-gray-600 tracking-wider"><input [(ngModel)]="bahan.item_code" /></td>
-                            <td class="text-left text-xs font-bold text-gray-600 tracking-wider"><input [(ngModel)]="bahan.item_name" /></td>
-                            <td class="text-left text-xs font-bold text-gray-600 tracking-wider"><input [(ngModel)]="bahan.ukuran" /></td>
-                            <td class="text-left text-xs font-bold text-gray-600 tracking-wider"><input [(ngModel)]="bahan.harga_beli" type="number" /></td>
-                            <td class="text-left text-xs font-bold text-gray-600 tracking-wider"><input [(ngModel)]="bahan.harga_jual" type="number" /></td>
-                            <td class="text-left text-xs font-bold text-gray-600 tracking-wider">
-                              <!-- Tombol Edit ->
-                              
-                              <button (click)="saveDetailBahan(ritem.id, bahan)">Simpan</button>
-                              <button (click)="cancelEdit(bahan)">Batal</button>
-                            </td>
-                          </ng-container>
-                          <ng-template #viewMode>
-                            <td>{{ i + 1 }}</td> <!-- Menampilkan nomor urut ->
-                            <td>{{ bahan.item_id  }}</td>
-                            <td>{{ bahan.item_code  }}</td>
-                            <td>{{ bahan.item_name || '-' }}</td>
-                            <td>{{ bahan.ukuran || '-' }}</td>
-                            <td>{{ bahan.harga_beli }}</td>
-                            <td>{{ bahan.harga_jual }}</td>
-                            <td>
-                              <button (click)="editDetailBahan(ritem.id, bahan)" title="Edit"
-                                class="w-10 h-10 flex items-center justify-center rounded-lg text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(34, 86, 155);"><path d="m7 17.013 4.413-.015 9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583v4.43zM18.045 4.458l1.589 1.583-1.597 1.582-1.586-1.585 1.594-1.58zM9 13.417l6.03-5.973 1.586 1.586-6.029 5.971L9 15.006v-1.589z"></path><path d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2z"></path></svg>
-                              </button>
-                              <button (click)="deleteDetailBahan(ritem, bahan)" title="Hapus" class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30" type="button">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(109, 8, 8);"><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path><path d="M9 10h2v8H9zm4 0h2v8h-2z"></path></svg>
-                              </button>
-                            </td>
-                          </ng-template>
-                        </tr>
-                      </tbody>
-                      -->
-                      
-                      <tbody *ngIf="expandedRows[ritem.id] && expandedRows[ritem.id].length > 0">
-                        <tr *ngFor="let bahan of expandedRows[ritem.id]; let i = index; trackBy: trackByFn">
-                          <ng-container *ngIf="bahan.isEditing; else viewMode">
-                            <td class="px-4 py-2">{{ i + 1 }}</td> <!-- Nomor urut -->
-                            <input hidden [(ngModel)]="bahan.id_project_detil" />
-                      
-                            <td class="px-4 py-2">
-                              <input [(ngModel)]="bahan.item_id" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
-                            </td>
-                            <td class="px-4 py-2">
-                              <input [(ngModel)]="bahan.item_code" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
-                            </td>
-                            <td class="px-4 py-2">
-                              <input [(ngModel)]="bahan.item_name" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
-                            </td>
-                            <td class="px-4 py-2">
-                              <input [(ngModel)]="bahan.ukuran" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
-                            </td>
-                            <td class="px-4 py-2">
-                              <input [(ngModel)]="bahan.harga_beli" type="number" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
-                            </td>
-                            <td class="px-4 py-2">
-                              <input [(ngModel)]="bahan.harga_jual" type="number" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
-                            </td>
-                            <td class="px-4 py-2 flex space-x-2">
-                              <button (click)="saveDetailBahan(ritem.id, bahan)" class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
-                                Simpan
-                              </button>
-                              <button (click)="cancelEdit(bahan)" class="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600">
-                                Batal
-                              </button>
-                            </td>
-                          </ng-container>
-                      
-                          <ng-template #viewMode>
-                            <td class="px-4 py-2">{{ i + 1 }}</td>
-                            <td class="px-4 py-2">{{ bahan.item_id }}</td>
-                            <td class="px-4 py-2">{{ bahan.item_code }}</td>
-                            <td class="px-4 py-2">{{ bahan.item_name || '-' }}</td>
-                            <td class="px-4 py-2">{{ bahan.ukuran || '-' }}</td>
-                            <td class="px-4 py-2">{{ bahan.harga_beli }}</td>
-                            <td class="px-4 py-2">{{ bahan.harga_jual }}</td>
-                            <td class="px-4 py-2 flex space-x-2">
-                              <button (click)="editDetailBahan(ritem.id, bahan)" title="Edit" class="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                                ✏️
-                              </button>
-                              <button (click)="deleteDetailBahan(ritem, bahan)" title="Hapus" class="p-2 bg-red-500 text-white rounded-md hover:bg-red-600">
-                                🗑️
-                              </button>
-                            </td>
-                          </ng-template>
-                        </tr>
-                      </tbody>
-                      
-                    </table>
-                    
+                  <td colspan="14">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                      <!-- Kebutuhan Kain -->
+                      <div>
+                        <h3 class="text-lg font-semibold mb-2">Kebutuhan Kain</h3>
+                        <table class="min-w-full text-sm border border-gray-300">
+                          <thead class="bg-cyan-300">
+                            <tr>
+                              <th class="text-left p-2">#</th>
+                              <th class="text-left p-2">Tinggi Kain</th>
+                              <th class="text-left p-2">Lebar Total</th>
+                              <th class="text-left p-2">Panel</th>
+                              <th class="text-left p-2">Kebutuhan Kain</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let kain of dataKebKain; let i = index">
+                              <td class="p-2">{{ i + 1 }}</td>
+                              <td class="p-2">{{ kain.tinggi_kain }}</td>
+                              <td class="p-2">{{ kain.lebar_total }}</td>
+                              <td class="p-2">{{ kain.panel || '-' }}</td>
+                              <td class="p-2">{{ kain.kebutuhan_kain || '-' }}</td>
+                            </tr>
+                          </tbody>
+                          <tfoot>
+                            <tr>
+                              <td colspan="4" class="p-2 font-semibold">Total Kebutuhan</td>
+                              <td class="p-2 font-semibold">{{ totKebutuhanKain }}</td>
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </div>
+
+                      <!-- Kebutuhan Vitrase -->
+                      <div>
+                        <h3 class="text-lg font-semibold mb-2">Kebutuhan Vitrase</h3>
+                        <table class="min-w-full text-sm border border-gray-300">
+                          <thead class="bg-cyan-300">
+                            <tr>
+                              <th class="text-left p-2">#</th>
+                              <th class="text-left p-2">Tinggi Vitrase</th>
+                              <th class="text-left p-2">Tinggi Lipatan</th>
+                              <th class="text-left p-2">Lebar Total</th>
+                              <th class="text-left p-2">Panel</th>
+                              <th class="text-left p-2">Kebutuhan Vitrase</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let vitrase of dataKebVitrase; let i = index">
+                              <td class="p-2">{{ i + 1 }}</td>
+                              <td class="p-2">{{ vitrase.tinggi_vitrase }}</td>
+                              <td class="p-2">{{ vitrase.tinggi_lipatan }}</td>
+                              <td class="p-2">{{ vitrase.lebar_total }}</td>
+                              <td class="p-2">{{ vitrase.panel || '-' }}</td>
+                              <td class="p-2">{{ vitrase.kebutuhan_vitrase || '-' }}</td>
+                            </tr>
+                          </tbody>
+                          <tfoot>
+                            <tr>
+                              <td colspan="5" class="p-2 font-semibold">Total Kebutuhan</td>
+                              <td class="p-2 font-semibold">{{ totKebutuhanVitrase }}</td>
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               </ng-container>
@@ -559,3 +512,106 @@
     </div>
   </div>
 </section>
+
+<!-- Modal -->
+<div
+  *ngIf="showAddBahanModal"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-xl shadow-lg w-[90%] max-w-lg p-6">
+    <h2 class="text-xl font-semibold mb-4">Tambah Detail Bahan</h2>
+    
+    <form *ngIf="selectedDetailProjekId !== null" (ngSubmit)="simpanChecklistBahan(selectedDetailProjekId)">
+
+      <div *ngFor="let bahan of dataBahan">
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" [(ngModel)]="bahan.selected" [name]="'checkbox_' + bahan.id" />
+          <span>{{ bahan.item_name }} - {{ bahan.ukuran }}</span>
+        </label>
+      </div>
+      <div class="mt-4 text-right">
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Simpan</button>
+      </div>
+    </form>
+    
+  </div>
+</div>
+
+
+<!--
+<tr *ngIf="expandedRows[ritem.id] && expandedRows[ritem.id].length > 0">
+  <td colspan="1"></td>
+  <td colspan="13">
+    <table class="min-w-full leading-normal">
+      <thead class="sticky top-0">
+        <tr class="bg-cyan-300">
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">#</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Item ID</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Item Code</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Item Name</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Ukuran</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Harga Beli</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Harga Jual</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Aksi</th>
+        </tr>
+       
+      </thead>
+      
+      <tbody *ngIf="expandedRows[ritem.id] && expandedRows[ritem.id].length > 0">
+        <tr *ngFor="let bahan of expandedRows[ritem.id]; let i = index; trackBy: trackByFn">
+          <ng-container *ngIf="bahan.isEditing; else viewMode">
+            <td class="px-4 py-2">{{ i + 1 }}</td> 
+            <input hidden [(ngModel)]="bahan.id_project_detil" />
+      
+            <td class="px-4 py-2">
+              <input [(ngModel)]="bahan.item_id" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+            </td>
+            <td class="px-4 py-2">
+              <input [(ngModel)]="bahan.item_code" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+            </td>
+            <td class="px-4 py-2">
+              <input [(ngModel)]="bahan.item_name" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+            </td>
+            <td class="px-4 py-2">
+              <input [(ngModel)]="bahan.ukuran" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+            </td>
+            <td class="px-4 py-2">
+              <input [(ngModel)]="bahan.harga_beli" type="number" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+            </td>
+            <td class="px-4 py-2">
+              <input [(ngModel)]="bahan.harga_jual" type="number" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+            </td>
+            <td class="px-4 py-2 flex space-x-2"> 
+              <button  class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
+                Simpan
+              </button> 
+              <button  class="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600">
+                Batal
+              </button>
+            </td>
+          </ng-container>
+      
+          <ng-template #viewMode>
+            <td class="px-4 py-2">{{ i + 1 }}</td>
+            <td class="px-4 py-2">{{ bahan.item_id }}</td>
+            <td class="px-4 py-2">{{ bahan.item_code }}</td>
+            <td class="px-4 py-2">{{ bahan.item_name || '-' }}</td>
+            <td class="px-4 py-2">{{ bahan.ukuran || '-' }}</td>
+            <td class="px-4 py-2">{{ bahan.harga_beli }}</td>
+            <td class="px-4 py-2">{{ bahan.harga_jual }}</td>
+            <td class="px-4 py-2 flex space-x-2"> 
+              <button  title="Edit" class="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                ✏️
+              </button> 
+              <button  title="Hapus" class="p-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                🗑️
+              </button>
+            </td>
+          </ng-template>
+        </tr>
+      </tbody>
+      
+    </table>
+    
+  </td>
+</tr> -->

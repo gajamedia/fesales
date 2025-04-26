@@ -28,7 +28,7 @@ export class SuratPenawaranComponent implements OnInit {
 
   //data
   info:any={
-    cv: "TERUS JAYA ABAD",
+    cv: "TERUS JAYA ABADI",
     alamat: "Gresik Regency Blok D5, Manyar, Gresik - Jawa Timur",
     phone: "0822 3338 9489",
     email: "tjakra.abadi@gmail.com"

@@ -34,7 +34,7 @@ export class DetailprojekService {
     return this.http.get<DetailProjek[]>(`${this.apiUrl}/projectdetil/search/`, { headers, params });
   }
    // Function to gel user detail by id_auth
-    getbyIdDetailProjek(id: string): Observable<DetailProjek> {
+  getbyIdDetailProjek(id: string): Observable<DetailProjek> {
       const headers = this.globalService.getHeaders();
       return this.http.get<any>(`${this.apiUrl}/projectdetil/searchbyiph/?id_project_header=${id}`, { headers });
     }
@@ -52,5 +52,12 @@ export class DetailprojekService {
     const headers = this.globalService.getHeaders();
     return this.http.put(`${this.apiUrl}/projectdetil/${id}/delete/`, jdata, { headers});
   }
-
+  getkain(id: any,): Observable<any> {
+    const headers = this.globalService.getHeaders();
+    return this.http.get(`${this.apiUrl}/totalkain/?id_project_detil=${id}`, { headers});
+  }
+  getvitrase(id: any,): Observable<any> {
+    const headers = this.globalService.getHeaders();
+    return this.http.get(`${this.apiUrl}/totalvitrase/?id_project_detil=${id}`, { headers});
+  }
 }

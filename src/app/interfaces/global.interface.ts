@@ -21,6 +21,7 @@ export interface Bahan {
   updated_by?: string,
   updated_date?: string,
   is_deleted?: number,
+  selected?: boolean; // ✅ tambahkan ini
 }
 export interface Projek {
   id?: number,
@@ -65,7 +66,7 @@ export interface DetailBahan{
   id?:number,
   id_project_detil?:number,
   item_id?:number,
-  item_code?:number,
+  item_code?:string,
   item_name?:string,
   ukuran?:string,
   harga_beli?:number,
