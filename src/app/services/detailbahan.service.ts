@@ -52,5 +52,9 @@ export class DetailbahanService {
     const headers = this.globalService.getHeaders();
     return this.http.put(`${this.apiUrl}/detilbahan/${id}/delete/`, jdata, { headers});
   }
-
+  //detilbahan/<int:pk>/harddelete/
+  deletedbyidprojdet(id: any): Observable<any> {
+    const headers = this.globalService.getHeaders();
+    return this.http.delete(`${this.apiUrl}/detilbahan/${id}/harddelete/`, { headers});
+  }
 }
