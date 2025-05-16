@@ -1,0 +1,31 @@
+@media print {
+  /* Pastikan garis tabel tetap ada saat print */
+  table {
+    border-collapse: collapse;
+  }
+
+  th, td {
+    border: 1px solid black;
+  }
+
+  /* Pastikan tanggal tetap di kanan */
+  .text-right {
+    text-align: right;
+  }
+
+  /* Atur margin atau padding jika perlu */
+  .p-6 {
+    padding: 10px;
+  }
+
+  /* Menambahkan margin untuk memastikan layout tidak berantakan */
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Menyembunyikan tombol cetak saat print */
+  button {
+    display: none;
+  }
+}

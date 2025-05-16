@@ -1,0 +1,107 @@
+
+  /*
+  @page {
+    size: A4;
+    margin: 1;
+  }
+  /*
+  <!-- Your HTML content here 
+     Ukuran mm: 85,6 mm x 53,98 mm. 
+     Ukuran cm: 8,56 cm x 5,398 cm. 
+     Ukuran inch: 3,37 inch x 2,12 inch. 
+     Ukuran pixel: 323,52 pixel x 204,01 pixel.
+     hidden dihtml dan visible saat printqr blm
+    -->
+  
+  @media print {
+    .container {
+      width: 100%;
+      margin: 0;
+    }
+
+    .grid {
+      display: grid; 
+      grid-template-columns: 5.2cm 5.2cm; 
+      grid-auto-rows: 7.0cm; 
+      gap: 1px; 
+    }
+
+    .bg-white {
+      width: 5.1cm;
+      height: 6.9cm;
+    }
+
+/* General Print Styles */
+@page {
+  size: A4;
+  margin: 1;
+}
+
+/* Styles for print media */
+@media print {
+  .container {
+    width: 100%;
+    margin: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 5.5cm 5.5cm;
+    grid-auto-rows: 8.0cm;
+    gap: 1px;
+  }
+
+  .bg-white {
+    width: 5.3cm;
+    height: 7.1cm;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .container,
+  .container * {
+    visibility: visible;
+  }
+}
+
+/* Centering the QR Code in qr-container */
+.qr-container {
+  display: flex;
+  justify-content: center; /* Horizontal centering */
+  align-items: center;     /* Vertical centering */
+  //width: 9rem;             /* Set a fixed width */
+  height: 9rem;            /* Set a fixed height */
+  margin-top: 0.25rem;     /* Small margin */
+}
+
+.qr-container img {
+  max-width: 100%;  /* Ensure the image doesn’t exceed container width */
+  max-height: 100%; /* Ensure the image doesn’t exceed container height */
+  object-fit: contain; /* Maintain aspect ratio and fit within the container */
+  border-radius: 0.5rem; /* Optional: rounded corners */
+  border: 1px solid #ccc; /* Optional: border around the image */
+}
+.perspective {
+  perspective: 35px; /* Set the perspective distance */
+}
+.rotate {
+  transform: rotateY(5deg); /* Rotate along the Y-axis */
+}
+.rotate-inverted {
+  transform: rotateY(-5deg); /* Inverted rotation along the Y-axis */
+}
+/* Ensuring that the background grid is behind the content */
+.background-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Ensure background is below content */
+}
+.content-class {
+  position: relative;
+  z-index: 10; /* Ensure content is on top of the background */
+}

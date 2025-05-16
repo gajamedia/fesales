@@ -36,8 +36,8 @@ export class AuthService {
       catchError(this.handleError<any>('/login'))
     );
   }
-  teslogin(formData: FormData): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/token/`, formData).pipe(
+  teslogin(username: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/token/`, {username, password}).pipe(
       tap(response => {
         console.log('test respon token api', response)
         const token = response['access'];

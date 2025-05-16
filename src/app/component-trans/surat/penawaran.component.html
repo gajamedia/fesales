@@ -1,0 +1,89 @@
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg" id="penawaranReport">
+  <h1 class="text-2xl font-bold text-center">{{ info.cv }}</h1>
+  <p class="text-center">{{ info.alamat }}</p>
+  <p class="text-center">Telp. {{ info.phone }} | Email: {{ info.email }}</p>
+
+  <!-- Tanggal -->
+  <p class="mt-4 text-right">{{ tglHariIni }}</p>
+
+  <!-- Informasi Customer -->
+  <p><strong>Kepada:</strong> Yth. Bagian Pengadaan {{ penawaranData?.customer.nama_customer }}</p>
+  <p><strong>Alamat:</strong> {{ penawaranData?.customer.addr_customer }}</p>
+
+  <!-- Informasi Project
+  <p><strong>No. Proyek:</strong> {{ penawaranData?.project.no_project }}</p>
+  <p><strong>Tanggal:</strong> {{ penawaranData?.project.tgl_project | date: 'yyyy-MM-dd' }}</p> -->
+  <p><strong>Perihal:</strong> Penawaran Harga</p>
+
+  <p class="mt-4">Dengan Hormat,</p>
+  <p>Bersama ini kami mengajukan penawaran harga Gorden Penyekat Ruang IGD untuk RS. Eka Husada Menganti, adapun perinciannya sebagai berikut:</p>
+  
+  <!-- Tabel Detail -->
+  <div class="overflow-x-auto p-4">
+    <table class="w-full border-collapse border border-gray-300 text-sm">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="border border-gray-300 px-4 py-2">Lantai</th>
+          <th class="border border-gray-300 px-4 py-2">Ruangan</th>
+          <th class="border border-gray-300 px-4 py-2">Bed</th>
+          <th class="border border-gray-300 px-4 py-2">Tinggi Gorden</th>
+          <th class="border border-gray-300 px-4 py-2">Lebar Gorden</th>
+          <th class="border border-gray-300 px-4 py-2">Tinggi Kain</th>
+          <th class="border border-gray-300 px-4 py-2">Panel</th>
+          <th class="border border-gray-300 px-4 py-2">Qty</th>
+          <th class="border border-gray-300 px-4 py-2">Items</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detail of penawaranData.details" class="border-b">
+          <td class="border border-gray-300 px-4 py-2">{{ detail.lantai }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.ruangan }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.bed }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.tinggi_gorden }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.lebar_gorden }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.tinggi_kain }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.panel }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ detail.qty }}</td>
+          <td class="border border-gray-300 px-4 py-2">
+            <table class="w-full border border-gray-200">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="border border-gray-300 px-2 py-1">Kode Item</th>
+                  <th class="border border-gray-300 px-2 py-1">Ukuran</th>
+                  <th class="border border-gray-300 px-2 py-1">Harga Beli</th>
+                  <th class="border border-gray-300 px-2 py-1">Harga Jual</th>
+                  <th class="border border-gray-300 px-2 py-1">Nama Item</th>
+                  <th class="border border-gray-300 px-2 py-1">Volume</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of detail.items">
+                  <td class="border border-gray-300 px-2 py-1">{{ item.item_code }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.ukuran }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.harga_beli }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.harga_jual }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.item_name }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.volume }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="mt-4">Demikian penawaran dari kami, atas perhatian dan kerja samanya kami sampaikan terima kasih.</p>
+
+  <p class="mt-6 font-bold">Hormat Kami,</p>
+  <p class="mt-2">{{ info.cv }}</p>
+
+
+  <!-- Print Button -->
+
+  <div class="text-center mt-6">
+    <button (click)="printPenawaran()" class="no-print bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Print Penawaran
+    </button>
+  </div>
+</div>

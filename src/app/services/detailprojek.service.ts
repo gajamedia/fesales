@@ -54,10 +54,10 @@ export class DetailprojekService {
   }
   getkain(id: any,): Observable<any> {
     const headers = this.globalService.getHeaders();
-    return this.http.get(`${this.apiUrl}/totalkain/?id_project_detil=${id}`, { headers});
+    return this.http.get(`${this.apiUrl}/totalkainsplit/?id_project_detil=${id}`, { headers});
   }
   getvitrase(id: any,): Observable<any> {
     const headers = this.globalService.getHeaders();
-    return this.http.get(`${this.apiUrl}/totalvitrase/?id_project_detil=${id}`, { headers});
+    return this.http.get(`${this.apiUrl}/totalkainvitrase/?id_project_detil=${id}`, { headers});
   }
 }

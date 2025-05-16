@@ -1,0 +1,9 @@
+<div class="bg-cover bg-center bg-fixed" style="background-image: url('https://picsum.photos/1920/1080')">
+  <div *ngIf="isLogin; else registerTemplate">
+    <app-login (switchToRegister)="toggleForm()"></app-login>
+  </div>
+
+  <ng-template #registerTemplate>
+    <app-register (switchToLogin)="toggleForm()"></app-register>
+  </ng-template>
+</div>

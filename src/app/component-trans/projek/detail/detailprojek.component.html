@@ -1,0 +1,612 @@
+<header aria-label="page caption" class="flex-none flex h-12 bg-gray-200 border-t px-4 items-center">
+  <h1 id="page-caption" class="font-bold text-lg"><p>Input Detail Project</p></h1>
+</header>
+<section aria-label="main content" class="flex flex-col flex-auto border-l py-2 h-full">
+  <div class="flex flex-wrap">
+    <!-- Div Kiri-->
+    <div class="flex flex-wrap w-full md:w-1/4 px-2 mb-2">
+      <div class="bg-gray-100 p-1 rounded-lg shadow-md w-full">
+        <div class="bg-white rounded-lg shadow w-full">
+          <!-- Card Header -->
+          <div class="bg-teal-500 text-white px-4 py-1 rounded-t-lg">
+            Info Header Project
+          </div>
+          <!-- Content -->
+          <div class="bg-white text-gray-800 px-2 py-1 rounded-lg">
+            <div class="w-full">
+              <div class="flex flex-col">
+                <div class="form-group">
+                  <p class="bg-gray-100"><strong>No Project:</strong></p>
+                  <p class="text-blue-gray-500 text-left px-10">{{ dataProjek?.no_project }}</p>
+                </div>
+                <div class="form-group">
+                  <p class="bg-gray-100"><strong>Tgl Project:</strong></p>
+                  <p class="text-blue-gray-500 text-left px-10"> {{ formatTglView(dataProjek?.tgl_project) }}</p>
+                </div>
+                <div class="form-group">
+                  <p class="bg-gray-100"><strong>Keterangan Project:</strong></p>
+                  <p class="text-blue-gray-500 text-left px-10">{{ dataProjek?.ket_project }}</p>
+                </div>
+                <div class="form-group">
+                  <p class="bg-gray-100"><strong>Nama Customer:</strong></p>
+                  <p class="text-blue-gray-500 text-left px-10"> {{ dataProjek?.nama_customer }}</p>
+                </div>
+                <div class="form-group">
+                  <p class="bg-gray-100"><strong>Alamat Customer:</strong></p>
+                  <p class="text-blue-gray-500 text-left px-10"> {{ dataProjek?.addr_customer }}</p>
+                </div>
+                <div class="form-group">
+                  <p class="bg-gray-100"><strong>Kontak Customer:</strong></p>
+                  <p class="text-blue-gray-500 text-left px-10"> {{ dataProjek?.contact_customer }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>      
+    </div>
+    <!-- div kanan-->
+    <div class="flex flex-wrap w-full md:w-3/4 px-2 mb-2">
+      <div class="bg-gray-100 p-1 rounded-lg shadow-md w-full">
+        <!-- Content -->
+        <!-- div input detail -->
+        <div class="bg-white rounded-lg shadow w-full">
+          <form #detailprojekForm="ngForm">
+            <div>
+              <!-- Input Hidden untuk id project-->
+              <input
+                hidden
+                id="id_project_header"
+                type="text"
+                [(ngModel)]="inputDetailProjek.id_project_header"
+                name="id_project_header"
+                #id_project_header="ngModel"
+              >
+            </div>
+            <div class="flex flex-wrap gap-4 p-2">
+              <div class="form-group flex-1">
+                <label class="text-gray-700" for="lantai">Lantai</label>
+                <input
+                  required
+                  #inputField
+                  id="lantai"
+                  type="text"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.lantai"
+                  name="lantai"
+                  #lantai="ngModel"
+                  [ngClass]="{'border-red-500': lantai.touched && lantai.invalid}"
+                >
+              </div>
+              <div class="form-group flex-1">
+                <label class="text-gray-700" for="ruangan">Ruangan</label>
+                <input
+                  required
+                  #inputField
+                  id="ruangan"
+                  type="text"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.ruangan"
+                  name="ruangan"
+                  #ruangan="ngModel"
+                  [ngClass]="{'border-red-500': ruangan.touched && ruangan.invalid}"
+                > 
+              </div>
+              <div class="form-group flex-1">
+                <label class="text-gray-700" for="bed">Bed</label>
+                <input
+                  required
+                  #inputField
+                  id="bed"
+                  type="text"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.bed"
+                  name="bed"
+                  #bed="ngModel"
+                  [ngClass]="{'border-red-500': bed.touched && bed.invalid}"
+                >
+              </div>
+              <div class="form-group flex-1">
+                <label class="text-gray-700" for="lebar_bahan">Lebar Bahan</label>
+                <input
+                    required
+                    #inputField
+                    id="lebar_bahan"
+                    type="text"
+                    class="mt-1 p-2 w-full border rounded-md"
+                    [(ngModel)]="inputDetailProjek.lebar_bahan"
+                    (ngModelChange)="onLebarBahanChange($event)"
+                    name="lebar_bahan"
+                    #lebar_bahan="ngModel"
+                    [ngClass]="{'border-red-500': lebar_bahan.touched && lebar_bahan.invalid}"
+                  >
+              </div>
+              <div class="form-group flex-1">
+                <label class="text-gray-700" for="tipe">Tipe</label>
+                <input
+                  required
+                  #inputField
+                  id="tipe"
+                  type="text"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.tipe"
+                  name="tipe"
+                  #tipe="ngModel"
+                  [ngClass]="{'border-red-500': tipe.touched && tipe.invalid}"
+                >   
+              </div>
+            </div>
+
+            <div class="flex w-full gap-x-4 p-2 mt-1 flex-nowrap">
+              <div class="form-group w-1/3">
+                <label class="text-gray-700" for="uk_room_l">Ukuran Room L</label>
+                <input
+                  required
+                  #inputField
+                  id="uk_room_l"
+                  type="text"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.uk_room_l"
+                  name="uk_room_l"
+                  #uk_room_l="ngModel"
+                  [ngClass]="{'border-red-500': uk_room_l.touched && uk_room_l.invalid}"
+                >  
+              </div>
+            
+              <div class="form-group w-1/3">
+                <label class="text-gray-700" for="uk_room_p">Ukuran Room P</label>
+                <input
+                  required
+                  #inputField
+                  id="uk_room_p"
+                  type="text"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.uk_room_p"
+                  name="uk_room_p"
+                  #uk_room_p="ngModel"
+                  [ngClass]="{'border-red-500': uk_room_p.touched && uk_room_p.invalid}"
+                >
+              </div>
+            
+              <div class="form-group w-1/3">
+                <label class="text-gray-700" for="uk_room_t">Ukuran Room T</label>
+                <input
+                  required
+                  #inputField
+                  id="uk_room_t"
+                  type="text"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.uk_room_t"
+                  name="uk_room_t"
+                  #uk_room_t="ngModel"
+                  [ngClass]="{'border-red-500': uk_room_t.touched && uk_room_t.invalid}"
+                >   
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-4 p-2">
+              <div class="form-group flex-1">
+                <label class="text-gray-700" for="stik">Stik</label>
+                <input
+                  required
+                  #inputField
+                  id="stik"
+                  type="text"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.stik"
+                  name="stik"
+                  #stik="ngModel"
+                  [ngClass]="{'border-red-500': stik.touched && stik.invalid}"
+                > 
+              </div>
+              
+              <div class="form-group flex-1">
+                <label class="text-gray-700" for="elevasi">Elevasi</label>
+                <input
+                  required
+                  #inputField
+                  id="elevasi"
+                  type="text"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.elevasi"
+                  name="elevasi"
+                  #elevasi="ngModel"
+                  [ngClass]="{'border-red-500': elevasi.touched && elevasi.invalid}"
+                >  
+              </div>
+              
+              <div class="form-group flex-1">
+                <label class="text-gray-700" for="tinggi_vitrase">Tinggi Vitrase</label>
+                <input
+                  required
+                  #inputField
+                  id="tinggi_vitrase"
+                  type="text"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.tinggi_vitrase"
+                  name="tinggi_vitrase"
+                  #tinggi_vitrase="ngModel"
+                  [ngClass]="{'border-red-500': tinggi_vitrase.touched && tinggi_vitrase.invalid}"
+                >
+              </div>
+              <div class="form-group flex-1">
+                <label class="text-gray-700" for="tinggi_lipatan">Tinggi Lipatan</label>
+                <select
+                  required
+                  id="tinggi_lipatan"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.tinggi_lipatan"
+                  name="tinggi_lipatan"
+                  #tinggi_lipatan="ngModel"
+                  [ngClass]="{'border-red-500': tinggi_lipatan.touched && tinggi_lipatan.invalid}"
+                  (ngModelChange)="onTinggiLipatanChange($event)"
+                >
+                  <option [ngValue]="25">25</option>
+                  <option [ngValue]="30">30</option>
+                </select>
+
+              </div>     
+              <input
+                [disabled]="isDisabled"
+                id="nilai_pembagi"
+                type="text"
+                class="mt-1 p-2 w-full border rounded-md"
+                [(ngModel)]="inputDetailProjek.nilai_pembagi"
+                name="nilai_pembagi"
+                #nilai_pembagi="ngModel"
+                [ngClass]="{'border-red-500': nilai_pembagi.touched && nilai_pembagi.invalid}"
+              >
+
+            </div>
+            <!-- Buttons -->
+            <div class="bg-gray-200 p-1 rounded-lg shadow-md w-full">
+              <div class="bg-white rounded-lg shadow p-2 w-full">
+                <div *ngIf="!visible" class="mt-2">
+                  <button 
+                    (click)="onCancel()" 
+                    type="button" 
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    (click)="onSimpan(detailprojekForm)" 
+                    type="button" 
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ml-2"
+                  >
+                    Add
+                  </button>
+                </div>
+                <div *ngIf="visible" class="mt-2">
+                  <button 
+                    (click)="onCancel()" 
+                    type="button" 
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    (click)="onUpdate(detailprojekForm)" 
+                    type="button" 
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ml-2"
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br />
+  <!-- table detail project-->
+  <div class="flex flex-col flex-auto border-l py-2">
+    <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4">
+      <!-- Add overflow-x-auto to enable horizontal scrolling -->
+      <div class="overflow-x-auto">
+        <div class="inline-block min-w-full shadow rounded-lg overflow-x-auto">
+          
+          <table class="min-w-full leading-normal">
+            <thead class="sticky top-0">
+              <tr>
+                <th class="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">#</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Lantai</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Ruangan</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Bed</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Lebar Bahan</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Tipe</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 ">Uk Room-L</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 ">Uk Room-P</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 ">Uk Room-T</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Stik</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Elevasi</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">T Vitrase</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">T Lipatan</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Nilai Pembagi</th>
+                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let ritem of dataDetailProjek; let i = index">
+                <tr class="border-b">
+                  <td class="px-2 py-3 border-b border-gray-200 bg-white text-sm">{{ (pageSize * (currentPage - 1) + i) + 1 }}</td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ ritem.lantai }}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ritem.ruangan}}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ritem.bed}}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ritem.lebar_bahan}}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ ritem.tipe }}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ ritem.uk_room_l }}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ ritem.uk_room_p }}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ ritem.uk_room_t }}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ ritem.stik }}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ ritem.elevasi}}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ ritem.tinggi_vitrase }}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ ritem.tinggi_lipatan }}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap">{{ ritem.nilai_pembagi }}</p>
+                  </td>
+                  <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm text-center">
+                    <div class="flex items-center justify-center gap-2">
+                      <!-- Tombol Expand -->
+                      <button (click)="toggleSubtable(ritem.id)" title="View Detail Bahan"
+                        class="w-10 h-10 flex items-center justify-center rounded-lg text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30">
+                        <ng-container *ngIf="ritem.expanded; else hideIcon">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-red-500">
+                            <path d="M12 9a3.02 3.02 0 0 0-3 3c0 1.642 1.358 3 3 3 1.641 0 3-1.358 3-3 0-1.641-1.359-3-3-3z"></path>
+                            <path d="M12 5c-7.633 0-9.927 6.617-9.948 6.684L1.946 12l.105.316C2.073 12.383 4.367 19 12 19s9.927-6.617 9.948-6.684l.106-.316-.105-.316C21.927 11.617 19.633 5 12 5z"></path>
+                          </svg>
+                        </ng-container>
+                        <ng-template #hideIcon>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(221, 38, 197)"><path d="M12 4.998c-1.836 0-3.356.389-4.617.971L3.707 2.293 2.293 3.707l3.315 3.316c-2.613 1.952-3.543 4.618-3.557 4.66l-.105.316.105.316C2.073 12.382 4.367 19 12 19c1.835 0 3.354-.389 4.615-.971l3.678 3.678 1.414-1.414-3.317-3.317c2.614-1.952 3.545-4.618 3.559-4.66l.105-.316-.105-.316c-.022-.068-2.316-6.686-9.949-6.686zM4.074 12c.103-.236.274-.586.521-.989l5.867 5.867C6.249 16.23 4.523 13.035 4.074 12zm9.247 4.907-7.48-7.481a8.138 8.138 0 0 1 1.188-.982l8.055 8.054a8.835 8.835 0 0 1-1.763.409zm3.648-1.352-1.541-1.541c.354-.596.572-1.28.572-2.015 0-.474-.099-.924-.255-1.349A.983.983 0 0 1 15 11a1 1 0 0 1-1-1c0-.439.288-.802.682-.936A3.97 3.97 0 0 0 12 7.999c-.735 0-1.419.218-2.015.572l-1.07-1.07A9.292 9.292 0 0 1 12 6.998c5.351 0 7.425 3.847 7.926 5a8.573 8.573 0 0 1-2.957 3.557z"></path></svg>
+                        </ng-template>
+                      </button>
+                      <!-- Tombol Add Detail Bahan -->
+                      <button (click)="addDetailBahan(ritem.id)" title="Add Detail Bahan"
+                        class="w-10 h-10 flex items-center justify-center rounded-lg text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(19, 241, 37)"><path d="M20 2H8c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zM8 16V4h12l.002 12H8z"></path><path d="M4 8H2v12c0 1.103.897 2 2 2h12v-2H4V8zm11-2h-2v3h-3v2h3v3h2v-3h3V9h-3z"></path></svg>
+                      </button>
+                      <!-- Tombol Edit -->
+                      
+                      <button (click)="onEdit(ritem.id)" title="Edit Detail Projek"
+                        class="w-10 h-10 flex items-center justify-center rounded-lg text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-pink-500">
+                          <path d="M3 17.25V21h3.75l11.064-11.064-3.75-3.75L3 17.25zm18-10.773a.75.75 0 0 0 0-1.06L18.583 3.5a.75.75 0 0 0-1.06 0L15 6.023l3.75 3.75L21 6.477z"></path>
+                        </svg>
+                      </button>
+                      <button (click)="onDeleted(ritem.id)" title="Hapus" class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30" type="button">
+                        <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path><path d="M9 10h2v8H9zm4 0h2v8h-2z"></path></svg>
+                        </span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                                         
+                <tr *ngIf="expandedRows[ritem.id] && expandedRows[ritem.id].length > 0">
+                  <td colspan="13">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                      <!-- Kebutuhan Kain -->
+                      <div>
+                        <h3 class="text-lg font-semibold mb-2">Kebutuhan Kain</h3>
+                        <table class="min-w-full text-sm border border-gray-300">
+                          <thead class="bg-cyan-300">
+                            <tr>
+                              <th class="text-left p-2">#</th>
+                              <th class="text-left p-2">Tinggi Kain</th>
+                              <th class="text-left p-2">Lebar Total</th>
+                              <th class="text-left p-2">Panel</th>
+                              <th class="text-left p-2">Kebutuhan Kain</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let kain of dataKebKain; let i = index">
+                              <td class="p-2">{{ i + 1 }}</td>
+                              <td class="p-2">{{ kain.tinggi_kain }}</td>
+                              <td class="p-2">{{ kain.lebar_total }}</td>
+                              <td class="p-2">{{ kain.panel || '-' }}</td>
+                              <td class="p-2">{{ kain.kebutuhan_kain_split || '-' }}</td>
+                            </tr>
+                          </tbody>
+                          <tfoot>
+                            <tr>
+                              <td colspan="4" class="p-2 font-semibold">Total Kebutuhan</td>
+                              <td class="p-2 font-semibold">{{ totKebutuhanKain }}</td>
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </div>
+                
+                      <!-- Kebutuhan Vitrase -->
+                      <div>
+                        <h3 class="text-lg font-semibold mb-2">Kebutuhan Vitrase</h3>
+                        <table class="min-w-full text-sm border border-gray-300">
+                          <thead class="bg-cyan-300">
+                            <tr>
+                              <th class="text-left p-2">#</th>
+                              <th class="text-left p-2">Tinggi Vitrase</th>
+                              <th class="text-left p-2">Tinggi Lipatan</th>
+                              <th class="text-left p-2">Lebar Total</th>
+                              <th class="text-left p-2">Panel</th>
+                              <th class="text-left p-2">Kebutuhan Vitrase</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let vitrase of dataKebVitrase; let i = index">
+                              <td class="p-2">{{ i + 1 }}</td>
+                              <td class="p-2">{{ vitrase.tinggi_vitrase }}</td>
+                              <td class="p-2">{{ vitrase.tinggi_lipatan }}</td>
+                              <td class="p-2">{{ vitrase.lebar_total }}</td>
+                              <td class="p-2">{{ vitrase.panel || '-' }}</td>
+                              <td class="p-2">{{ vitrase.kebutuhan_kain_vitrase || '-' }}</td>
+                            </tr>
+                          </tbody>
+                          <tfoot>
+                            <tr>
+                              <td colspan="5" class="p-2 font-semibold">Total Kebutuhan</td>
+                              <td class="p-2 font-semibold">{{ totKebutuhanVitrase }}</td>
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </div>
+                    </div>
+                    
+                  </td>
+                  <!-- Tombol Edit pada Kolom Terpisah -->
+                  <td class="w-1/12 text-right">
+                    <button (click)="editDetailBahan(ritem.id)" class="text-blue-600 hover:text-blue-800">
+                      <i class="fas fa-edit"></i> Edit
+                    </button>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>            
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal -->
+<div *ngIf="showAddBahanModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-lg w-[90%] max-w-lg p-6">
+    <h2 class="text-xl font-semibold mb-4">
+      {{ modeEdit ? 'Edit Detail Bahan' : 'Tambah Detail Bahan' }}
+    </h2>
+    
+    <form *ngIf="selectedDetailProjekId !== null" (ngSubmit)="editMode ? updateChecklistBahan(selectedDetailProjekId) : simpanChecklistBahan(selectedDetailProjekId)">
+
+      <div *ngFor="let bahan of dataBahan">
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" [(ngModel)]="bahan.selected" [name]="'checkbox_' + bahan.id" />
+          <span>{{ bahan.item_name }} - {{ bahan.ukuran }}</span>
+        </label>
+      </div>
+      <div class="mt-4 text-right">
+        <button
+          type="button"
+          class="bg-gray-400 text-white px-4 py-2 rounded mr-2"
+          (click)="onModalCancel()"
+        >
+          Cancel
+        </button>
+      
+        <button
+          type="submit"
+          class="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          {{ editMode ? 'Update' : 'Simpan' }}
+        </button>
+      </div>
+      
+    </form>
+    
+    
+  </div>
+</div>
+
+
+
+
+<!--
+<tr *ngIf="expandedRows[ritem.id] && expandedRows[ritem.id].length > 0">
+  <td colspan="1"></td>
+  <td colspan="13">
+    <table class="min-w-full leading-normal">
+      <thead class="sticky top-0">
+        <tr class="bg-cyan-300">
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">#</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Item ID</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Item Code</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Item Name</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Ukuran</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Harga Beli</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Harga Jual</th>
+          <th class="text-left text-xs font-bold text-gray-600 tracking-wider">Aksi</th>
+        </tr>
+       
+      </thead>
+      
+      <tbody *ngIf="expandedRows[ritem.id] && expandedRows[ritem.id].length > 0">
+        <tr *ngFor="let bahan of expandedRows[ritem.id]; let i = index; trackBy: trackByFn">
+          <ng-container *ngIf="bahan.isEditing; else viewMode">
+            <td class="px-4 py-2">{{ i + 1 }}</td> 
+            <input hidden [(ngModel)]="bahan.id_project_detil" />
+      
+            <td class="px-4 py-2">
+              <input [(ngModel)]="bahan.item_id" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+            </td>
+            <td class="px-4 py-2">
+              <input [(ngModel)]="bahan.item_code" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+            </td>
+            <td class="px-4 py-2">
+              <input [(ngModel)]="bahan.item_name" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+            </td>
+            <td class="px-4 py-2">
+              <input [(ngModel)]="bahan.ukuran" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+            </td>
+            <td class="px-4 py-2">
+              <input [(ngModel)]="bahan.harga_beli" type="number" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+            </td>
+            <td class="px-4 py-2">
+              <input [(ngModel)]="bahan.harga_jual" type="number" class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
+            </td>
+            <td class="px-4 py-2 flex space-x-2"> 
+              <button  class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
+                Simpan
+              </button> 
+              <button  class="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600">
+                Batal
+              </button>
+            </td>
+          </ng-container>
+      
+          <ng-template #viewMode>
+            <td class="px-4 py-2">{{ i + 1 }}</td>
+            <td class="px-4 py-2">{{ bahan.item_id }}</td>
+            <td class="px-4 py-2">{{ bahan.item_code }}</td>
+            <td class="px-4 py-2">{{ bahan.item_name || '-' }}</td>
+            <td class="px-4 py-2">{{ bahan.ukuran || '-' }}</td>
+            <td class="px-4 py-2">{{ bahan.harga_beli }}</td>
+            <td class="px-4 py-2">{{ bahan.harga_jual }}</td>
+            <td class="px-4 py-2 flex space-x-2"> 
+              <button  title="Edit" class="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                ✏️
+              </button> 
+              <button  title="Hapus" class="p-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                🗑️
+              </button>
+            </td>
+          </ng-template>
+        </tr>
+      </tbody>
+      
+    </table>
+    
+  </td>
+</tr> -->

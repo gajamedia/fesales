@@ -1,28 +1,29 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { LoginComponent } from './components/login/login.component';
-import { MainComponent } from './components/main/main.component';
+import { DashboardComponent } from './component-homes/dashboard/dashboard.component';
+import { LoginComponent } from './component-homes/login/login.component';
+import { MainComponent } from './component-homes/main/main.component';
 
 import { authGuard } from './auth.guard';
-import { RegisterComponent } from './components/register/register.component';
-import { UserprofileComponent } from './components/user/userprofile.component';
-import { EdituserComponent } from './components/user/edituser.component';
-import { UserComponent } from './components/user/user.component';
-import { JenisbahanComponent } from './components/jenisbahan/jenisbahan.component';
-import { InputjenisbahanComponent } from './components/jenisbahan/inputjenisbahan.component';
-import { BahanComponent } from './components/bahan/bahan.component';
-import { InputbahanComponent } from './components/bahan/inputbahan.component';
-import { ForbiddenComponent } from './components/forbidden/forbidden.component';
-import { ProjekComponent } from './components/projek/projek.component';
-import { InputprojekComponent } from './components/projek/inputprojek.component';
-import { DetailprojekComponent } from './components/projek/detailprojek.component';
-import { InvoiceReportComponent } from './components/surat/invoice.component';
-import { SuratPenawaranComponent } from './components/surat/penawaran.component';
+import { RegisterComponent } from './component-homes/register/register.component';
+import { UserprofileComponent } from './component-system/user/profiles/userprofile.component';
+import { EdituserComponent } from './component-system/user/edituser.component';
+import { UserComponent } from './component-system/user/user.component';
+import { JenisbahanComponent } from './component-masters/jenisbahan/jenisbahan.component';
+import { InputjenisbahanComponent } from './component-masters/jenisbahan/inputjenisbahan.component';
+import { BahanComponent } from './component-masters/bahan/bahan.component';
+import { InputbahanComponent } from './component-masters/bahan/inputbahan.component';
+import { ForbiddenComponent } from './component-homes/forbidden/forbidden.component';
+import { ProjekComponent } from './component-trans/projek/projek.component';
+import { InputprojekComponent } from './component-trans/projek/inputprojek.component';
+import { DetailprojekComponent } from './component-trans/projek/detail/detailprojek.component';
+import { InvoiceReportComponent } from './component-trans/surat/invoice.component';
+import { SuratPenawaranComponent } from './component-trans/surat/penawaran.component';
+import { HomeComponent } from './component-homes/home/home.component';
 
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  //{ path: 'login', component: LoginComponent },
+  //{ path: 'register', component: RegisterComponent },
   {
     path: 'main',
     component: MainComponent,
@@ -54,6 +55,7 @@ export const routes: Routes = [
    
       ],
   },
+  { path: 'home', component: HomeComponent },
   { path: 'forbidden', component: ForbiddenComponent },
-  { path: '**', redirectTo: '/login', pathMatch: 'full' }
+  { path: '**', redirectTo: '/home', pathMatch: 'full' }
 ];

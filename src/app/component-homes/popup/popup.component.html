@@ -1,0 +1,19 @@
+<div class="modal-overlay" *ngIf="isVisible">
+  <div class="modal-dialog">
+    <!-- Header Section -->
+    <div class="modal-header">
+      <h3>{{ header }}</h3>
+      <button class="close-btn" (click)="close()">×</button>
+    </div>
+
+    <!-- Content Section -->
+    <div class="modal-content">
+      <p>{{ message }}</p>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="modal-footer">
+      <button class="footer-btn" (click)="close()">Close</button>
+    </div>
+  </div>
+</div>
