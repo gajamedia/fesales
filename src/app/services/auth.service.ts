@@ -21,36 +21,19 @@ export class AuthService {
     private modalexpiredService: ModalExpiredService, 
     private shareloginService: SharedloginService) {}
 
-  // auth.service.ts
-  login(formData: FormData): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/users/login/`, formData).pipe(
-      tap(response => {
-        const token = response['access'];
-        localStorage.setItem('custom_token', token);
-        // Now fetch the user profile and store it in the SharedataService
-        //const user_details = response['user_details'][0]
-        //this.shareloginService.setProfileData(user_details); // Store the data
-        // Navigate to dashboard
-        this.router.navigate(['/main/dashboard']);
-      }),
-      catchError(this.handleError<any>('/login'))
-    );
-  }
+ 
   teslogin(username: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/token/`, {username, password}).pipe(
       tap(response => {
         console.log('test respon token api', response)
         const token = response['access'];
         localStorage.setItem('custom_token', token);
-        // Now fetch the user profile and store it in the SharedataService
-        //const user_details = response['user_details'][0]
-        //this.shareloginService.setProfileData(user_details); // Store the data
-        // Navigate to dashboard
-        this.router.navigate(['/main/dashboard']);
+
       }),
-      catchError(this.handleError<any>('/login'))
+      catchError(this.handleError<any>('/home'))
     );
   }
+  
   getUidToken(token: string): string | null {
     
     try {
@@ -82,29 +65,22 @@ export class AuthService {
     console.log('logout dri header di auth service')
     // Clear token from local storage
     localStorage.removeItem('custom_token');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
     
   }
  
   isAuthenticated(): boolean {
     const token = localStorage.getItem('custom_token');
-    
+
     if (!token || this.isTokenExpired(token)) {
-      // If no token or the token is expired, show the modal
-      const modal = this.modalexpiredService.getModal();
-      if (modal) {
-        modal.show();
-        modal.confirm.subscribe(() => {
-          this.logout();
-          window.location.reload();
-        });
-      }
+      console.warn('Token tidak valid atau sudah expired. Melakukan logout otomatis...');
+      this.logout(); // ✅ langsung logout
       return false;
     }
-  
-    return true; // Token is valid, and UID is obtained
+
+    return true;
   }
-  
+
   
   isTokenExpired(token: string): boolean {
     try {

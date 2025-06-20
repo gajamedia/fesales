@@ -213,21 +213,6 @@
                   [ngClass]="{'border-red-500': elevasi.touched && elevasi.invalid}"
                 >  
               </div>
-              
-              <div class="form-group flex-1">
-                <label class="text-gray-700" for="tinggi_vitrase">Tinggi Vitrase</label>
-                <input
-                  required
-                  #inputField
-                  id="tinggi_vitrase"
-                  type="text"
-                  class="mt-1 p-2 w-full border rounded-md"
-                  [(ngModel)]="inputDetailProjek.tinggi_vitrase"
-                  name="tinggi_vitrase"
-                  #tinggi_vitrase="ngModel"
-                  [ngClass]="{'border-red-500': tinggi_vitrase.touched && tinggi_vitrase.invalid}"
-                >
-              </div>
               <div class="form-group flex-1">
                 <label class="text-gray-700" for="tinggi_lipatan">Tinggi Lipatan</label>
                 <select
@@ -244,19 +229,36 @@
                   <option [ngValue]="30">30</option>
                 </select>
 
-              </div>     
-              <input
-                [disabled]="isDisabled"
-                id="nilai_pembagi"
-                type="text"
-                class="mt-1 p-2 w-full border rounded-md"
-                [(ngModel)]="inputDetailProjek.nilai_pembagi"
-                name="nilai_pembagi"
-                #nilai_pembagi="ngModel"
-                [ngClass]="{'border-red-500': nilai_pembagi.touched && nilai_pembagi.invalid}"
-              >
-
+              </div> 
+              <div class="form-group flex-1">
+                <label class="text-gray-700" for="tinggi_vitrase">Tinggi Vitrase</label>
+                <input
+                  #inputField
+                  id="tinggi_vitrase"
+                  type="text"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.tinggi_vitrase"
+                  name="tinggi_vitrase"
+                  #tinggi_vitrase="ngModel"
+                  [disabled]="inputDetailProjek.tinggi_lipatan === 25"
+                  [ngClass]="{'border-red-500': tinggi_vitrase.touched && tinggi_vitrase.invalid}"
+                >
+              </div>
+              <div class="form-group flex-1">
+                <label class="text-gray-700" for="stik">Nilai Pembagi</label>
+                <input
+                  [disabled]="isDisabled"
+                  id="nilai_pembagi"
+                  type="text"
+                  class="mt-1 p-2 w-full border rounded-md"
+                  [(ngModel)]="inputDetailProjek.nilai_pembagi"
+                  name="nilai_pembagi"
+                  #nilai_pembagi="ngModel"
+                  [ngClass]="{'border-red-500': nilai_pembagi.touched && nilai_pembagi.invalid}"
+                >
+              </div>
             </div>
+
             <!-- Buttons -->
             <div class="bg-gray-200 p-1 rounded-lg shadow-md w-full">
               <div class="bg-white rounded-lg shadow p-2 w-full">
@@ -305,26 +307,25 @@
     <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4">
       <!-- Add overflow-x-auto to enable horizontal scrolling -->
       <div class="overflow-x-auto">
-        <div class="inline-block min-w-full shadow rounded-lg overflow-x-auto">
-          
-          <table class="min-w-full leading-normal">
-            <thead class="sticky top-0">
+        <div class="inline-block min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+          <table class="min-w-full leading-normal text-sm md:text-base">
+            <thead class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white sticky top-0 z-10">
               <tr>
-                <th class="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">#</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Lantai</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Ruangan</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Bed</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Lebar Bahan</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Tipe</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 ">Uk Room-L</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 ">Uk Room-P</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 ">Uk Room-T</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Stik</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Elevasi</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">T Vitrase</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">T Lipatan</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Nilai Pembagi</th>
-                <th class="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-bold text-gray-600 tracking-wider">Aksi</th>
+                <th class="px-4 py-3 text-left text-sm font-bold tracking-wide">#</th>
+                <th class="px-4 py-3 text-left text-sm font-bold tracking-wide">Lantai</th>
+                <th class="px-4 py-3 text-left text-sm font-bold tracking-wide">Ruangan</th>
+                <th class="px-4 py-3 text-left text-sm font-bold tracking-wide">Bed</th>
+                <th class="px-4 py-3 text-left text-sm font-bold tracking-wide">Lebar</th>
+                <th class="px-4 py-3 text-left text-sm font-bold tracking-wide">Tipe</th>
+                <th class="px-4 py-3 text-left text-sm font-bold">L-Room</th>
+                <th class="px-4 py-3 text-left text-sm font-bold">P-Room</th>
+                <th class="px-4 py-3 text-left text-sm font-bold">T-Room</th>
+                <th class="px-4 py-3 text-left text-sm font-bold tracking-wide">Stik</th>
+                <th class="px-4 py-3 text-left text-sm font-bold tracking-wide">Elevasi</th>
+                <th class="px-4 py-3 text-left text-sm font-bold tracking-wide">T-Lipatan</th>
+                 <th class="px-4 py-3 text-left text-sm font-bold tracking-wide">T-Vitrase</th>
+                <th class="px-4 py-3 text-left text-sm font-bold tracking-wide">Pembagi</th>
+                <th class="px-4 py-3 text-left text-sm font-bold tracking-wide">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -407,82 +408,94 @@
                   </td>
                 </tr>
                                          
-                <tr *ngIf="expandedRows[ritem.id] && expandedRows[ritem.id].length > 0">
-                  <td colspan="13">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <tr *ngIf="expandedRows[ritem.id]">
+                  <td colspan="16">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <!-- Kebutuhan Kain -->
-                      <div>
+                      <div class="md:col-span-1 bg-white rounded-xl shadow p-2">
                         <h3 class="text-lg font-semibold mb-2">Kebutuhan Kain</h3>
                         <table class="min-w-full text-sm border border-gray-300">
                           <thead class="bg-cyan-300">
                             <tr>
                               <th class="text-left p-2">#</th>
-                              <th class="text-left p-2">Tinggi Kain</th>
-                              <th class="text-left p-2">Lebar Total</th>
+                              <th class="text-left p-2">Lebar</th>
+                              <th class="text-left p-2">Tinggi</th>
                               <th class="text-left p-2">Panel</th>
                               <th class="text-left p-2">Kebutuhan Kain</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let kain of dataKebKain; let i = index">
+                            <tr *ngFor="let kain of dataKebKain[ritem.id] || []; let i = index">
                               <td class="p-2">{{ i + 1 }}</td>
-                              <td class="p-2">{{ kain.tinggi_kain }}</td>
                               <td class="p-2">{{ kain.lebar_total }}</td>
+                              <td class="p-2">{{ kebtinggi[ritem.id] }}</td>
                               <td class="p-2">{{ kain.panel || '-' }}</td>
-                              <td class="p-2">{{ kain.kebutuhan_kain_split || '-' }}</td>
+                              <td class="p-2">{{ totKebutuhanKain[ritem.id] }}</td>
                             </tr>
                           </tbody>
-                          <tfoot>
-                            <tr>
-                              <td colspan="4" class="p-2 font-semibold">Total Kebutuhan</td>
-                              <td class="p-2 font-semibold">{{ totKebutuhanKain }}</td>
-                            </tr>
-                          </tfoot>
                         </table>
                       </div>
-                
+
+                      <!-- Kebutuhan PVC -->
+                      <div class="md:col-span-1 bg-white rounded-xl shadow p-2">
+                        <h3 class="text-lg font-semibold mb-2">Kebutuhan PVC</h3>
+                        <table class="min-w-full text-sm border border-gray-300">
+                          <thead class="bg-cyan-300">
+                            <tr>
+                              <th class="text-left p-2">#</th>
+                              <th class="text-left p-2">Lebar</th>
+                              <th class="text-left p-2">Tinggi</th>
+                              <th class="text-left p-2">Kebutuhan PVC</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let kain of dataKebKain[ritem.id] || []; let i = index">
+                              <td class="p-2">{{ i + 1 }}</td>
+                              <td class="p-2">{{ kain.lebar_total }}</td>
+                              <td class="p-2">{{ kain.tinggi_kain }}</td>
+                              <td class="p-2">{{ kain.kebutuhan_kain_split || '-'}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
                       <!-- Kebutuhan Vitrase -->
-                      <div>
+                      <div class="md:col-span-1 bg-white rounded-xl shadow p-2">
                         <h3 class="text-lg font-semibold mb-2">Kebutuhan Vitrase</h3>
                         <table class="min-w-full text-sm border border-gray-300">
                           <thead class="bg-cyan-300">
                             <tr>
                               <th class="text-left p-2">#</th>
-                              <th class="text-left p-2">Tinggi Vitrase</th>
-                              <th class="text-left p-2">Tinggi Lipatan</th>
                               <th class="text-left p-2">Lebar Total</th>
-                              <th class="text-left p-2">Panel</th>
+                              <th class="text-left p-2">Tinggi Vitrase</th>
                               <th class="text-left p-2">Kebutuhan Vitrase</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let vitrase of dataKebVitrase; let i = index">
+                            <tr *ngFor="let vitrase of dataKebVitrase[ritem.id] || []; let i = index">
                               <td class="p-2">{{ i + 1 }}</td>
-                              <td class="p-2">{{ vitrase.tinggi_vitrase }}</td>
-                              <td class="p-2">{{ vitrase.tinggi_lipatan }}</td>
                               <td class="p-2">{{ vitrase.lebar_total }}</td>
-                              <td class="p-2">{{ vitrase.panel || '-' }}</td>
+                              <td class="p-2">{{ vitrase.tinggi_vitrase }}</td>
                               <td class="p-2">{{ vitrase.kebutuhan_kain_vitrase || '-' }}</td>
                             </tr>
                           </tbody>
-                          <tfoot>
-                            <tr>
-                              <td colspan="5" class="p-2 font-semibold">Total Kebutuhan</td>
-                              <td class="p-2 font-semibold">{{ totKebutuhanVitrase }}</td>
-                            </tr>
-                          </tfoot>
                         </table>
                       </div>
                     </div>
-                    
-                  </td>
-                  <!-- Tombol Edit pada Kolom Terpisah -->
-                  <td class="w-1/12 text-right">
-                    <button (click)="editDetailBahan(ritem.id)" class="text-blue-600 hover:text-blue-800">
-                      <i class="fas fa-edit"></i> Edit
-                    </button>
+
+                    <!-- Tombol Edit di bawah card -->
+                    <div class="mt-4">
+                      <button 
+                        (click)="editDetailBahan(ritem.id)" 
+                        class="w-full bg-cyan-800 hover:bg-cyan-500 text-white font-semibold py-2 px-4 rounded-md shadow transition duration-200"
+                      >
+                        <i class="fas fa-edit mr-2"></i> Edit
+                      </button>
+                    </div>
+
                   </td>
                 </tr>
+
               </ng-container>
             </tbody>
           </table>            

@@ -27,10 +27,13 @@ export class DetailprojekComponent implements OnInit {
   dataDetailProjek: DetailProjek[] = [];
   expandedRows: { [key: number]: any[] } = {};
   dataBahan: Bahan[] = [];
-  dataKebKain: any[] = [];
-  dataKebVitrase: any[] = [];
-  totKebutuhanKain: any;
-  totKebutuhanVitrase: any;
+  dataKebKain: { [id: number]: any[] } = {};
+  dataKebVitrase: { [id: number]: any[] } = {};
+  totKebutuhanKainPVC: { [id: number]: number } = {};
+  totKebutuhanVitrase: { [id: number]: number } = {};
+  totKebutuhanKain: { [id: number]: number } = {};
+  // Pastikan kebtinggi dan totKebutuhanKain adalah objek
+  kebtinggi: { [id: number]: number } = {};
 
   inputDetailProjek: DetailProjek = this.initDetailProjek();
   isDisabled = true; // atau false tergantung kondisi untukk pembagi
@@ -51,7 +54,7 @@ export class DetailprojekComponent implements OnInit {
 
   listIDProjectDetail:any []=[]
   modeEdit: boolean = false; // kalau false berarti tambah
-  
+
   constructor(
     private sharedloginService: SharedloginService,
     private projekService: ProjekService,
@@ -98,8 +101,11 @@ export class DetailprojekComponent implements OnInit {
   onTinggiLipatanChange(value: number): void {
     console.log('Tinggi lipatan changed to:', value);
     this.inputDetailProjek.tinggi_lipatan = value;
-  }
 
+    if (value === 25) {
+      this.inputDetailProjek.tinggi_vitrase = 0; // atau null sesuai kebutuhan
+    }
+  }
   onLebarBahanChange(value: string): void {
     const lebar = parseInt(value, 10);
     this.inputDetailProjek.nilai_pembagi = {150: 75, 140: 70, 120: 60}[lebar] || 0;
@@ -188,6 +194,7 @@ export class DetailprojekComponent implements OnInit {
   }
 
   fetchDetailBahan(id: number): void {
+    console.log('id', id)
     this.detailbahanService.getbyIdDetailProjek(id.toString()).subscribe({
       next: (res: any) => {
         console.log('res pada detail bahan', res);
@@ -348,21 +355,37 @@ export class DetailprojekComponent implements OnInit {
   loadKebutuhanKain(id: number): void {
     this.detailprojekService.getkain(id).subscribe({
       next: (res: any) => {
-        console.log('res keb kain', res)
-        this.dataKebKain = res.details;
-        this.totKebutuhanKain = res.total_kebutuhan_kain_split;
+        this.dataKebKain[id] = res.details;
+        this.totKebutuhanKainPVC[id] = Number(res.total_kebutuhan_kain_split || 0);
+
+        if (res.details && res.details.length > 0) {
+          const detail = res.details[0];
+          this.kebtinggi[id] = Number(detail.tinggi_kain || 0) + Number(detail.tinggivitrase || 0);
+        } else {
+          this.kebtinggi[id] = 0;
+        }
+
+        this.hitungTotal(id); // pastikan totKebutuhanKain[id] diisi di sini
       }
     });
   }
+
 
   loadKebutuhanVitrase(id: number): void {
     this.detailprojekService.getvitrase(id).subscribe({
       next: (res: any) => {
         console.log('res vitrase', res)
-        this.dataKebVitrase = res.details;
-        this.totKebutuhanVitrase = res.total_kebutuhan_kain_vitrase;
+        this.dataKebVitrase[id] = res.details;
+        this.totKebutuhanVitrase[id] = res.total_kebutuhan_kain_vitrase;
+        this.hitungTotal(id)
       }
     });
+  }
+  hitungTotal(id:number){
+    const pvc = Number(this.totKebutuhanKainPVC[id]) || 0;
+    const vit = Number(this.totKebutuhanVitrase[id]) || 0;
+    this.totKebutuhanKain[id] = pvc + vit;
+    console.log('Final Total:', this.totKebutuhanKain[id], ' = ', pvc, '+', vit);
   }
 
   @HostListener('document:keydown', ['$event'])

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SharedloginService } from './services/sharedlogin.service';
+import { AuthService } from './services/auth.service';
 
 
 @Component({
@@ -15,12 +16,13 @@ import { SharedloginService } from './services/sharedlogin.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private sharedloginService: SharedloginService) {
+  constructor(private sharedloginService: SharedloginService, private authService: AuthService) {
   }
 
   ngOnInit() {
     // Initialize profile data when the app starts
     this.sharedloginService.initializeProfileData();
+    this.authService.isAuthenticated(); // ✅ otomatis logout jika token sudah expired
   }
 
 }

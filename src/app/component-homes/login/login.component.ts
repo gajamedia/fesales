@@ -58,8 +58,14 @@ export class LoginComponent implements OnInit {
     this.authService.teslogin(this.username, this.password).subscribe({
       next: (res: any) => {
         this.loadingStateService.setLoading(false);
-        this.router.navigate(['/main/dashboard']);
 
+        if (!res || !res.access) {
+          alert('Login gagal. Cek Username dan Password anda.');
+          return;
+        }
+
+        localStorage.setItem('custom_token', res.access);
+        this.router.navigate(['/main/dashboard']);
       },
       error: (err: any) => {
         this.loadingStateService.setLoading(false);
