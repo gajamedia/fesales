@@ -36,7 +36,6 @@ export class DetailprojekComponent implements OnInit {
   kebtinggi: { [id: number]: number } = {};
 
   inputDetailProjek: DetailProjek = this.initDetailProjek();
-  isDisabled = true; // atau false tergantung kondisi untukk pembagi
 
   projectId: string | null = null;
   currentPage = 1;
@@ -88,7 +87,7 @@ export class DetailprojekComponent implements OnInit {
       error: () => this.dataProjek = {}
     });
   }
-
+  /*
   loadDataDetailProjek(id: any): void {
     this.detailprojekService.getbyIdDetailProjek(id).subscribe({
       next: (res: any) => {
@@ -98,6 +97,25 @@ export class DetailprojekComponent implements OnInit {
       error: (e: any) => console.error(e)
     });
   }
+    */
+  loadDataDetailProjek(id: any): void {
+    this.detailprojekService.getbyIdDetailProjek(id).subscribe({
+      next: (res: any) => {
+        console.log('res', res);
+        this.dataDetailProjek = res.results;
+
+        // Expand semua detail langsung
+        this.dataDetailProjek.forEach((item) => {
+          const itemId = item.id;
+          this.fetchDetailBahan(itemId);
+          this.loadKebutuhanKain(itemId);
+          this.loadKebutuhanVitrase(itemId);
+        });
+      },
+      error: (e: any) => console.error(e)
+    });
+  }
+
   onTinggiLipatanChange(value: number): void {
     console.log('Tinggi lipatan changed to:', value);
     this.inputDetailProjek.tinggi_lipatan = value;
@@ -435,5 +453,8 @@ export class DetailprojekComponent implements OnInit {
       dataDetailBahan: undefined,
       expanded: false
     };
+  }
+  get isDisabled(): boolean {
+    return this.inputDetailProjek?.tinggi_lipatan === 25;
   }
 }
