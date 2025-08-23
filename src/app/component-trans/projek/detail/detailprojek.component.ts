@@ -10,6 +10,13 @@ import dayjs from 'dayjs';
 import { DetailprojekService } from '../../../services/detailprojek.service';
 import { DetailbahanService } from '../../../services/detailbahan.service';
 import { BahanService } from '../../../services/bahan.service';
+// tipe untuk value per row
+interface KebutuhanValue {
+  total: number;
+  itemName: string;
+  harga?: number; // kalau nanti mau simpan harga juga
+}
+
 
 @Component({
   selector: 'app-detailprojek',
@@ -21,7 +28,7 @@ import { BahanService } from '../../../services/bahan.service';
 export class DetailprojekComponent implements OnInit {
   @ViewChildren('inputField') inputFields!: QueryList<ElementRef>;
   formRef!: NgForm;
-
+  isModalOpen = false;
   dataProjek: any = {};
   dataLogin: any = {};
   dataDetailProjek: DetailProjek[] = [];
@@ -29,9 +36,36 @@ export class DetailprojekComponent implements OnInit {
   dataBahan: Bahan[] = [];
   dataKebKain: { [id: number]: any[] } = {};
   dataKebVitrase: { [id: number]: any[] } = {};
+  dataKebRel: { [id: number]: any[] } = {};
+  dataKebRoda: { [id: number]: any[] } = {};
+  dataKebBracketL: { [id: number]: any[] } = {};
+  dataKebBracketS: { [id: number]: any[] } = {};
+  dataKebStik: { [id: number]: any[] } = {};
+  dataKebFisher: { [id: number]: any[] } = {};
+  dataKebGalvanis24: { [id: number]: any[] } = {};
+  dataKebJasaPasang: { [id: number]: any[] } = {};
+
   totKebutuhanKainPVC: { [id: number]: number } = {};
   totKebutuhanVitrase: { [id: number]: number } = {};
   totKebutuhanKain: { [id: number]: number } = {};
+  // ⬇️ tambahkan ini
+  materialLabels: Record<string, string> = {
+    "005": "Kebutuhan Rel",
+    "006": "Kebutuhan Rel",
+    "007": "Kebutuhan Bracket L",
+    "008": "Kebutuhan Bracket S",
+    "009": "Kebutuhan Stik",
+    "010": "Kebutuhan Fisher",
+    "011": "Kebutuhan Galvanis 24",
+    "012": "Kebutuhan Jasa Pasang",
+    "013": "Kebutuhan Roda"
+  };
+
+  // object hasil panggilan endpoint
+  // totKebutuhan: { [itemCode: string]: { [id: number]: number } } = {};
+  // totKebutuhan simpan object per itemCode -> per id_project_detil
+  totKebutuhan: { [itemCode: string]: { [id_project_detil: number]: KebutuhanValue } } = {};
+
   // Pastikan kebtinggi dan totKebutuhanKain adalah objek
   kebtinggi: { [id: number]: number } = {};
 
@@ -53,6 +87,7 @@ export class DetailprojekComponent implements OnInit {
 
   listIDProjectDetail:any []=[]
   modeEdit: boolean = false; // kalau false berarti tambah
+  
 
   constructor(
     private sharedloginService: SharedloginService,
@@ -87,26 +122,19 @@ export class DetailprojekComponent implements OnInit {
       error: () => this.dataProjek = {}
     });
   }
-  /*
+  
   loadDataDetailProjek(id: any): void {
     this.detailprojekService.getbyIdDetailProjek(id).subscribe({
       next: (res: any) => {
-        console.log('res', res);
-        this.dataDetailProjek = res.results;
-      },
-      error: (e: any) => console.error(e)
-    });
-  }
-    */
-  loadDataDetailProjek(id: any): void {
-    this.detailprojekService.getbyIdDetailProjek(id).subscribe({
-      next: (res: any) => {
-        console.log('res', res);
-        this.dataDetailProjek = res.results;
-
-        // Expand semua detail langsung
-        this.dataDetailProjek.forEach((item) => {
+        console.log('res data detail project', res)
+        this.dataDetailProjek = res.results
+         console.log('res data this.dataDetailProjek', this.dataDetailProjek)
+        this.dataDetailProjek.forEach((item: any) => {
+          console.log('item', item)
           const itemId = item.id;
+          const itemCode = item.item_code;
+
+        
           this.fetchDetailBahan(itemId);
           this.loadKebutuhanKain(itemId);
           this.loadKebutuhanVitrase(itemId);
@@ -146,15 +174,15 @@ export class DetailprojekComponent implements OnInit {
     }
   }
 
-  onEdit(id: number): void {
-    const item = this.dataDetailProjek.find(d => d.id === id);
-    if (item) {
-      this.visible = true;
-      this.editMode = true;
-      this.editedItemId = id.toString();
-      this.inputDetailProjek = { ...item };
-    }
-  }
+  // onEdit(id: number): void {
+  //   const item = this.dataDetailProjek.find(d => d.id === id);
+  //   if (item) {
+  //     this.visible = true;
+  //     this.editMode = true;
+  //     this.editedItemId = id.toString();
+  //     this.inputDetailProjek = { ...item };
+  //   }
+  // }
 
   onDeleted(id: number): void {
     this.detailprojekService.deletedby(id, { is_deleted: 1 }).subscribe({
@@ -211,17 +239,83 @@ export class DetailprojekComponent implements OnInit {
     }
   }
 
+  // ✅ Map item_code ke endpoint
+  private kebutuhanEndpointMap: Record<string, string> = {
+    "005": "totalrel",
+    "006": "totalrel",
+    "007": "totalbracketl",
+    "008": "totalbrackets",
+    "009": "totalstik",
+    "010": "totalfisher",
+    "011": "totalgalvanis24",
+    "012": "totaljasapasang",
+    "013": "totalroda",
+  };
+  // mapping endpoint -> nama field total di response
+  private responseQtyFieldMap: Record<string, string> = {
+    "totalrel": "total_qty_rel",
+    "totalbracketl": "total_qty_bracketl",
+    "totalbrackets": "total_qty_brackets",
+    "totalstik": "total_qty_stik",
+    "totalfisher": "total_qty_fisher",
+    "totalgalvanis24": "total_qty_galvanis24",
+    "totaljasapasang": "total_qty_jasapasang",
+    "totalroda": "total_qty_roda",
+  };
   fetchDetailBahan(id: number): void {
-    console.log('id', id)
     this.detailbahanService.getbyIdDetailProjek(id.toString()).subscribe({
       next: (res: any) => {
-        console.log('res pada detail bahan', res);
         this.expandedRows[id] = res.results;
-      },
-      error: (e) => console.error('Gagal mengambil subtable:', e)
+
+        res.results.forEach((row: any) => {
+          const itemCode = row.item_code;
+          const endpoint = this.kebutuhanEndpointMap[itemCode];
+
+          if (endpoint) {
+            this.loadKebutuhanRelnya(endpoint, this.expandedRows[id], itemCode);
+          } else {
+            console.warn("ItemCode belum terdaftar:", itemCode);
+          }
+        });
+      }
     });
   }
-  
+
+  loadKebutuhanRelnya(
+    endpoint: string,
+    expandedRows: any[],
+    itemCode: string
+  ) {
+    const filtered = expandedRows.filter(r => r.item_code === itemCode);
+
+    filtered.forEach(row => {
+      const params = { id_project_detil: row.id_project_detil, item_code: itemCode };
+
+      this.detailprojekService.kebutuhanRelnya(endpoint, params).subscribe({
+  next: (res: any) => {
+    console.log("Response kebutuhan:", endpoint, res);
+
+    const qtyField = this.responseQtyFieldMap[endpoint];
+    const total = qtyField ? res[qtyField] : 0;
+
+    if (!this.totKebutuhan[itemCode]) {
+      this.totKebutuhan[itemCode] = {};
+    }
+
+    this.totKebutuhan[itemCode][row.id_project_detil] = {
+      total,
+      itemName: row.item_name,
+      harga: res['harga_rel'] ?? res['harga'] ?? 0 // opsional
+    };
+
+    console.log("Update totKebutuhan", this.totKebutuhan);
+  }
+});
+
+
+    })
+  }
+
 
   loadDataBahan(callback?: () => void): void {
     this.bahanService.getAll('', 1, 100).subscribe({
@@ -369,7 +463,7 @@ export class DetailprojekComponent implements OnInit {
     })
     
   }
-  
+
   loadKebutuhanKain(id: number): void {
     this.detailprojekService.getkain(id).subscribe({
       next: (res: any) => {
@@ -399,6 +493,7 @@ export class DetailprojekComponent implements OnInit {
       }
     });
   }
+
   hitungTotal(id:number){
     const pvc = Number(this.totKebutuhanKainPVC[id]) || 0;
     const vit = Number(this.totKebutuhanVitrase[id]) || 0;
@@ -456,5 +551,25 @@ export class DetailprojekComponent implements OnInit {
   }
   get isDisabled(): boolean {
     return this.inputDetailProjek?.tinggi_lipatan === 25;
+  }
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+  }
+  onModalEdit(id: number): void {
+    // cari data detail projek berdasarkan id
+    const detail = this.dataDetailProjek.find((item: any) => item.id === id);
+
+    if (detail) {
+      // clone datanya biar tidak langsung bind ke array asli
+      this.inputDetailProjek = { ...detail };
+
+      // set state form ke mode edit
+      this.visible = true;      // true = update mode
+      this.isModalOpen = true;  // buka modal
+    }
   }
 }
