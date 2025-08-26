@@ -256,7 +256,7 @@ export class DetailprojekComponent implements OnInit {
     this.detailbahanService.getbyIdDetailProjek(id.toString()).subscribe({
       next: (res: any) => {
         this.expandedRows[id] = res.results;
-
+        console.log('this.expandedRows[id]', this.expandedRows[id])
         res.results.forEach((row: any) => {
           const itemCode = row.item_code;
           const endpoint = this.kebutuhanEndpointMap[itemCode];
@@ -281,7 +281,9 @@ export class DetailprojekComponent implements OnInit {
     });
   }
 
-
+  hasDetailBahan(id: number): boolean {
+    return (this.expandedRows[id]?.length || 0) > 0;
+  }
   loadKebutuhanRelnya(
     endpoint: string,
     expandedRows: any[],
