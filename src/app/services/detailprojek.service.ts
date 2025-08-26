@@ -60,7 +60,6 @@ export class DetailprojekService {
     const headers = this.globalService.getHeaders();
     return this.http.get(`${this.apiUrl}/totalkainvitrase/?id_project_detil=${id}`, { headers});
   }
-
   // jasa pasang
   jasaPasang(params: any): Observable<any> {
     const headers = this.globalService.getHeaders();

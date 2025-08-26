@@ -9,8 +9,8 @@ export interface Jenisbahan {
 }
 export interface Bahan {
   id?: number,
-  item_code?: string,
-  item_name?: string,
+  item_code: string,
+  item_name: string,
   id_jenis?: number,
   ukuran?: string,
   keterangan?: string,
@@ -21,7 +21,10 @@ export interface Bahan {
   updated_by?: string,
   updated_date?: string,
   is_deleted?: number,
-  selected?: boolean; // ✅ tambahkan ini
+  // tambahkan ini untuk kebutuhan input manual
+  selected?: boolean; 
+  qty?: number;     
+
 }
 export interface Projek {
   id?: number,
@@ -66,8 +69,9 @@ export interface DetailBahan{
   id?:number,
   id_project_detil?:number,
   item_id?:number,
-  item_code?:string,
+  item_code:string,
   item_name?:string,
+  qty?:number,
   ukuran?:string,
   harga_beli?:number,
   harga_jual?:number,

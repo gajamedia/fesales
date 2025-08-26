@@ -127,8 +127,8 @@
                     <td class="px-3 py-3">{{ ritem.uk_room_t }}</td>
                     <td class="px-3 py-3">{{ ritem.stik }}</td>
                     <td class="px-3 py-3">{{ ritem.elevasi }}</td>
-                    <td class="px-3 py-3">{{ ritem.tinggi_vitrase }}</td>
                     <td class="px-3 py-3">{{ ritem.tinggi_lipatan }}</td>
+                    <td class="px-3 py-3">{{ ritem.tinggi_vitrase }}</td>
                     <td class="px-3 py-3">{{ ritem.nilai_pembagi }}</td>
                     <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm text-center">
                       <div class="flex items-center justify-center gap-2">
@@ -175,7 +175,6 @@
                             <table class="w-full text-sm border">
                               <thead class="bg-cyan-300">
                                 <tr>
-                                  <th class="p-2">#</th>
                                   <th class="p-2">Lebar</th>
                                   <th class="p-2">Tinggi</th>
                                   <th class="p-2">Panel</th>
@@ -183,8 +182,7 @@
                               </thead>
                               <tbody>
                                 <tr *ngFor="let kain of dataKebKain[ritem.id] || []; let j = index">
-                                  <td class="p-2">{{ j+1 }}</td>
-                                  <td class="p-2">{{ kain.lebar_total }}</td>
+                                 <td class="p-2">{{ kain.lebar_total }}</td>
                                   <td class="p-2">{{ kebtinggi[ritem.id] }}</td>
                                   <td class="p-2">{{ kain.panel || '-' }}</td>
                                 </tr>
@@ -198,7 +196,6 @@
                             <table class="min-w-full text-sm border border-gray-300">
                               <thead class="bg-cyan-300">
                                 <tr>
-                                  <th class="text-left p-2">#</th>
                                   <th class="text-left p-2">Lebar</th>
                                   <th class="text-left p-2">Tinggi</th>
                                   <th class="text-left p-2">Kebutuhan PVC</th>
@@ -206,7 +203,6 @@
                               </thead>
                               <tbody>
                                 <tr *ngFor="let kain of dataKebKain[ritem.id] || []; let i = index">
-                                  <td class="p-2">{{ i + 1 }}</td>
                                   <td class="p-2">{{ kain.lebar_total }}</td>
                                   <td class="p-2">{{ kain.tinggi_kain }}</td>
                                   <td class="p-2">{{ kain.kebutuhan_kain_split || '-'}}</td>
@@ -220,7 +216,6 @@
                             <table class="min-w-full text-sm border border-gray-300">
                               <thead class="bg-cyan-300">
                                 <tr>
-                                  <th class="text-left p-2">#</th>
                                   <th class="text-left p-2">Lebar Total</th>
                                   <th class="text-left p-2">Tinggi Vitrase</th>
                                   <th class="text-left p-2">Kebutuhan Vitrase</th>
@@ -228,7 +223,6 @@
                               </thead>
                               <tbody>
                                 <tr *ngFor="let vitrase of dataKebVitrase[ritem.id] || []; let i = index">
-                                  <td class="p-2">{{ i + 1 }}</td>
                                   <td class="p-2">{{ vitrase.lebar_total }}</td>
                                   <td class="p-2">{{ vitrase.tinggi_vitrase }}</td>
                                   <td class="p-2">{{ vitrase.kebutuhan_kain_vitrase || '-' }}</td>
@@ -240,31 +234,59 @@
                         <!-- Kebutuhan Material -->
                         <div class="bg-white rounded-xl shadow p-3">
                           <h3 class="font-semibold mb-2">Kebutuhan Relnya</h3>
+
                           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <ng-container *ngFor="let entry of totKebutuhan | keyvalue">
+                            <ng-container *ngFor="let entry of totKebutuhanRel | keyvalue">
                               <div *ngFor="let row of entry.value | keyvalue">
                                 <label class="text-sm text-gray-600">
-  {{ materialLabels[entry.key] || entry.key }} 
-  ({{ row.value.itemName }})
-</label>
-<input type="text" 
-       [value]="row.value.total"
-       readonly
-       class="w-full border rounded-md px-2 py-1 bg-gray-100">
+                                  {{ materialLabels[entry.key] || entry.key }} 
+                                  ({{ row.value.itemName }})
+                                </label>
 
+                                <!-- Kalau otomatis, tampil readonly -->
+                                <input *ngIf="!isManualQty(entry.key)"
+                                  type="text" 
+                                  [value]="row.value.total"
+                                  readonly
+                                  class="w-full border rounded-md px-2 py-1 bg-gray-100">
+
+                                <!-- Kalau manual, tampil input editable -->
+                                <input *ngIf="isManualQty(entry.key)"
+                                  type="number"
+                                  [(ngModel)]="row.value.total"
+                                  name="qty_{{entry.key}}_{{row.key}}"
+                                  class="w-full border rounded-md px-2 py-1"
+                                  placeholder="Masukkan qty manual">
                               </div>
                             </ng-container>
                           </div>
                         </div>
+
+
                         <!-- Footer tombol aksi -->
-                        <div class="flex justify-between gap-2 mt-4">
+                        <!-- <div class="flex justify-between gap-2 mt-4">
                           <button (click)="addDetailBahan(ritem.id)" class="flex-1 bg-green-600 text-white py-2 rounded-md">
                             <i class="fas fa-plus mr-2"></i> Add Detail Bahan
                           </button>
                           <button (click)="editDetailBahan(ritem.id)" class="flex-1 bg-blue-600 text-white py-2 rounded-md">
                             <i class="fas fa-edit mr-2"></i> Edit Detail Bahan
                           </button>
+                        </div> -->
+                        <div class="flex justify-between gap-2 mt-4">
+                          <button 
+                            (click)="(dataKebRel[ritem.id] && dataKebRel[ritem.id].length || 0) === 0 
+                                        ? addDetailBahan(ritem.id) : editDetailBahan(ritem.id)" 
+                            class="px-4 py-2 text-white rounded-lg"
+                            [ngClass]="(dataKebRel[ritem.id] && dataKebRel[ritem.id].length || 0) === 0 
+                                        ? 'bg-teal-600 hover:bg-teal-700' 
+                                        : 'bg-amber-500 hover:bg-amber-600'">
+                            {{ (dataKebRel[ritem.id] && dataKebRel[ritem.id].length || 0) === 0 
+                                ? 'Add Detail Bahan' 
+                                : 'Edit Detail Bahan' }}
+                          </button>
+
                         </div>
+      
                       </div>
                     </td>
                   </tr>
@@ -289,9 +311,27 @@
 
       <div *ngFor="let bahan of dataBahan">
         <label class="flex items-center space-x-2">
-          <input type="checkbox" [(ngModel)]="bahan.selected" [name]="'checkbox_' + bahan.id" />
+          <!-- Checkbox -->
+          <input 
+            type="checkbox" 
+            [(ngModel)]="bahan.selected" 
+            [name]="'checkbox_' + bahan.id" 
+          />
           <span>{{ bahan.item_name }} - {{ bahan.ukuran }}</span>
         </label>
+
+        <!-- Kondisi: jika item_code 016,018,019 -->
+        <div *ngIf="isManualQty(bahan.item_code)" class="ml-6 mt-1">
+          <input 
+            type="number"
+            [(ngModel)]="bahan.qty"
+            [name]="'qty_' + bahan.id"
+            min="0"
+            class="w-24 border rounded-md px-2 py-1 focus:ring focus:ring-teal-300"
+            placeholder="Qty"
+          />
+        </div>
+
       </div>
       <div class="mt-4 text-right">
         <button
@@ -469,13 +509,13 @@
           <input
             required
             id="stik"
-            type="text"
+            type="number"
             class="mt-1 p-2 w-full border rounded-md"
             [(ngModel)]="inputDetailProjek.stik"
             name="stik"
             #stik="ngModel"
             [ngClass]="{'border-red-500': stik.touched && stik.invalid}"
-          > 
+          >
         </div>
         
         <div class="form-group flex-1">
